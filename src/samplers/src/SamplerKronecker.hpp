@@ -80,8 +80,13 @@ public:
         };
     }
 
-
-	SamplerKronecker(const double* alphas, unsigned int d) : D(d), m_alphas(alphas) { }
+	SamplerKronecker(unsigned int d) : D(d) 
+    {
+             if (d == 2) setAlphas(ParseAlpha("R2", d));
+        else if (d == 3) setAlphas(ParseAlpha("R3", d));
+        else if (d == 4) setAlphas(ParseAlpha("R4", d));
+        else  setAlphas(nullptr);
+     }
 
     void setAlphas(const double* al)  { m_alphas = al; }
 	void setDimension(unsigned int d) { D = d; }
@@ -90,8 +95,10 @@ public:
 	template<typename T>
 	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
 	{
-        arg_pts.Resize(N, D);
+        if (m_alphas == nullptr)
+            return false;
 
+        arg_pts.Resize(N, D);
 		for(unsigned int i = 0; i < N; i++)
         {
             for (unsigned int d = 0; d < D; d++)

@@ -56,13 +56,13 @@ public:
 
 	SamplerHalton(unsigned int d) : D(d) 
     {
-		setBaseList(PRIMES, sizeof(PRIMES) / sizeof(unsigned int));
+		setBasisList(PRIMES, sizeof(PRIMES) / sizeof(unsigned int));
 	}
     
 	void setDimension(unsigned int d) { D = d; }
     unsigned int GetDimension() const { return D; }
 
-	void setBaseList(const unsigned int* arg_base_list, unsigned int arg_idBaseMax )
+	void setBasisList(const unsigned int* arg_base_list, unsigned int arg_idBaseMax )
 	{
 		m_base_list = arg_base_list;
 		m_idBaseMax = arg_idBaseMax;

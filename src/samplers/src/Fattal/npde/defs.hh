@@ -1,4 +1,5 @@
-typedef double real ;
+namespace fattal {
+typedef double real;
 
 #ifndef NULL
 #define NULL 0
@@ -11,3 +12,5 @@ typedef double real ;
 #ifndef INF
 #define INF 1e12
 #endif /* INF */
+
+};

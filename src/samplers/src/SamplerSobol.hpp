@@ -32,6 +32,7 @@
 #include "../../pointsets/Pointset.hpp"
 #include "../utils/FastPRNG.hpp"
 #include "../utils/RadicalInversion.hpp"
+#include <fstream>
 #include <type_traits>
 #include <bitset>
 #include <random>

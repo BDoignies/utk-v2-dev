@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include <fstream>
 #include <cmath>
 
 namespace neider

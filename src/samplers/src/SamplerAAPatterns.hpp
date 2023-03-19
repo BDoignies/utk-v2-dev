@@ -32,6 +32,7 @@
 #include "../../pointsets/Pointset.hpp"
 #include "AAPatterns/t191861r110771.h"
 #include <random>
+#include <tuple> // std::ignore
 
 
 namespace nsaapattern
@@ -103,7 +104,7 @@ void loadVectors(const char *fileName) {                                        
 	map = new TPoint[ng];
     maxDisplacement = 0;
     for (int i = 0; i < ng; i++) {
-        fscanf(vectorsFile, " %lf %lf", &map[i].x, &map[i].y);
+        std::ignore = fscanf(vectorsFile, " %lf %lf", &map[i].x, &map[i].y);
         if (feof(vectorsFile)) {
             fprintf(stderr, "Failed to read all vectors from %s\n", fileName);
             exit(1);
@@ -125,7 +126,7 @@ class SamplerAAPatterns
 protected:
 public:
 
-	SamplerAAPatterns() { setRandomSeed(); }
+	SamplerAAPatterns() { setRandomSeed(); m_vectorfile = GetDefaultFiles()[0]; }
 
     unsigned int GetDimension() const { return 2; }
 	

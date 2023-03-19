@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include "tensor2d.hh"
 
+namespace fattal 
+{
 Tensor2d::Tensor2d(int lx, int ly) {
   data = NULL ;
   set(lx, ly) ;
@@ -970,3 +972,4 @@ void Tensor2d::resize(int factor, double* filter, int filter_len) {
       (*this)(x,y) /= dense(x,y) ;
 }
 */
+};

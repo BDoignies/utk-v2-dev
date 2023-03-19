@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <tuple> // std::ignore
 #include <stdint.h>
 
 // -------------------- Math --------------------
@@ -263,10 +264,10 @@ void ReadPFM(int &width, int &height, float *&data, const char *fname) {
     FILE* fp = fopen(fname, "rb");
     char name[100];
     float f;
-    fscanf(fp, "%s\n%d %d %f\n", name, &width, &height, &f);
+    std::ignore = fscanf(fp, "%s\n%d %d %f\n", name, &width, &height, &f);
     //printf("f is %f\n", f);
     data = new float[width * height];
-    fread((char*) data, sizeof(float), width * height, fp);
+    std::ignore = fread((char*) data, sizeof(float), width * height, fp);
     fclose(fp);
 }
 

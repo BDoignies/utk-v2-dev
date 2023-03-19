@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include <iostream>
 #include <cmath>
 
 //Code from https://people.sc.fsu.edu/~jburkardt/cpp_src/faure/faure.html

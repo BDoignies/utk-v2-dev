@@ -33,6 +33,8 @@
 #include "../../pointsets/Pointset.hpp"
 #include <random>
 
+#ifndef STEP_COMMON_IMPLEMENTATION
+#define STEP_COMMON_IMPLEMENTATION 
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -214,6 +216,8 @@ namespace heck
 	}
 
 }
+
+#endif // STEP_COMMON_IMPLEMENTATION
 
 namespace utk
 {

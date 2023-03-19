@@ -31,20 +31,80 @@
  */
 #pragma once
 
+#include <cstring> // memcpy
 #include <vector>
+#include <iostream>
 #include <algorithm>
 
 namespace utk
 {
+    // Pointset class
+
+    // Just a wrapper around a T*
+    // It can be set to be a view or hold its own memory
+    // The copy/view mecanism is introduced for seemless interaction with numpy (and python protocol buffer)
+    // This also allows to use the library with 'plain double pointers'.
+
     template<typename T>
     class Pointset
     {
     public:
+        Pointset()
+        {
+            D = 0;
+            N = 0;
+            isView = false;
+            data = nullptr;
+        }
+
         Pointset(unsigned int n, unsigned int d) 
         {
-            D = d;
-            N = d;
-            data.resize(n * d);
+            isView = false;
+            data = nullptr;
+            Resize(n, d);
+        }
+
+        static Pointset<T> View(T* data, unsigned int n, unsigned int d)
+        {
+            Pointset<T> pt;
+            pt.isView = true;
+            pt.data = data;
+
+            return pt;
+        }
+
+        static Pointset<T> Copy(const T* data, unsigned int n, unsigned int d)
+        {
+            Pointset<T> pt(n, d);
+            pt.isView = false;
+            std::memcpy(pt.data, data, sizeof(T) * n * d);
+            return pt;
+        }
+
+        // Do not risk taking a view here, just use a copy
+        Pointset(const Pointset& other)
+        {
+            N = 0;
+            D = 0;
+            isView = false;
+            data = nullptr;
+            Resize(other.N, other.D);
+            std::memcpy(data, other.data, sizeof(T) * N * D);
+        }
+
+        // Do not risk taking a view here, just use a copy
+        Pointset& operator=(const Pointset& other)
+        {
+            if (this != &other)
+            {
+                D = 0;
+                N = 0;
+                isView = false;
+                data = nullptr;
+                Resize(other.N, other.D);
+                std::memcpy(data, other.data, sizeof(T) * N * D);   
+            }
+            return *this;
         }
 
         T* Data()
@@ -71,6 +131,7 @@ namespace utk
         {
             std::swap(other.N, N);
             std::swap(other.D, D);
+            std::swap(other.isView, isView);
             std::swap(other.data, data);
         }
 
@@ -86,18 +147,53 @@ namespace utk
 
         void Fill(T value = 0) const
         {
-            std::fill(data.begin(), data.end(), value);
+            std::fill(data, data + N * D, value);
         }
 
         void Resize(unsigned int n, unsigned int d)
         {
-            N = n;
-            D = d;
-            data.resize(N * D);
+            // Always realloc if it previously was a view
+            if (isView)
+            {
+                // isView is true, do not delete here
+                D = d;
+                N = n;
+                isView = false;
+
+                data = new T[N * D];
+            }
+            else
+            {
+                // Realloc only if size do not match
+                if (n != N || d != D)
+                {
+                    // Safe to delete, isView == false here
+                    if (data != nullptr)
+                        delete[] data;
+
+                    D = d;
+                    N = n;
+                    isView = false;
+
+                    data = new T[N * D];
+                }
+            }
+        }
+
+        ~Pointset()
+        {      
+            if (data != nullptr && !isView)
+                delete[] data;
         }
     private:
+        bool isView;
         unsigned int N;
         unsigned int D;
-        std::vector<T> data; 
+
+        T* data;
+
+        // Can not set data's pointer... Or maybe with custom allocators
+        // Anyway keeping the pointer is simpler.
+        // std::vector<T> data; 
     };
 };

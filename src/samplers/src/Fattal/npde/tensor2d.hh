@@ -8,6 +8,8 @@
 
 using namespace std;
 
+namespace fattal
+{
 class Tensor2d {
 public:
   /* Members */
@@ -128,5 +130,6 @@ void Tensor2d::put(double x, double y, double v) {
   (*this)(ix+1, iy+1) += dx * dy * v ;
 }
 
+};
 
 #endif /* TENSOR2D_HH */
