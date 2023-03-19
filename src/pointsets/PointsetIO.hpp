@@ -1,0 +1,86 @@
+/*
+ * Coded by Hélène Perrier helene.perrier@liris.cnrs.fr
+ * Copyright (c) 2018 CNRS Université de Lyon
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are those
+ * of the authors and should not be interpreted as representing official policies,
+ * either expressed or implied, of the Halton project.
+ */
+#pragma once
+
+#include <iomanip>
+#include <fstream>
+#include <string>
+
+#include "Pointset.hpp"
+
+namespace utk
+{
+
+template<class Stream, typename T>
+inline void write_text_pointset_stream(Stream& st, const Pointset<T>& pts)
+{
+    
+    for (unsigned int i = 0; i < pts.Npts(); i++)
+    {
+        for (unsigned int d = 0; d < pts.Ndim() - 1; d++)
+        {
+            st << pts[i][d] << ' ';
+        }
+        st << pts[i][pts.Ndim() - 1] << '\n';
+    }
+}
+    
+template<typename T>
+inline bool write_text_pointset(const std::string& dest, const Pointset<T>& pts)
+{
+    std::ofstream file(dest); 
+    
+    if (!file.is_open()) return false;
+
+    file << std::setprecision(16) << std::fixed;
+    write_text_pointset_stream(file, pts);
+    return true;
+}
+
+template<typename T>
+inline bool write_text_pointsets(const std::string& dest, const std::vector<Pointset<T>>& pts)
+{
+    std::ofstream file(dest);
+    if (!file.is_open()) return false;
+    
+    file << std::setprecision(16) << std::fixed;
+    for (unsigned int i = 0; i < pts.size() - 1; i++)
+    {
+        write_text_pointset_stream(file, pts[i]);
+        file << "#\n";
+    }
+    
+    if (pts.size() != 0)
+        write_text_pointset_stream(file, pts.back());
+
+    return true;
+}
+
+};
