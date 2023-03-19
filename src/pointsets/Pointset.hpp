@@ -44,36 +44,39 @@ namespace utk
     // It can be set to be a view or hold its own memory
     // The copy/view mecanism is introduced for seemless interaction with numpy (and python protocol buffer)
     // This also allows to use the library with 'plain double pointers'.
-
     template<typename T>
     class Pointset
     {
     public:
         Pointset()
         {
-            D = 0;
             N = 0;
+            D = 0;
             isView = false;
             data = nullptr;
         }
 
-        Pointset(unsigned int n, unsigned int d) 
+        Pointset(uint32_t n, uint32_t d) 
         {
+            N = 0;
+            D = 0;
             isView = false;
             data = nullptr;
             Resize(n, d);
         }
 
-        static Pointset<T> View(T* data, unsigned int n, unsigned int d)
+        static Pointset<T> View(T* data, uint32_t n, uint32_t d)
         {
             Pointset<T> pt;
             pt.isView = true;
             pt.data = data;
+            pt.N = n;
+            pt.D = d;
 
             return pt;
         }
 
-        static Pointset<T> Copy(const T* data, unsigned int n, unsigned int d)
+        static Pointset<T> Copy(const T* data, uint32_t n, uint32_t d)
         {
             Pointset<T> pt(n, d);
             pt.isView = false;
@@ -97,8 +100,8 @@ namespace utk
         {
             if (this != &other)
             {
-                D = 0;
                 N = 0;
+                D = 0;
                 isView = false;
                 data = nullptr;
                 Resize(other.N, other.D);
@@ -117,12 +120,12 @@ namespace utk
             return &data[0];
         }
 
-        T* operator[](unsigned int i) 
+        T* operator[](uint32_t i) 
         {
             return &data[0] + i * D;
         }
 
-        const T* operator[](unsigned int i) const
+        const T* operator[](uint32_t i) const
         {
             return &data[0] + i * D;
         }
@@ -135,12 +138,12 @@ namespace utk
             std::swap(other.data, data);
         }
 
-        unsigned int Npts() const
+        uint32_t Npts() const
         {
             return N;
         }
 
-        unsigned int Ndim() const
+        uint32_t Ndim() const
         {
             return D;
         }
@@ -150,7 +153,7 @@ namespace utk
             std::fill(data, data + N * D, value);
         }
 
-        void Resize(unsigned int n, unsigned int d)
+        void Resize(uint32_t n, uint32_t d)
         {
             // Always realloc if it previously was a view
             if (isView)
@@ -187,8 +190,8 @@ namespace utk
         }
     private:
         bool isView;
-        unsigned int N;
-        unsigned int D;
+        uint32_t N;
+        uint32_t D;
 
         T* data;
 

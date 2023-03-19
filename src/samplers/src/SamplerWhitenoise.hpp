@@ -40,16 +40,16 @@ class SamplerWhitenoise
 protected:
 public:
 
-	SamplerWhitenoise(unsigned int d) : D(d) { setRandomSeed(); }
+	SamplerWhitenoise(uint32_t d) : D(d) { setRandomSeed(); }
 
-	void setDimension(unsigned int d) { D = d; }
-    unsigned int GetDimension() const { return D; }
+	void setDimension(uint32_t d) { D = d; }
+    uint32_t GetDimension() const { return D; }
 
-	void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
         std::uniform_real_distribution<T> dist(0, 1);
         arg_pts.Resize(N, D);
@@ -64,7 +64,7 @@ public:
 	};
 
 protected:
-	unsigned int D;
+	uint32_t D;
     std::mt19937 m_mersenneTwister;
 };
 

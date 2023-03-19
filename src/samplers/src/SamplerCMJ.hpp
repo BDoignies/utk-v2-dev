@@ -43,15 +43,15 @@ namespace utk
 
 		SamplerCMJ() { setRandomSeed(); }
         
-        unsigned int GetDimension() const { return 2; }
+        uint32_t GetDimension() const { return 2; }
 
-        void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+        void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
         void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
 		template<typename T>
-        bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+        bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
         {
-            const unsigned int n  = (unsigned int) std::round(std::sqrt(N));
+            const uint32_t n  = (uint32_t) std::round(std::sqrt(N));
             const double gridSize = 1. / (double)n;
             const double gridSqr  = gridSize * gridSize;
 
@@ -62,9 +62,9 @@ namespace utk
             arg_pts.Resize(N, 2);
 
             // "Canonical" arrangement
-            for (unsigned int i = 0; i < n; i++)
+            for (uint32_t i = 0; i < n; i++)
             {
-                for (unsigned int j = 0; j < n; j++)
+                for (uint32_t j = 0; j < n; j++)
                 {
                     arg_pts[j + i * n][0] = i * gridSize + j * gridSqr;
                     arg_pts[j + i * n][1] = j * gridSize + i * gridSqr;
@@ -72,20 +72,20 @@ namespace utk
             }
 
             // Shuffle on x
-            for (unsigned int j = 0; j < n; j++)
+            for (uint32_t j = 0; j < n; j++)
             {
-                const unsigned int k = static_cast<unsigned int>(j + dist(m_mersenneTwister) * (n - j));
-                for (unsigned int i = 0; i < n; i++)
+                const uint32_t k = static_cast<uint32_t>(j + dist(m_mersenneTwister) * (n - j));
+                for (uint32_t i = 0; i < n; i++)
                 {
                     std::swap(arg_pts[j * n + i][0], arg_pts[k * n + i][0]);
                 }
             }
             
             // Shuffle on y
-            for (unsigned int i = 0; i < n; i++)
+            for (uint32_t i = 0; i < n; i++)
             {
-                const unsigned int k = static_cast<unsigned int>(i + dist(m_mersenneTwister) * (n - i));
-                for (unsigned int j = 0; j < n; j++)
+                const uint32_t k = static_cast<uint32_t>(i + dist(m_mersenneTwister) * (n - i));
+                for (uint32_t j = 0; j < n; j++)
                 {
                     std::swap(arg_pts[j * n + i][1], arg_pts[j * n + k][1]);
                 }

@@ -24,15 +24,15 @@ protected:
 	
 public:
 
-	SamplerFattal(double temperature_ = 0.5, unsigned int level = 2) : levels(level), temperature(temperature_) { }
+	SamplerFattal(double temperature_ = 0.5, uint32_t level = 2) : levels(level), temperature(temperature_) { }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
 	void setTemperature(double arg_temperature) { temperature = arg_temperature; }
-    void setLevel(unsigned int lvl) { levels = lvl; }
+    void setLevel(uint32_t lvl) { levels = lvl; }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{	
 		/* Global inits */
         // TODO : proper level usage (it seems like )
@@ -52,7 +52,7 @@ public:
         
 		fattal::Pow2_tab = new unsigned long[levels+2] ;
 		fattal::Pow2_tab[0] = 1 ;
-		for(unsigned int i = 1 ; i < levels+2 ; i++)
+		for(uint32_t i = 1 ; i < levels+2 ; i++)
 			fattal::Pow2_tab[i] = 2 * fattal::Pow2_tab[i-1] ;
 		
 		double *I, *osigma = NULL, *CA = NULL, *sigma = NULL, *sigma_x = NULL, *sigma_y = NULL ;
@@ -86,7 +86,7 @@ public:
 		for(int i = 0 ; i < len ; i++)
 			rho[0][i] = pow(I[i], 1.0) ;
 
-		for(unsigned int l = 1 ; l < levels ; l++) {
+		for(uint32_t l = 1 ; l < levels ; l++) {
 			fattal::downsample(rho[l-1], nx[l-1], ny[l-1], rho[l], nx[l], ny[l]) ;
 		}
 
@@ -142,7 +142,7 @@ public:
 			arg_pts[i][1] = by;
 		}
 
-        for (unsigned int i = 0; i < levels; i++)
+        for (uint32_t i = 0; i < levels; i++)
             delete[] rho[i];
 
         delete[] dots;
@@ -161,7 +161,7 @@ public:
 	}
 
 protected:
-    unsigned int levels;
+    uint32_t levels;
 	double temperature;
 };
 

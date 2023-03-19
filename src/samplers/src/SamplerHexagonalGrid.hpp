@@ -42,12 +42,12 @@ public:
 
     SamplerHexagonalGrid() { }
     
-	unsigned int GetDimension() const { return 2; }
+	uint32_t GetDimension() const { return 2; }
 
     template<typename T>
-    bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+    bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
     {
-		const unsigned int n = (unsigned int) std::round(std::sqrt(N));
+		const uint32_t n = (uint32_t) std::round(std::sqrt(N));
         
         if (n * n != N)
             return false;
@@ -58,11 +58,11 @@ public:
         const double grid_size_x = std::sqrt(3) * s;
         const double grid_size_y = (3.0 / 2.0) * s;
 
-        for (unsigned int i = 0; i < N; i++)
+        for (uint32_t i = 0; i < N; i++)
         {
-            const unsigned int coords = i;
-            const unsigned int xi = (coords % n);
-            const unsigned int yi = (coords / n);
+            const uint32_t coords = i;
+            const uint32_t xi = (coords % n);
+            const uint32_t yi = (coords / n);
 
             arg_pts[i][0] = (xi + (yi % 2) / 2.0) * grid_size_x;
             arg_pts[i][1] = yi * grid_size_y;

@@ -42,10 +42,10 @@ protected:
 public:
 
 	SamplerDartThrowing(
-		unsigned int d,
+		uint32_t d,
 		bool relaxed_ = true,
 		bool toroidal_ = true,
-		unsigned int numTrials_ = 1000,
+		uint32_t numTrials_ = 1000,
 		double relaxedFactor_ = 0.9,
 		double spherePacking = -1.0
 	) : 
@@ -56,15 +56,15 @@ public:
 		setRandomSeed(); 
 	}
 	
-	void setDimension(unsigned int d) { D = d; }
-    unsigned int GetDimension() const { return D; }
+	void setDimension(uint32_t d) { D = d; }
+    uint32_t GetDimension() const { return D; }
 
-	void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
 	void setRelaxed(bool re) { relaxed = re; }
 	void setToroidal(bool trd) { toroidal = trd; }
-	void setMaxIters(unsigned int its) { numTrials = its; }
+	void setMaxIters(uint32_t its) { numTrials = its; }
 	void setRelaxedFactor(double factor) { relaxedFactor = factor * factor; /* we use square dist */}
 	void setSpherePacking(double packing) 
 	{
@@ -84,7 +84,7 @@ public:
 	}
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		std::uniform_real_distribution<T> dist(0, 1);
 		
@@ -97,16 +97,16 @@ public:
 
 		// Scale by N ^ (1/D) (squared)
 		T currentDist = static_cast<T>(initialDistanceSquared * std::pow(1. / (double)N, 2. / (double)D));
-        for (unsigned int i = 0; i < N; /* change i only when sample is accepted */)
+        for (uint32_t i = 0; i < N; /* change i only when sample is accepted */)
 		{
 			bool accept = false;
-			for (unsigned int it = 0; (it < numTrials) && !accept; it++)
+			for (uint32_t it = 0; (it < numTrials) && !accept; it++)
 			{
-				for (unsigned int d = 0; d < D; d++)
+				for (uint32_t d = 0; d < D; d++)
 					pt[d] = dist(m_mersenneTwister);
 
 				accept = true;
-				for (unsigned int j = 0; (j < i) && accept; j++)
+				for (uint32_t j = 0; (j < i) && accept; j++)
 				{
 					const T dist = dist_function(pt.data(), arg_pts[j], D);
 					accept = (dist > currentDist);
@@ -130,10 +130,10 @@ public:
 // utk::SamplerDartThrowing::GetDistFunction() [with T = double]::<lambda(const double*, const double*)>
 private:
 	template<typename T>
-	static T computeDistSquared(const T* a, const T* b, unsigned int n)
+	static T computeDistSquared(const T* a, const T* b, uint32_t n)
 	{
 		T dist = 0.0;
-		for (unsigned int i = 0; i < n; i++)
+		for (uint32_t i = 0; i < n; i++)
 		{
 			const T diff = (a[i] - b[i]);
 			dist += diff * diff; 
@@ -141,10 +141,10 @@ private:
 		return dist;
 	}
 	template<typename T>
-	static T computeToroidalDistSquared(const T* a, const T* b, unsigned int n)
+	static T computeToroidalDistSquared(const T* a, const T* b, uint32_t n)
 	{
 		T dist = 0.0;
-		for (unsigned int i = 0; i < n; i++)
+		for (uint32_t i = 0; i < n; i++)
 		{
 			const T diff = std::abs(a[i] - b[i]);
 			const T toric_diff = std::min(diff, 1. - diff);
@@ -154,7 +154,7 @@ private:
 		
 	}
 
-	static double GetPackingDistance(unsigned int D)
+	static double GetPackingDistance(uint32_t D)
 	{
 		// I simply don't like maccros for constants ^^'
 		static constexpr double PI = 3.14159265358979323846;
@@ -178,12 +178,12 @@ private:
 	}
 
 protected:
-	unsigned int D;
+	uint32_t D;
 
 	bool toroidal;
 	bool relaxed;
 
-	unsigned int numTrials;
+	uint32_t numTrials;
 	double relaxedFactor;
 	double initialDistanceSquared;
 

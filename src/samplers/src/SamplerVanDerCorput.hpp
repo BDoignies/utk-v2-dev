@@ -43,22 +43,22 @@ namespace utk
 
 		SamplerVanDerCorput() { }
 
-		unsigned int GetDimension() const { return 1; }
+		uint32_t GetDimension() const { return 1; }
 
 		template<typename T>
-		bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+		bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 		{
             arg_pts.Resize(N, 1);
 			if constexpr (std::is_integral_v<T>)
 			{
-				for(unsigned int i = 0; i < N; i++)
+				for(uint32_t i = 0; i < N; i++)
 				{
 					arg_pts[i][0] = radicalInverse_VdC(i);
 				}
 			}
 			else
 			{
-				for(unsigned int i = 0; i < N; i++)
+				for(uint32_t i = 0; i < N; i++)
 				{
 					arg_pts[i][0] = radicalInverse_VdC(i) * 0x1p-32;
 				}
@@ -70,7 +70,7 @@ namespace utk
 	protected:
 		
         //Code from http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
-        static unsigned int radicalInverse_VdC(uint32_t bits) 
+        static uint32_t radicalInverse_VdC(uint32_t bits) 
         {
             bits = (bits << 16u) | (bits >> 16u);
             bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
@@ -80,7 +80,7 @@ namespace utk
             return bits;
     	}
 
-        static unsigned int radicalInverse_VdC64(uint64_t bits) 
+        static uint32_t radicalInverse_VdC64(uint64_t bits) 
         {
             uint64_t n0 = radicalInverse_VdC((uint32_t) bits);
             uint64_t n1 = radicalInverse_VdC((uint32_t) (bits >> 32));

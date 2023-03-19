@@ -41,7 +41,7 @@ class SamplerHalton
 {
 protected:
 public:
-	static constexpr unsigned int PRIMES[100] = {
+	static constexpr uint32_t PRIMES[100] = {
 	 	  2,   3,   5,   7,  11,  13,  17,  19,  23,  29, 
 		 31,  37,  41,  43,  47,  53,  59,  61,  67,  71, 
 	  	 73,  79,  83,  89,  97, 101, 103, 107, 109, 113, 
@@ -54,31 +54,31 @@ public:
 		467, 479, 487, 491, 499, 503, 509, 521, 523, 541
 	};
 
-	SamplerHalton(unsigned int d) : D(d) 
+	SamplerHalton(uint32_t d) : D(d) 
     {
-		setBasisList(PRIMES, sizeof(PRIMES) / sizeof(unsigned int));
+		setBasisList(PRIMES, sizeof(PRIMES) / sizeof(uint32_t));
 	}
     
-	void setDimension(unsigned int d) { D = d; }
-    unsigned int GetDimension() const { return D; }
+	void setDimension(uint32_t d) { D = d; }
+    uint32_t GetDimension() const { return D; }
 
-	void setBasisList(const unsigned int* arg_base_list, unsigned int arg_idBaseMax )
+	void setBasisList(const uint32_t* arg_base_list, uint32_t arg_idBaseMax )
 	{
 		m_base_list = arg_base_list;
 		m_idBaseMax = arg_idBaseMax;
 	}
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		if(D > m_idBaseMax) return false;
 
 		arg_pts.Resize(N, D);
 		if constexpr (std::is_integral_v<T>)
 		{
-			for(unsigned int i=0; i < N; i++)
+			for(uint32_t i=0; i < N; i++)
 			{
-				for(unsigned int d = 0; d < D; d++)
+				for(uint32_t d = 0; d < D; d++)
 				{
 					arg_pts[i][d] = RadicalInverseInt(i, m_base_list[d]);
 				}
@@ -86,9 +86,9 @@ public:
 		}
 		else // Assume double or float here
 		{
-			for(unsigned int i = 0; i < N; i++)
+			for(uint32_t i = 0; i < N; i++)
 			{
-				for(unsigned int d = 0; d < D; d++)
+				for(uint32_t d = 0; d < D; d++)
 				{
 					arg_pts[i][d] = RadicalInverseDouble<T>(i, m_base_list[d]);
 				}
@@ -99,9 +99,9 @@ public:
 	}
 
 private:
-    unsigned int D;
-	unsigned int m_idBaseMax;
-	const unsigned int* m_base_list;
+    uint32_t D;
+	uint32_t m_idBaseMax;
+	const uint32_t* m_base_list;
 };
 
 } //end namespace utk

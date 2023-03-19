@@ -40,15 +40,15 @@ class SamplerKorobov
 protected:
 public:
 
-	SamplerKorobov(unsigned int d, unsigned int gen = 3) : D(d), gen_a(gen) { }
+	SamplerKorobov(uint32_t d, uint32_t gen = 3) : D(d), gen_a(gen) { }
 	
-	void setDimension(unsigned int d) { D = d; }
-    unsigned int GetDimension() const { return D; }
+	void setDimension(uint32_t d) { D = d; }
+    uint32_t GetDimension() const { return D; }
 
-	void setGeneratorA(unsigned int arg_a) { if (arg_a != 0) gen_a = arg_a; }
+	void setGeneratorA(uint32_t arg_a) { if (arg_a != 0) gen_a = arg_a; }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		// @TODO : prevent user from generating points if gcd(N, a) != 1 ? 
 		arg_pts.Resize(N, D);
@@ -59,13 +59,13 @@ public:
 		if (D >= 2) W[1] = gen_a * step;
 		if (D >  2) 
 		{
-			for (unsigned int i = 2; i < D; i++)
+			for (uint32_t i = 2; i < D; i++)
 				W[i] = (T)((int) std::pow(gen_a, i) % N) * step;
 		}
 		
-		for(unsigned int i = 0; i < N; i++)
+		for(uint32_t i = 0; i < N; i++)
 		{
-			for (unsigned int d = 0; d < D; d++)
+			for (uint32_t d = 0; d < D; d++)
 			{
 				arg_pts[i][d] = std::fmod(i * W[d], 1.0);
 			}
@@ -75,8 +75,8 @@ public:
 	};
 
 protected:
-	unsigned int D;
-	unsigned int gen_a;
+	uint32_t D;
+	uint32_t gen_a;
 };
 
 } //end namespace utk

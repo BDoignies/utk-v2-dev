@@ -139,7 +139,7 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
     - [X] Kronecker (Uses a global constant to store Alphas)
     - [X] Halton    (Uses a global constant to store Basis)
 - [ ] Discrepancies, Spectrum, PCF, ...
-- [ ] Scramblers, ...
+- [X] Scramblers
 
 ## Design :
 

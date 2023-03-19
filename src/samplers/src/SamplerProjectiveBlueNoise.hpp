@@ -38,7 +38,7 @@
 class CombinationGenerator
 {
 public:
-    CombinationGenerator(unsigned int n, unsigned int k, std::vector<bool>* buff) : 
+    CombinationGenerator(uint32_t n, uint32_t k, std::vector<bool>* buff) : 
         buffer(buff),
         N(n), K(k)
     {
@@ -49,12 +49,12 @@ public:
         std::fill(buff->begin() + K,   buff->end(), false);
     }
 
-    bool GetNext(std::vector<unsigned int>& permut)
+    bool GetNext(std::vector<uint32_t>& permut)
     {
         if (end) return false;
         
         permut.resize(0);
-        for (unsigned int i = 0; i < N; i++)
+        for (uint32_t i = 0; i < N; i++)
             if (buffer->at(i)) permut.push_back(i);
         
         end = !std::prev_permutation(buffer->begin(), buffer->end());
@@ -63,8 +63,8 @@ public:
 private:
     bool end;
     std::vector<bool>* buffer;
-    const unsigned int N;
-    const unsigned int K;
+    const uint32_t N;
+    const uint32_t K;
 };
 
 
@@ -77,10 +77,10 @@ protected:
 public:
 
 	SamplerProjectiveBlueNoise(
-		unsigned int d,
+		uint32_t d,
 		bool relaxed_ = true,
 		bool toroidal_ = true,
-		unsigned int numTrials_ = 1000,
+		uint32_t numTrials_ = 1000,
 		double relaxedFactor_ = 0.9
 	) : 
 		D(d), toroidal(toroidal_), relaxed(relaxed_),
@@ -89,19 +89,19 @@ public:
 		setRandomSeed(); 
 	}
 	
-	void setDimension(unsigned int d) { D = d; }
-    unsigned int GetDimension() const { return D; }
+	void setDimension(uint32_t d) { D = d; }
+    uint32_t GetDimension() const { return D; }
 	
-	void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
 	void setRelaxed(bool re) { relaxed = re; }
 	void setToroidal(bool trd) { toroidal = trd; }
-	void setMaxIters(unsigned int its) { numTrials = its; }
+	void setMaxIters(uint32_t its) { numTrials = its; }
 	void setRelaxedFactor(double factor) { relaxedFactor = factor * factor; /* we use square dist */}
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		std::uniform_real_distribution<T> dist(0, 1);
 		
@@ -114,25 +114,25 @@ public:
 		
 		// Buffers to avoid reallocation ! 
 		std::vector<bool> combinationBuffer(D);
-		std::vector<unsigned int> combination(D);
+		std::vector<uint32_t> combination(D);
 
 		// Compute per-projection distances
 		std::vector<T> projectiveDistances(D);
-		for (unsigned int d = 0; d < D; d++)
+		for (uint32_t d = 0; d < D; d++)
 			projectiveDistances[d] = GetDistance<T>(N, d + 1);
 
 		T currentRelaxFactor = static_cast<T>(1.0);
-		for (unsigned int i = 0; i < N; /* change i only when sample is accepted */)
+		for (uint32_t i = 0; i < N; /* change i only when sample is accepted */)
 		{
 			bool accept = false;
-			for (unsigned int it = 0; (it < numTrials) && !accept; it++)
+			for (uint32_t it = 0; (it < numTrials) && !accept; it++)
 			{
-				for (unsigned int d = 0; d < D; d++)
+				for (uint32_t d = 0; d < D; d++)
 					pt[d] = dist(m_mersenneTwister);
 
 				accept = true;
 				// For each size of projection
-				for (unsigned int k = 0; (k < D) && accept; k++)
+				for (uint32_t k = 0; (k < D) && accept; k++)
 				{
 					const T currentDist = projectiveDistances[k] * currentRelaxFactor; 
 					CombinationGenerator generator(D, k + 1, &combinationBuffer);
@@ -141,7 +141,7 @@ public:
 					while (generator.GetNext(combination) && accept)
 					{
 						// For each previous point
-						for (unsigned int j = 0; (j < i) && accept; j++)
+						for (uint32_t j = 0; (j < i) && accept; j++)
 						{
 							const T dist = dist_function(pt.data(), arg_pts[j], combination);
 							accept = (dist > currentDist);
@@ -166,10 +166,10 @@ public:
 
 private:
 	template<typename T>
-	static T computeDistSquared(const T* a, const T* b, const std::vector<unsigned int>& coords)
+	static T computeDistSquared(const T* a, const T* b, const std::vector<uint32_t>& coords)
 	{
 		T dist = 0.0;
-		for (unsigned int i = 0; i < coords.size(); i++)
+		for (uint32_t i = 0; i < coords.size(); i++)
 		{
 			const T diff = (a[coords[i]] - b[coords[i]]);
 			dist += diff * diff; 
@@ -178,10 +178,10 @@ private:
 	}
 	
 	template<typename T>
-	static T computeToroidalDistSquared(const T* a, const T* b, const std::vector<unsigned int>& coords)
+	static T computeToroidalDistSquared(const T* a, const T* b, const std::vector<uint32_t>& coords)
 	{
 		T dist = 0.0;
-		for (unsigned int i = 0; i < coords.size(); i++)
+		for (uint32_t i = 0; i < coords.size(); i++)
 		{
 			const T diff = std::abs(a[coords[i]] - b[coords[i]]);
 			const T toric_diff = std::min(diff, 1. - diff);
@@ -192,7 +192,7 @@ private:
 	}
 
 	template<typename T>
-	static T GetDistance(unsigned int N, unsigned int k)
+	static T GetDistance(uint32_t N, uint32_t k)
 	{
 		T gamman_max = 0;
 		switch(k)
@@ -214,12 +214,12 @@ private:
 	}
 
 protected:
-	unsigned int D;
+	uint32_t D;
 
 	bool toroidal;
 	bool relaxed;
 
-	unsigned int numTrials;
+	uint32_t numTrials;
 	double relaxedFactor;
 
     std::mt19937 m_mersenneTwister;

@@ -77,9 +77,9 @@ namespace heck
 	#ifdef _OPENMP
 	#pragma omp for schedule(static)
 	#endif
-		for (unsigned int i=0; i<pts.size(); i++) {
+		for (uint32_t i=0; i<pts.size(); i++) {
 			heck_Point grad;
-			for (unsigned int j = 0; j < pts.size(); j++) {
+			for (uint32_t j = 0; j < pts.size(); j++) {
 				if (i == j)
 					continue;
 
@@ -233,23 +233,23 @@ public:
 		smoothing(smooth)
 	{ setRandomSeed(); }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
-	void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
 	void setCriticalFrequency(float cf) { critFrequency = cf; }
 	void setSmoothing(float sm) { smoothing = sm; }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		// Note : heck_Points are of type float
         std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 		std::vector<heck_Point> pts, result;
 		pts.resize(N);
 
-		for (unsigned int i = 0; i < N; i++)
+		for (uint32_t i = 0; i < N; i++)
 		{
 			pts[i].x = dist(m_mersenneTwister);
 			pts[i].y = dist(m_mersenneTwister);
@@ -268,7 +268,7 @@ public:
     	heck::MainOptimization(pts, target, smoothing, result);
 		
 		arg_pts.Resize(N, 2);
-		for(unsigned int i = 0; i < N; i++)
+		for(uint32_t i = 0; i < N; i++)
         {
 			arg_pts[i][0] = static_cast<T>(result[i].x);
 			arg_pts[i][1] = static_cast<T>(result[i].y);

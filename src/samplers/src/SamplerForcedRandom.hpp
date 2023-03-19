@@ -48,11 +48,11 @@ protected:
 public:
 
 	SamplerForcedRandom(
-		unsigned int sparsity_ = 8, 
-		unsigned int matrixSize_ = 512
+		uint32_t sparsity_ = 8, 
+		uint32_t matrixSize_ = 512
 	) : sparsity(sparsity_) { setMatrixSize(matrixSize_); }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
 	void setMatrixSparsity(int sparsity_) 
 	{
@@ -69,7 +69,7 @@ public:
 	}
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
         forcedrandom::n = N;
 		forcedrandom::sigma = sparsity;
@@ -87,7 +87,7 @@ public:
 
 		std::vector<V2d> samples = forcedrandom::GenerateSamples();
 		arg_pts.Resize(N, 2);
-        for(unsigned int i = 0; i < samples.size(); i++)
+        for(uint32_t i = 0; i < samples.size(); i++)
 		{
 			arg_pts[i][0] = samples[i].x;
 			arg_pts[i][1] = samples[i].y;

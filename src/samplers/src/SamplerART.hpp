@@ -69,12 +69,12 @@ public:
 		tileFile(std::string(UTK_DATA_PATH) + "/ART/table.dat")
 	{	}
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
 	void setTileFile(const std::string& file) { tileFile = file; }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
         std::fstream file(tileFile);
         if (!file.is_open())
@@ -87,7 +87,7 @@ public:
 		art::generate(s);
 		
 		arg_pts.Resize(N, 2);
-		for (unsigned int i = 0; i < N; i++) 
+		for (uint32_t i = 0; i < N; i++) 
 		{
 			arg_pts[i][0] = s[i].x;
 			arg_pts[i][1] = s[i].y;

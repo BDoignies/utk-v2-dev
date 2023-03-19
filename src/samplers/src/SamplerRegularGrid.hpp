@@ -41,29 +41,29 @@ namespace utk
 	protected:
 	public:
 
-		SamplerRegularGrid(unsigned int d) : D(d) { }
+		SamplerRegularGrid(uint32_t d) : D(d) { }
         
-        void setDimension(unsigned int d) { D = d; }
-        unsigned int GetDimension() const { return D; }
+        void setDimension(uint32_t d) { D = d; }
+        uint32_t GetDimension() const { return D; }
         
 		template<typename T>
-        bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+        bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
         {
-            const unsigned int n  = (unsigned int) std::round(pow((double) N, 1. / (double) D));
+            const uint32_t n  = (uint32_t) std::round(pow((double) N, 1. / (double) D));
             const double gridSize = 1. / (double)n;
 
-            if (N != static_cast<unsigned int>(std::round(std::pow(n, D))))
+            if (N != static_cast<uint32_t>(std::round(std::pow(n, D))))
                 return false;
             
             std::uniform_real_distribution<T> dist(0, 1);
             arg_pts.Resize(N, D);
 
-            for (unsigned int i = 0; i < N; i++)
+            for (uint32_t i = 0; i < N; i++)
             {
-                unsigned int coords = i;
-                for (unsigned int d = 0; d < D; d++)
+                uint32_t coords = i;
+                for (uint32_t d = 0; d < D; d++)
                 {
-                    const unsigned int cellStart = static_cast<unsigned int>(coords % n);
+                    const uint32_t cellStart = static_cast<uint32_t>(coords % n);
                     arg_pts[i][d] = cellStart * gridSize;           
 
                     coords /= n;         
@@ -74,7 +74,7 @@ namespace utk
         }
 
     protected:
-        unsigned int D;
+        uint32_t D;
 	};
 
 } 

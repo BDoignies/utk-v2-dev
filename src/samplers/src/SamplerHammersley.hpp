@@ -44,15 +44,15 @@ namespace utk
 
 		SamplerHammersley() { }
 
-		unsigned int GetDimension() const { return 2; }
+		uint32_t GetDimension() const { return 2; }
 
 		template<typename T>
-		bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+		bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 		{
             arg_pts.Resize(N, 2);
 			if constexpr (std::is_integral_v<T>)
 			{
-				for(unsigned int i = 0; i < N; i++)
+				for(uint32_t i = 0; i < N; i++)
 				{
 					arg_pts[i][0] = RadicalInverseBase2(i);
 					arg_pts[i][1] = i;
@@ -60,7 +60,7 @@ namespace utk
 			}
 			else
 			{
-				for(unsigned int i = 0; i < N; i++)
+				for(uint32_t i = 0; i < N; i++)
 				{
 					arg_pts[i][0] = RadicalInverseBase2Double<T>(i);
 					arg_pts[i][1] = (T) i / (T)N;

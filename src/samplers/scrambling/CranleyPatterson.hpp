@@ -32,46 +32,76 @@
 #include "../utils/FastPRNG.hpp"
 #include <random>
 
-class CranleyPatterson
-{
-public:
-    CranleyPatterson(double mv = 1.0) : 
-        maxValue(mv)
-    { }
-
-    void setMaxValue(double mv = 1.0) 
+namespace utk
+{ 
+    class CranleyPattersonScrambling
     {
-        maxValue = mv;
-    }
+    public:
+        CranleyPattersonScrambling(double md = 1.0, double ds = 1.0) : 
+            maxDispacement(md), domainSize(ds)
+        { }
 
-    void setRandomSeed(long unsigned int arg_seed) 
-    { 
-        mt.seed(arg_seed);
-    }
-
-    void setRandomSeed() 
-    { 
-        setRandomSeed(std::random_device{}());
-    }
-
-    template<typename T>
-    void Scramble(Pointset<T>& in)
-    {
-        std::uniform_real_distribution<T> dist(0.0, maxValue);
-        std::vector<T> shift(in.Ndim());
-        
-        for (unsigned int d = 0; d < in.Ndim(); d++)
-            shift[d] = dist(mt);
-
-        for (unsigned int i = 0; i < in.Npts(); i++)
+        void setMaxDispacement(double mv = 1.0) 
         {
+            maxDispacement = mv;
+        }
+
+        void setDomainSize(double ds = 1.0)
+        {
+            domainSize = ds;
+        }
+
+        void setRandomSeed(long unsigned int arg_seed) 
+        { 
+            mt.seed(arg_seed);
+        }
+
+        void setRandomSeed() 
+        { 
+            setRandomSeed(std::random_device{}());
+        }
+
+        template<typename T>
+        void Scramble(Pointset<T>& in)
+        {
+            std::uniform_real_distribution<T> dist(-maxDispacement, maxDispacement);
+            std::vector<T> shift(in.Ndim());
+            
             for (unsigned int d = 0; d < in.Ndim(); d++)
+                shift[d] = dist(mt);
+
+            for (unsigned int i = 0; i < in.Npts(); i++)
             {
-                in[i][d] = fmodf64(in[i][d] + shift[d], maxValue);
+                for (unsigned int d = 0; d < in.Ndim(); d++)
+                {
+                    in[i][d] = fmodf64(in[i][d] + shift[d], domainSize);
+                }
             }
         }
-    }
-private:
-    double maxValue;
-    std::mt19937 mt;
-};
+
+        template<typename T>
+        void Scramble(const Pointset<T>& in, Pointset<T>& out)
+        {
+            std::uniform_real_distribution<T> dist(-maxDispacement, maxDispacement);
+            std::vector<T> shift(in.Ndim());
+            
+            out.Resize(in.Npts(), in.Ndim());
+
+            for (unsigned int d = 0; d < in.Ndim(); d++)
+                shift[d] = dist(mt);
+
+            for (unsigned int i = 0; i < in.Npts(); i++)
+            {
+                for (unsigned int d = 0; d < in.Ndim(); d++)
+                {
+                    out[i][d] = fmodf64(in[i][d] + shift[d], domainSize);
+                }
+            }
+        }
+
+    private:
+        double domainSize;
+        double maxDispacement;
+        std::mt19937 mt;
+    };
+}

@@ -54,21 +54,21 @@ public:
 
     SamplerPMJ(
         const std::string& method_ = "PMJ02",
-        unsigned int candidates = 10
+        uint32_t candidates = 10
     ) : method(method_) { setRandomSeed(); }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
     void setMethod(const std::string& m) { method = m; }
-    void setCandidates(unsigned int nb) { candidates = nb; }
-    void setRandomSeed( long unsigned int arg_seed ) { seed = arg_seed; }
+    void setCandidates(uint32_t nb) { candidates = nb; }
+    void setRandomSeed( uint64_t arg_seed ) { seed = arg_seed; }
     void setRandomSeed() { seed = std::random_device{}(); }
 
     template<typename T>
-    bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+    bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
     {
         const SamplePMJ* samples;
-        unsigned int Npts;
+        uint32_t Npts;
         if (method == "PJ")
         {
             // Increment seed for samples not to be the same next time they are asked.
@@ -111,7 +111,7 @@ public:
         // }
 
         arg_pts.Resize(Npts, 2);
-        for (unsigned int i = 0; i < Npts; i++)
+        for (uint32_t i = 0; i < Npts; i++)
         {
             arg_pts[i][0] = samples[i][0];
             arg_pts[i][1] = samples[i][1];
@@ -120,7 +120,7 @@ public:
     };
 
 protected:
-    unsigned int candidates;
+    uint32_t candidates;
     unsigned long long int seed;
     std::string method;
     std::mt19937 m_mersenneTwister;

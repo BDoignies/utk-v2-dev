@@ -1268,22 +1268,22 @@ namespace utk
 	{
 	protected:
 	public:
-		SamplerNiederreiter(unsigned int d, unsigned int basis = 2) : D(d), m_basis(basis) { }
+		SamplerNiederreiter(uint32_t d, uint32_t basis = 2) : D(d), m_basis(basis) { }
 	
 		void setBasis(uint arg_basis) { m_basis = arg_basis; }
 	
-		void setDimension(unsigned int d) { D = d; }
-		unsigned int GetDimension() const { return D; }
+		void setDimension(uint32_t d) { D = d; }
+		uint32_t GetDimension() const { return D; }
 
 		template <typename T>
-		bool generateSamples(Pointset<T> &arg_pts, unsigned int N)
+		bool generateSamples(Pointset<T> &arg_pts, uint32_t N)
 		{
 			arg_pts.Resize(N, D);
 		
 			int seed = 0;
 			if constexpr (std::is_same_v<T, double>)
 			{
-				for (unsigned int i = 0; i < N; i++)
+				for (uint32_t i = 0; i < N; i++)
 				{
 					neider::niederreiter(D, m_basis, &seed, arg_pts[i]);
 				}
@@ -1292,24 +1292,24 @@ namespace utk
 			{
 				// Most likely float 
 				std::vector<double> tmp(D);
-				for (unsigned int i = 0; i < N; i++)
+				for (uint32_t i = 0; i < N; i++)
 				{
 					neider::niederreiter(D, m_basis, &seed, tmp.data());
-					for (unsigned int d = 0; d < D; d++)
+					for (uint32_t d = 0; d < D; d++)
 						arg_pts[i][d] = static_cast<T>(tmp[d]);
 				}
 			}
 			else
 			{
-				const unsigned int power  = std::ceil(std::log(N) / std::log(m_basis));
-				const unsigned int factor = std::pow(m_basis, power);
+				const uint32_t power  = std::ceil(std::log(N) / std::log(m_basis));
+				const uint32_t factor = std::pow(m_basis, power);
 
 				std::vector<double> tmp(D);
-				for (unsigned int i = 0; i < N; i++)
+				for (uint32_t i = 0; i < N; i++)
 				{
 					neider::niederreiter(D, m_basis, &seed, tmp.data());
 					
-					for (unsigned int d = 0; d < D; d++)
+					for (uint32_t d = 0; d < D; d++)
 						arg_pts[i][d] = static_cast<T>(tmp[d] * factor);
 				}
 			}
@@ -1318,7 +1318,7 @@ namespace utk
 		};
 
 	protected:
-		unsigned int D;
+		uint32_t D;
 		int m_basis;
 	};
 

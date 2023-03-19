@@ -47,7 +47,7 @@ public:
 
 	SamplerLutLDBN() : target("BNOT") { initSamplers(); }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
 	void setTarget(const std::string& tgt) 
 	{
@@ -55,9 +55,9 @@ public:
 	}
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
-		const unsigned int n  = (unsigned int) std::round(std::sqrt(N));
+		const uint32_t n  = (uint32_t) std::round(std::sqrt(N));
 		if (n * n != N)
 			return false;
 
@@ -76,12 +76,12 @@ public:
 		// }
 		
 		arg_pts.Resize(N, 2);
-		unsigned int pmax = std::ceil(std::log2(N));
-		unsigned int smax = std::pow(2, pmax);
+		uint32_t pmax = std::ceil(std::log2(N));
+		uint32_t smax = std::pow(2, pmax);
 
 		if (std::is_integral_v<T>)
 		{
-			for (unsigned int i = 0; i < N; i++)
+			for (uint32_t i = 0; i < N; i++)
 			{
 				arg_pts[i][0] = static_cast<T>(samples[i][0] * smax);
 				arg_pts[i][1] = static_cast<T>(samples[i][1] * smax);
@@ -89,7 +89,7 @@ public:
 		}
 		else
 		{
-			for (unsigned int i = 0; i < N; i++)
+			for (uint32_t i = 0; i < N; i++)
 			{
 				arg_pts[i][0] = static_cast<T>(samples[i][0]);
 				arg_pts[i][1] = static_cast<T>(samples[i][1]);

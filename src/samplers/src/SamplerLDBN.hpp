@@ -43,13 +43,13 @@ public:
 
 	SamplerLDBN() { setRandomSeed(); setTileSize(128); }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
 	void setPermutFile(const std::string& file) { permutFile = file; }
-	void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
-	void setTileSize(unsigned int tileSize)
+	void setTileSize(uint32_t tileSize)
 	{
 		tablesize = tileSize;
 		tablebit  = std::log2(tablesize);
@@ -59,9 +59,9 @@ public:
 	}
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
-		const unsigned int n  = (unsigned int) std::round(std::sqrt(N));
+		const uint32_t n  = (uint32_t) std::round(std::sqrt(N));
 		if (n * n != N)
 			return false;
 		
@@ -73,12 +73,12 @@ public:
 		generate(n);
 
 		arg_pts.Resize(N, 2);
-		unsigned int pmax = std::ceil(std::log2(N));
-		unsigned int smax = std::pow(2, pmax);
+		uint32_t pmax = std::ceil(std::log2(N));
+		uint32_t smax = std::pow(2, pmax);
 
 		if (std::is_integral_v<T>)
 		{
-			for (unsigned int i = 0; i < N; i++)
+			for (uint32_t i = 0; i < N; i++)
 			{
 				arg_pts[i][0] = static_cast<T>(s[i][0] * smax);
 				arg_pts[i][1] = static_cast<T>(s[i][1] * smax);
@@ -86,7 +86,7 @@ public:
 		}
 		else
 		{
-			for (unsigned int i = 0; i < N; i++)
+			for (uint32_t i = 0; i < N; i++)
 			{
 				arg_pts[i][0] = static_cast<T>(s[i][0]);
 				arg_pts[i][1] = static_cast<T>(s[i][1]);
@@ -111,7 +111,7 @@ protected:
 			return false;
 		
 		O.resize(one);
-		for (unsigned int i = 0; i < one; i++)
+		for (uint32_t i = 0; i < one; i++)
 		{
 			permut_table >> O[i][0] >> O[i][1];
 		}
@@ -123,13 +123,13 @@ protected:
 
 	bool setRandomPermut()
 	{
-		std::uniform_int_distribution<unsigned int> dist(0, 16 - 1);
+		std::uniform_int_distribution<uint32_t> dist(0, 16 - 1);
 
 		O.resize(one);
 
 		//Permut Y
-		for (unsigned int x = 0; x < 128; x++)
-		for (unsigned int y = 0; y < 128; y+=16)
+		for (uint32_t x = 0; x < 128; x++)
+		for (uint32_t y = 0; y < 128; y+=16)
 		{
 			int tab[16];
 			for(uint n=0; n<16; n++) tab[n] = n;
@@ -146,8 +146,8 @@ protected:
 		}
 		
 		//Permut X
-		for (unsigned int y = 0; y < 128; y++)
-		for (unsigned int x = 0; x < 128; x += 16)
+		for (uint32_t y = 0; y < 128; y++)
+		for (uint32_t x = 0; x < 128; x += 16)
 		{
 			int tab[16];
 			for(uint n=0; n<16; n++) tab[n] = n;
@@ -182,7 +182,7 @@ protected:
 		*/
 	}
 
-	void generate(unsigned int n) 
+	void generate(uint32_t n) 
 	{
 		double inv = 1.0 / n;
 		int i = 0;
@@ -196,11 +196,11 @@ protected:
 				s[i++].y = inv * (Y + O[id].y + y);
 			}
 		}*/
-		for (unsigned int Y = 0; Y < n; Y++) {
+		for (uint32_t Y = 0; Y < n; Y++) {
 			double x = scl * mirror[Y >> tablebit];
 			unsigned id0 = ((Y & (tablesize-1)) << tablebit);
 			//std::cout << "id0 " << id0 << std::endl;
-			for (unsigned int X = 0; X < n; X++) {
+			for (uint32_t X = 0; X < n; X++) {
 				double y = scl * mirror[X >> tablebit];
 				unsigned id = id0 + (X & (tablesize-1));
 				//std::cout << "id " << id << std::endl;
@@ -213,10 +213,10 @@ protected:
 	std::vector<std::array<double, 2>> O, s;
 
 	std::string permutFile;
-	unsigned int tablesize;
-	unsigned int tablebit;
-	unsigned int maxval;
-	unsigned int one;
+	uint32_t tablesize;
+	uint32_t tablebit;
+	uint32_t maxval;
+	uint32_t one;
 	double scl;
 
 	unsigned mirror[1024];  // 10 bits

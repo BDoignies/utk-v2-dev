@@ -42,16 +42,16 @@ namespace utk
     class SamplerNRooks
     {
     public:
-        SamplerNRooks(unsigned int d) : D(d) { setRandomSeed(); }
+        SamplerNRooks(uint32_t d) : D(d) { setRandomSeed(); }
         
-        void setDimension(unsigned int d) { D = d; }
-        unsigned int GetDimension() const { return D; }
+        void setDimension(uint32_t d) { D = d; }
+        uint32_t GetDimension() const { return D; }
         
-        void setRandomSeed(long unsigned int arg_seed) { m_mersenneTwister.seed(arg_seed); }
+        void setRandomSeed(uint64_t arg_seed) { m_mersenneTwister.seed(arg_seed); }
 	    void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
         template <typename T>
-        bool generateSamples(Pointset<T> &arg_pts, unsigned int N)
+        bool generateSamples(Pointset<T> &arg_pts, uint32_t N)
         {
             arg_pts.Resize(N, D);
 
@@ -64,12 +64,12 @@ namespace utk
             }
 
             /// N-Rooks Swapping
-            std::uniform_int_distribution<unsigned int> dist(0, N - 1);
+            std::uniform_int_distribution<uint32_t> dist(0, N - 1);
             for (uint i = 0; i < N - 2; i++)
             {
                 for (uint d = 0; d < D; d++)
                 {
-                    unsigned int j = dist(m_mersenneTwister);
+                    uint32_t j = dist(m_mersenneTwister);
                     std::swap(arg_pts[i][d], arg_pts[j][d]);
                 }
             }
@@ -78,7 +78,7 @@ namespace utk
         };
 
     protected:
-        unsigned int D;
+        uint32_t D;
         std::mt19937 m_mersenneTwister;
     };
 

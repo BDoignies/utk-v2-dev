@@ -54,19 +54,19 @@ class SamplerPenrose
 protected:
 public:
 
-	SamplerPenrose(/*unsigned int mag = 100*/) : magFactor(100) { }
+	SamplerPenrose(/*uint32_t mag = 100*/) : magFactor(100) { }
 	
-    unsigned int GetDimension() const { return 2; }
-	// void setMagFactor(unsigned int mag) { magFactor = mag; }
+    uint32_t GetDimension() const { return 2; }
+	// void setMagFactor(uint32_t mag) { magFactor = mag; }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		MyQuasisampler test(magFactor * N);
 		std::vector<penrose::Point2D> points = test.getSamplingPoints();
 
         arg_pts.Resize(N, 2);
-		for (unsigned int i = 0; i < points.size(); i++)
+		for (uint32_t i = 0; i < points.size(); i++)
 		{
 			arg_pts[i][0] = (points[i].x / 100.0);
 			arg_pts[i][1] = (points[i].y / 100.0);
@@ -76,7 +76,7 @@ public:
 	};
 
 protected:
-	unsigned int magFactor;
+	uint32_t magFactor;
 };
 
 }

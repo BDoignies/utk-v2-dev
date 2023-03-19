@@ -334,13 +334,13 @@ class SamplerRank1
             m_exhaustSearch(exhaustSearch), m_fibonnacci(fibonnacci)
         { }
 		
-		unsigned int GetDimension() const { return 2; }
+		uint32_t GetDimension() const { return 2; }
 
 		void setFibonnacci(bool arg_fibonnacci) { m_fibonnacci = arg_fibonnacci; }
 		void setExhaustSearch(bool arg_exhauseSearch) { m_exhaustSearch = arg_exhauseSearch; }
 
 		template<typename T>
-		bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+		bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 		{		
 			std::vector<nsrank1::Point> pts;
 			
@@ -348,10 +348,10 @@ class SamplerRank1
 				pts = nsrank1::general_rank1_lattices(N, m_exhaustSearch);
 			else
 			{
-				unsigned int fib_lvl0 = 0;
-				unsigned int fib_lvl1 = 1;
-				unsigned int fib_lvl2 = 1;
-				unsigned int i = 2;
+				uint32_t fib_lvl0 = 0;
+				uint32_t fib_lvl1 = 1;
+				uint32_t fib_lvl2 = 1;
+				uint32_t i = 2;
 				while(fib_lvl2 < N)
 				{
 					fib_lvl0 = fib_lvl1;
@@ -374,7 +374,7 @@ class SamplerRank1
 			// }
 			// else
 			// {
-			for(unsigned int i = 0; i < pts.size(); i++)
+			for(uint32_t i = 0; i < pts.size(); i++)
 			{
 				arg_pts[i][0] = pts[i].x;
 				arg_pts[i][1] = pts[i].y;

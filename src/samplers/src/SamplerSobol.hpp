@@ -52,7 +52,7 @@ namespace utk
         }
 
         SamplerSobol(
-            unsigned int d,
+            uint32_t d,
             unsigned char owenDepth = 32,
             const std::string& fp = "") : D(d) 
         { 
@@ -61,8 +61,8 @@ namespace utk
             setRandomSeed(); 
         }
     
-        void setDimension(unsigned int d) { D = d; }
-        unsigned int GetDimension() const { return D; }
+        void setDimension(uint32_t d) { D = d; }
+        uint32_t GetDimension() const { return D; }
 
         void setOwenDepth(unsigned char depth) { owenDepth = (depth > MAX_BITS) ? MAX_BITS : depth; }
         void setDirectionFile(const std::string& file) 
@@ -73,7 +73,7 @@ namespace utk
                 directionFile = file;
         }
 
-        void setRandomSeed(long unsigned int arg_seed) { m_mersenneTwister.seed(arg_seed); }
+        void setRandomSeed(uint64_t arg_seed) { m_mersenneTwister.seed(arg_seed); }
         void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
         template <typename T>
@@ -83,15 +83,15 @@ namespace utk
             if (!load_mk(directionFile))
                 return false;
 
-            std::vector<unsigned long long> seeds(D);
-            for (unsigned int d = 0; d < D; d++)
+            std::vector<uint64_t> seeds(D);
+            for (uint32_t d = 0; d < D; d++)
                 seeds[d] = m_mersenneTwister();
 
             arg_pts.Resize(N, D);
             for (IntegerType i = 0; i < N; i++)
             {
                 arg_pts[i][0] = convert<T>(owen(RadicalInverseBase2(i), 0, owenDepth, seeds.data()));
-                for (unsigned int d = 1; d < D; d++)
+                for (uint32_t d = 1; d < D; d++)
                     arg_pts[i][d] = convert<T>(owen(sobol_binary(i, sobol_mk[d].data()), d, owenDepth, seeds.data()));
             }
 
@@ -145,19 +145,19 @@ namespace utk
 
         static IntegerType owen(
             IntegerType i,
-            unsigned int dim, 
+            uint32_t dim, 
             unsigned char depth,
-            const unsigned long long int* seeds
+            const uint64_t* seeds
         )
         {
             std::bitset<MAX_BITS> digitsBase2 = i;
             std::bitset<MAX_BITS> newDigits = i;
 
             RNG rng;
-            for (unsigned int idigit = 0; idigit < depth; idigit++)
+            for (unsigned char idigit = 0; idigit < depth; idigit++)
             {
                 IntegerType indPermut = (1 << idigit) - 1 + (digitsBase2 >> (MAX_BITS - idigit)).to_ullong();
-                unsigned long long int seed = seeds[dim] + indPermut;
+                uint64_t seed = seeds[dim] + indPermut;
                 
                 rng.seed(seed);
                 int thisDigitPermut = rng.sample() & 1;
@@ -178,7 +178,7 @@ namespace utk
             file.ignore(256, '\n');
     
             // Load all the mk, aj and sj
-            unsigned int index = 1;
+            uint32_t index = 1;
             while (file.good() && index < D)
             {
                 // Parse the polynomial
@@ -198,7 +198,7 @@ namespace utk
 
 
     protected:
-        unsigned int D;
+        uint32_t D;
         std::mt19937 m_mersenneTwister;
 
         unsigned char owenDepth;

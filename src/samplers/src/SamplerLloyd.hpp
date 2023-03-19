@@ -49,7 +49,7 @@ class SamplerLloyd
 protected:
 public:
 
-	SamplerLloyd(unsigned int nbSteps_ = 100, bool periodic = false) : 
+	SamplerLloyd(uint32_t nbSteps_ = 100, bool periodic = false) : 
 		nbSteps(nbSteps_),
 		periodic_(periodic) 
 	{ 
@@ -57,9 +57,9 @@ public:
 		setRandomSeed(); 
 	}
 
-    unsigned int GetDimension() const { return 3; }
+    uint32_t GetDimension() const { return 3; }
 
-	void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
 	void setToricity(bool isToric)
@@ -68,7 +68,7 @@ public:
 	}
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		if constexpr (std::is_same_v<T, double>)
 		{
@@ -82,7 +82,7 @@ public:
 			tmp.Resize(N, 3);
 
 			generate(tmp, N);
-			for (unsigned int i = 0; i < N * 3; i++)
+			for (uint32_t i = 0; i < N * 3; i++)
 			{
 				arg_pts.Data()[i] = static_cast<T>(tmp.Data()[i]);
 			}
@@ -98,13 +98,13 @@ public:
 
 protected:
     std::mt19937 m_mersenneTwister;
-	unsigned int nbSteps;
+	uint32_t nbSteps;
 	bool periodic_;
     
 	GEO::PeriodicDelaunay3d::IncidentTetrahedra W_;
     GEO::PeriodicDelaunay3d *delaunay_ = nullptr;
 
-	void generate(Pointset<double>& arg_pts, unsigned int N)
+	void generate(Pointset<double>& arg_pts, uint32_t N)
     {
 		if (delaunay_ != nullptr)
 			delete delaunay_;
@@ -119,7 +119,7 @@ protected:
 		init_random_points(arg_pts);
 
 		//Main loop
-		for(unsigned int i = 0; i < nbSteps ; ++i)
+		for(uint32_t i = 0; i < nbSteps ; ++i)
 			Lloyd_step(arg_pts, new_pts);
     }
 	

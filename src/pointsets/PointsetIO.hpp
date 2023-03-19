@@ -42,9 +42,9 @@ template<class Stream, typename T>
 inline void write_text_pointset_stream(Stream& st, const Pointset<T>& pts)
 {
     
-    for (unsigned int i = 0; i < pts.Npts(); i++)
+    for (uint32_t i = 0; i < pts.Npts(); i++)
     {
-        for (unsigned int d = 0; d < pts.Ndim() - 1; d++)
+        for (uint32_t d = 0; d < pts.Ndim() - 1; d++)
         {
             st << pts[i][d] << ' ';
         }
@@ -71,7 +71,7 @@ inline bool write_text_pointsets(const std::string& dest, const std::vector<Poin
     if (!file.is_open()) return false;
     
     file << std::setprecision(16) << std::fixed;
-    for (unsigned int i = 0; i < pts.size() - 1; i++)
+    for (uint32_t i = 0; i < pts.size() - 1; i++)
     {
         write_text_pointset_stream(file, pts[i]);
         file << "#\n";

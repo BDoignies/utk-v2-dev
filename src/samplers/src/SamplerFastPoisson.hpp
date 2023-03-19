@@ -68,11 +68,11 @@ public:
 	SamplerFastPoisson(
         std::string method_ = "DartThrowing", 
         double radius_ = 0.1,
-        unsigned int throwMultiplier_ = 1,
-        unsigned int throws_ = 1000, 
+        uint32_t throwMultiplier_ = 1,
+        uint32_t throws_ = 1000, 
         bool maximize_ = false, 
         bool isTiled_ = false, 
-        unsigned int relaxCount_ = 0
+        uint32_t relaxCount_ = 0
     ) : 
         method(method_), radius(std::clamp(radius_, 0.0005, 0.2)),
         throwMultiplier(throwMultiplier_), throws(throws_), 
@@ -80,19 +80,19 @@ public:
         relaxCount(relaxCount_), sampler(nullptr)
     {  }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 
     void setMethod(const std::string& m) { method = m; }
     void setRadius(double rd) { radius = std::clamp(rd, 0.0005, 0.2); }
-    void setThrowMultiplier(unsigned int tm) { throwMultiplier = tm; }
-    void setThrows(unsigned int t) { throws = t; }
+    void setThrowMultiplier(uint32_t tm) { throwMultiplier = tm; }
+    void setThrows(uint32_t t) { throws = t; }
     void setMaximize(bool m) { maximize = m; }
     void setTiled(bool t) { isTiled = t; }
-    void setRelaxCount(unsigned int rc) { relaxCount = rc; }
+    void setRelaxCount(uint32_t rc) { relaxCount = rc; }
 
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
         if (sampler != nullptr)
             delete sampler;
@@ -108,11 +108,11 @@ public:
 
         sampler->complete();
         if (maximize) sampler->maximize();
-        for (unsigned int i = 0; i < relaxCount; i++) sampler->relax();
+        for (uint32_t i = 0; i < relaxCount; i++) sampler->relax();
 
         N = sampler->points.size();
         arg_pts.Resize(N, 2);
-        for (unsigned int i = 0; i < N; i++)
+        for (uint32_t i = 0; i < N; i++)
         {
             arg_pts[i][0] = sampler->points[i].x;
             arg_pts[i][1] = sampler->points[i].y;
@@ -129,11 +129,11 @@ public:
 protected:
     std::string method; 
     double radius;
-    unsigned int throwMultiplier;
-    unsigned int throws;
+    uint32_t throwMultiplier;
+    uint32_t throws;
     bool maximize; 
     bool isTiled; 
-    unsigned int relaxCount;
+    uint32_t relaxCount;
 
     dunbarPoisson::PDSampler* sampler;
 };

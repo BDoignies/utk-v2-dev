@@ -529,20 +529,20 @@ protected:
 
 public:
 
-	SamplerFaure(unsigned int d) : D(d) {}
+	SamplerFaure(uint32_t d) : D(d) {}
   
-	void setDimension(unsigned int d) { D = d; }
-  unsigned int GetDimension() const { return D; }
+	void setDimension(uint32_t d) { D = d; }
+  uint32_t GetDimension() const { return D; }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		arg_pts.Resize(N, D);
 		
 		int seed = 0;
         if constexpr (std::is_same_v<T, double>)
         {
-            for (unsigned int i = 0; i < N; i++)
+            for (uint32_t i = 0; i < N; i++)
             {
                 nsfaure::faure(D, &seed, arg_pts[i]);
             }
@@ -551,24 +551,24 @@ public:
         {
             // Most likely float 
             std::vector<double> tmp(D);
-            for (unsigned int i = 0; i < N; i++)
+            for (uint32_t i = 0; i < N; i++)
             {
                 nsfaure::faure(D, &seed, tmp.data());
-                for (unsigned int d = 0; d < D; d++)
+                for (uint32_t d = 0; d < D; d++)
                     arg_pts[i][d] = static_cast<T>(tmp[d]);
             }
         }
         else
         {
-            const unsigned int power  = std::ceil(std::log(N) / std::log(2));
-            const unsigned int factor = (1 << power);
+            const uint32_t power  = std::ceil(std::log(N) / std::log(2));
+            const uint32_t factor = (1 << power);
 
             std::vector<double> tmp(D);
-            for (unsigned int i = 0; i < N; i++)
+            for (uint32_t i = 0; i < N; i++)
             {
                 nsfaure::faure(D, &seed, tmp.data());
                 
-                for (unsigned int d = 0; d < D; d++)
+                for (uint32_t d = 0; d < D; d++)
                     arg_pts[i][d] = static_cast<T>(tmp[d] * factor);
             }
         }
@@ -576,7 +576,7 @@ public:
         return true;
 	};
 protected:
-    unsigned int D;
+    uint32_t D;
 };
 
 } //end namespace utk

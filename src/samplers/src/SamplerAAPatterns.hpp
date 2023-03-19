@@ -128,7 +128,7 @@ public:
 
 	SamplerAAPatterns() { setRandomSeed(); m_vectorfile = GetDefaultFiles()[0]; }
 
-    unsigned int GetDimension() const { return 2; }
+    uint32_t GetDimension() const { return 2; }
 	
 	static std::map<std::string, std::string> GetDefaultFiles()
     {
@@ -144,22 +144,22 @@ public:
 		return files;
     }
 
-	void setRandomSeed( long unsigned int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
+	void setRandomSeed( unsigned long long int arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
 	void setVectorFile(const std::string& file) { m_vectorfile = file; }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
 		if (m_vectorfile.empty()) return false;
 		
 		nsaapattern::loadVectors(m_vectorfile.c_str());
-		nsaapattern::TPoint* list = new nsaapattern::TPoint[(unsigned int)(1.1 * N)];   
+		nsaapattern::TPoint* list = new nsaapattern::TPoint[(uint32_t)(1.1 * N)];   
 
-		N = std::min(static_cast<unsigned int>(nsaapattern::aa(list, N, m_mersenneTwister)), N);
+		N = std::min(static_cast<uint32_t>(nsaapattern::aa(list, N, m_mersenneTwister)), N);
 		arg_pts.Resize(N, 2);
-		for (unsigned int i = 0; i < N; i++)
+		for (uint32_t i = 0; i < N; i++)
 		{
 			arg_pts[i][0] = list[i].x;
 			arg_pts[i][1] = list[i].y;

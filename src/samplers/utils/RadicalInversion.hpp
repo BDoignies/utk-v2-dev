@@ -178,7 +178,7 @@ namespace utk
             else 
             {
                 // std::pow is not constexpr until C++23... So computation
-                // can not be done at compile time...
+                // can not be done at compile time... That's why is is separated away
                 static constexpr T factor = std::pow(1.0 / 2.0, 8 * sizeof(IntegerType));
                 return x * factor;
             }

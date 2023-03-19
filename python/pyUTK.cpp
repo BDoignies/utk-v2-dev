@@ -29,48 +29,83 @@
 #include "../src/samplers/src/SamplerStep.hpp"
 #include "../src/samplers/src/SamplerSinglePeak.hpp"
 
+#include "../src/samplers/scrambling/Owen.hpp"
+#include "../src/samplers/scrambling/CranleyPatterson.hpp"
+
 namespace py = pybind11;
 using namespace utk;
 
 // Global constants for various samplers
 namespace utk
 {
-    std::vector<unsigned int> HALTON_BASIS; 
+    std::vector<uint32_t> HALTON_BASIS; 
     std::vector<double>   KRONECKER_ALPHAS;
 };
+
+template<typename DataType>
+auto ToNumpyArray(Pointset<DataType>* pts)
+{
+    py::capsule freeArray(pts, [](void* data) {
+        Pointset<DataType>* toFree = reinterpret_cast<Pointset<DataType>*>(data);
+        delete toFree;
+    }); 
+
+    return py::array_t<DataType>(
+        { pts->Npts(), pts->Ndim() },
+        { pts->Ndim() * sizeof(DataType), sizeof(DataType) },
+          pts->Data(),
+          freeArray
+    );       
+}
 
 template<typename T, typename DataType = double>
 auto GetSampleFunction()
 {
-    return [](T& sp, unsigned int n) {
-        // Use pointer to avoid 'automatic' deletion                                    
-        Pointset<DataType>* pts = new Pointset<DataType>;                                   
-        bool rslt = sp.generateSamples(*pts, n);                                        
-                                                                                        
-        if (rslt)                                                                       
-        {                                                                               
-            py::capsule freeArray(pts, [](void* data) {                                 
-                Pointset<DataType>* toFree = reinterpret_cast<Pointset<DataType>*>(data);   
-                delete toFree;                                                          
-            });                                                                         
+    return [](T& sp, uint32_t n) {
+        // Use pointer to avoid 'automatic' deletion
+        Pointset<DataType>* pts = new Pointset<DataType>;
+        bool rslt = sp.generateSamples(*pts, n);
 
-            // Return numpy array                                                                        
-            return py::array_t<DataType>(                                                 
-                { pts->Npts(), pts->Ndim() },                                           
-                { pts->Ndim() * sizeof(DataType), sizeof(DataType) },                       
-                pts->Data(),                                                            
-                freeArray                                                               
-            );                                                                          
-        }                                                                               
-                                                                                        
-        throw std::runtime_error("Error while generating samples");                     
+        if (rslt)
+            return ToNumpyArray<DataType>(pts);
+
+        throw std::runtime_error("Error while generating samples");
+    };
+}
+
+template<typename T, typename InputType, typename OutputType>
+auto GetScrambleFunction()
+{
+    return [](T& scrambler, py::buffer b){
+        py::buffer_info info = b.request();
+
+        if (info.format != py::format_descriptor<InputType>::format())
+            throw std::runtime_error("Type not supported");
+
+        if (info.ndim != 2)
+            throw std::runtime_error("Only 2D array are supported");
+        
+        std::vector<py::ssize_t> desiredStride = {
+            info.shape[1] * static_cast<py::ssize_t>(sizeof(InputType)), sizeof(InputType)
+        };
+        if (info.strides != desiredStride)
+            throw std::runtime_error("Only contiguous C-ordered array are supported");
+        
+        Pointset<InputType> in = Pointset<InputType>::View(
+            static_cast<InputType*>(info.ptr), 
+            info.shape[0], info.shape[1]
+        );
+
+        Pointset<OutputType>* out = new Pointset<OutputType>;
+        scrambler.Scramble(in, *out);
+        return ToNumpyArray<OutputType>(out);
     };
 }
 
 template<typename T>
 auto GetSetSeedFunction()
 {
-    return [](T& sp, unsigned long long seed)
+    return [](T& sp, uint64_t seed)
     {
         if (seed = 0)
             sp.setRandomSeed();
@@ -83,15 +118,15 @@ auto GetSetSeedFunction()
 void init_BasicSamplers(py::module& m)
 {
     py::class_<SamplerWhitenoise>(m, "Whitenoise")
-        .def(py::init<unsigned int>(), py::arg("d"))
+        .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerWhitenoise& wn) { return "Whitenoise(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("setSeed", GetSetSeedFunction<SamplerWhitenoise>(), py::arg("seed"))
         .def("sample",  GetSampleFunction <SamplerWhitenoise>(), py::arg("N"));
 
     py::class_<SamplerHalton>(m, "Halton")
-        .def(py::init<unsigned int>(), py::arg("d"))
+        .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerHalton& wn) { return "Halton(d=" + std::to_string(wn.GetDimension()) +")"; })
-        .def("setBasisList", [](SamplerHalton& ht, const std::vector<unsigned int>& list)
+        .def("setBasisList", [](SamplerHalton& ht, const std::vector<uint32_t>& list)
         {
             if (list.size() < ht.GetDimension())
                 throw std::runtime_error("Basis list should be greater than sampler dimension");
@@ -99,22 +134,22 @@ void init_BasicSamplers(py::module& m)
             HALTON_BASIS = list;
             ht.setBasisList(HALTON_BASIS.data(), list.size());
         })
-        .def("sample",  GetSampleFunction <SamplerHalton>()              , py::arg("N"))
-        .def("isample", GetSampleFunction <SamplerHalton, unsigned int>(), py::arg("N"));
+        .def("sample",  GetSampleFunction <SamplerHalton>()          , py::arg("N"))
+        .def("isample", GetSampleFunction <SamplerHalton, uint32_t>(), py::arg("N"));
 
     py::class_<SamplerHammersley>(m, "Hammersley")
         .def(py::init<>())
         .def("__repr__", [](const SamplerHammersley& wn) { return "Hammersley()"; })
-        .def("sample",  GetSampleFunction <SamplerHammersley>()              , py::arg("N"))
-        .def("isample", GetSampleFunction <SamplerHammersley, unsigned int>(), py::arg("N"));
+        .def("sample",  GetSampleFunction <SamplerHammersley>()          , py::arg("N"))
+        .def("isample", GetSampleFunction <SamplerHammersley, uint32_t>(), py::arg("N"));
 
     py::class_<SamplerRegularGrid>(m, "RegularGrid")
-        .def(py::init<unsigned int>(), py::arg("d"))
+        .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerRegularGrid& wn) { return "RegularGrid(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("sample",  GetSampleFunction <SamplerRegularGrid>(), py::arg("N"));
 
     py::class_<SamplerStratified>(m, "Stratified")
-        .def(py::init<unsigned int>(), py::arg("d"))
+        .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerStratified& wn) { return "Stratified(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("setSeed", GetSetSeedFunction<SamplerStratified>(), py::arg("seed"))
         .def("sample",  GetSampleFunction <SamplerStratified>(), py::arg("N"));
@@ -131,34 +166,34 @@ void init_BasicSamplers(py::module& m)
         .def("sample",  GetSampleFunction <SamplerCMJ>() , py::arg("N"));
 
     py::class_<SamplerFaure>(m, "Faure")
-        .def(py::init<unsigned int>(), py::arg("d"))
+        .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerFaure& wn) { return "Faure(d=" + std::to_string(wn.GetDimension()) +")"; })
-        .def("sample",  GetSampleFunction <SamplerFaure>()              , py::arg("N"))
-        .def("isample", GetSampleFunction <SamplerFaure, unsigned int>(), py::arg("N"));
+        .def("sample",  GetSampleFunction <SamplerFaure>()          , py::arg("N"))
+        .def("isample", GetSampleFunction <SamplerFaure, uint32_t>(), py::arg("N"));
 
     py::class_<SamplerNRooks>(m, "NRooks")
-        .def(py::init<unsigned int>(), py::arg("d"))
+        .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerNRooks& wn) { return "NRooks(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("setSeed", GetSetSeedFunction<SamplerNRooks>(), py::arg("seed"))
         .def("sample",  GetSampleFunction <SamplerNRooks>(), py::arg("N"));
 
     py::class_<SamplerNiederreiter>(m, "Niederreiter")
-        .def(py::init<unsigned int, unsigned int>(), py::arg("d"), py::arg("b") = 2)
+        .def(py::init<uint32_t, uint32_t>(), py::arg("d"), py::arg("b") = 2)
         .def("__repr__", [](const SamplerNiederreiter& wn) { return "Niederreiter(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("setBasis", &SamplerNiederreiter::setBasis)
-        .def("sample",  GetSampleFunction <SamplerNiederreiter>()              , py::arg("N"))
-        .def("isample", GetSampleFunction <SamplerNiederreiter, unsigned int>(), py::arg("N"));
+        .def("sample",  GetSampleFunction <SamplerNiederreiter>()          , py::arg("N"))
+        .def("isample", GetSampleFunction <SamplerNiederreiter, uint32_t>(), py::arg("N"));
 
     py::class_<SamplerLutLDBN>(m, "LDBN")
         .def(py::init<>())
         .def("__repr__", [](const SamplerLutLDBN& wn) { return "LDBN()"; })
         .def_static("getAvailableTargets", &SamplerLutLDBN::GetTargets)
         .def("setTarget", &SamplerLutLDBN::setTarget)
-        .def("sample",  GetSampleFunction <SamplerLutLDBN>()              , py::arg("N"))
-        .def("isample", GetSampleFunction <SamplerLutLDBN, unsigned int>(), py::arg("N"));
+        .def("sample",  GetSampleFunction <SamplerLutLDBN>()          , py::arg("N"))
+        .def("isample", GetSampleFunction <SamplerLutLDBN, uint32_t>(), py::arg("N"));
     
     py::class_<SamplerPMJ>(m, "PMJ")
-        .def(py::init<const std::string&, unsigned int>(), py::arg("method") = "PMJ02", py::arg("nbCandidates") = 10)
+        .def(py::init<const std::string&, uint32_t>(), py::arg("method") = "PMJ02", py::arg("nbCandidates") = 10)
         .def("__repr__", [](const SamplerPMJ& wn) { return "PMJ()"; })
         .def_static("getAvailableMethods", &SamplerPMJ::GetMethods)
         .def("setMethod", &SamplerPMJ::setMethod)
@@ -168,8 +203,8 @@ void init_BasicSamplers(py::module& m)
 
     py::class_<SamplerDartThrowing>(m, "DartThrowing")
         .def(py::init<
-                unsigned int, bool, bool,
-                unsigned int, double, double
+                uint32_t, bool, bool,
+                uint32_t, double, double
             >(), 
                 py::arg("d"), py::arg("relaxed") = true, py::arg("toroidal") = true,
                 py::arg("trials") = 1000, py::arg("relaxedFactor") = 0.9, py::arg("spherePacking") = -1.0
@@ -185,8 +220,8 @@ void init_BasicSamplers(py::module& m)
 
     py::class_<SamplerProjectiveBlueNoise>(m, "ProjectiveBlueNoise")
         .def(py::init<
-                unsigned int, bool, bool,
-                unsigned int, double
+                uint32_t, bool, bool,
+                uint32_t, double
             >(), 
                 py::arg("d"), py::arg("relaxed") = true, py::arg("toroidal") = true,
                 py::arg("trials") = 1000, py::arg("relaxedFactor") = 0.9
@@ -202,8 +237,8 @@ void init_BasicSamplers(py::module& m)
     py::class_<SamplerFastPoisson>(m, "FastPoisson")
         .def(py::init<
                 const std::string&, double, 
-                unsigned int, unsigned int, 
-                bool, bool, unsigned int 
+                uint32_t, uint32_t, 
+                bool, bool, uint32_t 
             >(), 
                 py::arg("method") = "DartThrowing", py::arg("radius") = 0.1, 
                 py::arg("throwMultiplier") = 1, py::arg("throws") = 1000,
@@ -229,13 +264,13 @@ void init_BasicSamplers(py::module& m)
         .def("sample",  GetSampleFunction <SamplerRank1>(), py::arg("N"));
 
     py::class_<SamplerKorobov>(m, "Korobov")
-        .def(py::init<unsigned int, unsigned int>(), py::arg("d"), py::arg("generator") = 3)
+        .def(py::init<uint32_t, uint32_t>(), py::arg("d"), py::arg("generator") = 3)
         .def("__repr__", [](const SamplerKorobov& wn) {  return "Korobov(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("setGenerator", &SamplerKorobov::setGeneratorA)
         .def("sample",  GetSampleFunction <SamplerKorobov>(), py::arg("N"));
 
     py::class_<SamplerKronecker>(m, "Kronecker")
-        .def(py::init<unsigned int>(), py::arg("d"))
+        .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerKronecker& wn) {  return "Kronecker(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("setAlphas", [](SamplerKronecker& kronecker, const std::vector<double>& alphas)
         {
@@ -277,14 +312,14 @@ void init_BasicSamplers(py::module& m)
 
     
     py::class_<SamplerFattal>(m, "Fattal")
-        .def(py::init<double, unsigned int>(), py::arg("temperature") = 0.5, py::arg("level") = 2)
+        .def(py::init<double, uint32_t>(), py::arg("temperature") = 0.5, py::arg("level") = 2)
         .def("__repr__", [](const SamplerFattal& wn) { return "Fattal()"; })
         .def("setTemperature", &SamplerFattal::setTemperature)
         .def("setLevel"      , &SamplerFattal::setLevel)
         .def("sample",  GetSampleFunction <SamplerFattal>(), py::arg("N"));
 
     py::class_<SamplerForcedRandom>(m, "ForcedRandom")
-        .def(py::init<unsigned int, unsigned int>(), py::arg("sparcity") = 8, py::arg("matrixSize") = 512)
+        .def(py::init<uint32_t, uint32_t>(), py::arg("sparcity") = 8, py::arg("matrixSize") = 512)
         .def("__repr__", [](const SamplerForcedRandom& wn) { return "ForcedRandom()"; })
         .def("setMatrixSparsity", &SamplerForcedRandom::setMatrixSparsity)
         .def("setMatrixSize"    , &SamplerForcedRandom::setMatrixSize)
@@ -313,17 +348,36 @@ void init_BasicSamplers(py::module& m)
         .def("setSmoothing"        , &SamplerSinglePeak::setSmoothing)
         .def("sample",  GetSampleFunction <SamplerSinglePeak>(), py::arg("N"));
         
-    py::class_<SamplerSobol<unsigned int>>(m, "Sobol")
+    using SobolSampler = SamplerSobol<uint32_t>; 
+    py::class_<SobolSampler>(m, "Sobol")
         .def(
-            py::init<unsigned int, unsigned int, const std::string&>(),
+            py::init<uint32_t, uint32_t, const std::string&>(),
             py::arg("d"), py::arg("depth") = 32, py::arg("file") = ""
         )
-        .def("__repr__", [](const SamplerSobol<unsigned int>& wn) { return "Sobol(d=" + std::to_string(wn.GetDimension()) +")"; })
-        .def("setDirectionFile", &SamplerSobol<unsigned int>::setDirectionFile)
-        .def("setOwenDepth",     &SamplerSobol<unsigned int>::setOwenDepth)
-        .def("setSeed", GetSetSeedFunction<SamplerSobol<unsigned int>>()              , py::arg("seed"))
-        .def("sample",  GetSampleFunction <SamplerSobol<unsigned int>>()              , py::arg("N"))
-        .def("isample", GetSampleFunction <SamplerSobol<unsigned int>, unsigned int>(), py::arg("N"));
+        .def("__repr__", [](const SobolSampler& wn) { return "Sobol(d=" + std::to_string(wn.GetDimension()) +")"; })
+        .def("setDirectionFile", &SobolSampler::setDirectionFile)
+        .def("setOwenDepth",     &SobolSampler::setOwenDepth)
+        .def("setSeed", GetSetSeedFunction<SobolSampler>()              , py::arg("seed"))
+        .def("sample",  GetSampleFunction <SobolSampler>()              , py::arg("N"))
+        .def("isample", GetSampleFunction <SobolSampler, uint32_t>(), py::arg("N"));
+}
+
+void init_Scrambling(py::module& m)
+{
+    using IntegerType = uint32_t;
+    using OwenScrambling = ScramblingOwen<IntegerType>;
+
+    py::class_<OwenScrambling>(m, "OwenScrambling")
+        .def(py::init<uint32_t>(), py::arg("depth") = 32)
+        .def("setOwenDepth", &OwenScrambling::setOwenDepth)
+        .def("setSeed", GetSetSeedFunction<OwenScrambling>(), py::arg("seed"))
+        .def("scramble",  GetScrambleFunction<OwenScrambling, IntegerType, double>())
+        .def("iscramble", GetScrambleFunction<OwenScrambling, IntegerType, IntegerType>());
+    
+    py::class_<CranleyPattersonScrambling>(m, "CranleyPattersonScrambling")
+        .def(py::init<double, double>(), py::arg("max") = 1.0, py::arg("domain") = 1.0)
+        .def("setSeed" ,  GetSetSeedFunction <CranleyPattersonScrambling>(), py::arg("seed"))
+        .def("scramble",  GetScrambleFunction<CranleyPattersonScrambling, double, double>());
 }
 
 PYBIND11_MODULE(pyutk, m) 
@@ -331,4 +385,5 @@ PYBIND11_MODULE(pyutk, m)
     m.doc() = "UTK python binding";
 
     init_BasicSamplers(m);
+    init_Scrambling(m);
 };

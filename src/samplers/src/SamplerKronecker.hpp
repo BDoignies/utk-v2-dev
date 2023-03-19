@@ -56,7 +56,7 @@ public:
     }
 
     // Return alpha from name and verify dimension
-    static const double* ParseAlpha(const std::string& name, unsigned int dim)
+    static const double* ParseAlpha(const std::string& name, uint32_t dim)
     {
         switch (dim)
         {
@@ -80,7 +80,7 @@ public:
         };
     }
 
-	SamplerKronecker(unsigned int d) : D(d) 
+	SamplerKronecker(uint32_t d) : D(d) 
     {
              if (d == 2) setAlphas(ParseAlpha("R2", d));
         else if (d == 3) setAlphas(ParseAlpha("R3", d));
@@ -89,19 +89,19 @@ public:
      }
 
     void setAlphas(const double* al)  { m_alphas = al; }
-	void setDimension(unsigned int d) { D = d; }
-    unsigned int GetDimension() const { return D; }
+	void setDimension(uint32_t d) { D = d; }
+    uint32_t GetDimension() const { return D; }
     
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
         if (m_alphas == nullptr)
             return false;
 
         arg_pts.Resize(N, D);
-		for(unsigned int i = 0; i < N; i++)
+		for(uint32_t i = 0; i < N; i++)
         {
-            for (unsigned int d = 0; d < D; d++)
+            for (uint32_t d = 0; d < D; d++)
             {
                 arg_pts[i][d] = Kronecker::get_value(i, d, m_alphas);
             }
@@ -111,7 +111,7 @@ public:
 	};
 
 protected:
-	unsigned int D;
+	uint32_t D;
     const double* m_alphas;
 };
 
