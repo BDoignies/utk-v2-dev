@@ -30,6 +30,7 @@
 #include "../src/samplers/src/SamplerSinglePeak.hpp"
 
 #include "../src/samplers/scrambling/Owen.hpp"
+#include "../src/samplers/scrambling/OwenTreeScrambling.hpp"
 #include "../src/samplers/scrambling/CranleyPatterson.hpp"
 
 namespace py = pybind11;
@@ -107,7 +108,7 @@ auto GetSetSeedFunction()
 {
     return [](T& sp, uint64_t seed)
     {
-        if (seed = 0)
+        if (seed == 0)
             sp.setRandomSeed();
         else
             sp.setRandomSeed(seed);
@@ -366,6 +367,7 @@ void init_Scrambling(py::module& m)
 {
     using IntegerType = uint32_t;
     using OwenScrambling = ScramblingOwen<IntegerType>;
+    using OwenTreeScramblingI = OwenTreeScrambling<IntegerType>;
 
     py::class_<OwenScrambling>(m, "OwenScrambling")
         .def(py::init<uint32_t>(), py::arg("depth") = 32)
@@ -378,6 +380,15 @@ void init_Scrambling(py::module& m)
         .def(py::init<double, double>(), py::arg("max") = 1.0, py::arg("domain") = 1.0)
         .def("setSeed" ,  GetSetSeedFunction <CranleyPattersonScrambling>(), py::arg("seed"))
         .def("scramble",  GetScrambleFunction<CranleyPattersonScrambling, double, double>());
+
+    
+    py::class_<OwenTreeScramblingI>(m, "OwenTreeScrambling")
+        .def(py::init<uint32_t>(), py::arg("depth") = 32)
+        .def("setOwenDepth", &OwenTreeScramblingI::setOwenDepth)
+        .def("setSeed", GetSetSeedFunction<OwenTreeScramblingI>(), py::arg("seed"))
+        .def("setBitPattern", &OwenTreeScramblingI::setBitPattern)
+        .def("scramble",  GetScrambleFunction<OwenTreeScramblingI, IntegerType, double>())
+        .def("iscramble", GetScrambleFunction<OwenTreeScramblingI, IntegerType, IntegerType>());
 }
 
 PYBIND11_MODULE(pyutk, m) 

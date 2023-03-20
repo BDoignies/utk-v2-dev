@@ -92,7 +92,7 @@ namespace utk
             {
                 for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
-                    out[i][d] = convert<D>(owen(in[i][d], d, depth, seeds.data()));
+                    out[i][d] = convertFullRadicalInverseBase2<D>(owen(in[i][d], d, depth, seeds.data()));
                 }
             }
         }

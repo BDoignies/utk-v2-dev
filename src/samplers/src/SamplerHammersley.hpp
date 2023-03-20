@@ -54,7 +54,10 @@ namespace utk
 			{
 				for(uint32_t i = 0; i < N; i++)
 				{
-					arg_pts[i][0] = RadicalInverseBase2(i);
+					// Use 'up to log2(N)' radical inverse
+					// It gives more coherent results with 'i' as 
+					// coordinates
+					arg_pts[i][0] = RadicalInverseIntInternal<2>(i);
 					arg_pts[i][1] = i;
 				}
 			}
@@ -62,6 +65,8 @@ namespace utk
 			{
 				for(uint32_t i = 0; i < N; i++)
 				{
+					// Use full radical inverse here
+					// Both gives the same result, but this one is faster
 					arg_pts[i][0] = RadicalInverseBase2Double<T>(i);
 					arg_pts[i][1] = (T) i / (T)N;
 				}

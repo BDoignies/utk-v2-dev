@@ -122,7 +122,7 @@ namespace utk
     {
         switch (Base)
         {
-        case  2: return RadicalInverseBase2<IntegerType>(N);
+        case  2: return RadicalInverseIntInternal< 2, IntegerType>(N);
         case  3: return RadicalInverseIntInternal< 3, IntegerType>(N);
         case  5: return RadicalInverseIntInternal< 5, IntegerType>(N);
         case  7: return RadicalInverseIntInternal< 7, IntegerType>(N);
@@ -142,7 +142,7 @@ namespace utk
     {
         switch (Base)
         {
-        case  2: return RadicalInverseBase2Double<T, IntegerType>(N);
+        case  2: return RadicalInverseDoubleInternal< 2, T, IntegerType>(N);
         case  3: return RadicalInverseDoubleInternal< 3, T, IntegerType>(N);
         case  5: return RadicalInverseDoubleInternal< 5, T, IntegerType>(N);
         case  7: return RadicalInverseDoubleInternal< 7, T, IntegerType>(N);
@@ -158,7 +158,7 @@ namespace utk
     }
 
     template<typename T = double, typename IntegerType = unsigned int>
-    inline T convert(IntegerType x)
+    inline T convertFullRadicalInverseBase2(IntegerType x)
     {
         // Just forward integers
         if constexpr (std::is_integral_v<T>)
