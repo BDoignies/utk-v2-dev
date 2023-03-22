@@ -14,5 +14,11 @@ set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
 
 add_definitions(-DUTK_DATA_PATH=\"${UTK_DATA_PATH}\")
 
+# Finding libraries
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
+# Threads (C++ standard library)
+find_package(Threads)
+find_package(OpenMP)
 
 add_subdirectory(src)

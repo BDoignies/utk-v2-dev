@@ -52,10 +52,7 @@ ENDFOREACH(FILE)
 #  Samplers requiring additional libraries  #
 # ===========================================
 
-# pthreads (or its equivalent on windows, to be tested)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads)
-
+# Threads is looked for in main cmake
 IF(Threads_FOUND)
     # Lloyd
     add_executable(Lloyd exe/Lloyd.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Lloyd/Delaunay_psm.cpp)

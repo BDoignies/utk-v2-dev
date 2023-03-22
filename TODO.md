@@ -73,13 +73,15 @@ New samplers :
 Discrepancies 
 
 - [ ] Star Discrepancy (With N-D version ?)
-- [ ] L2
-- [ ] GL2
-- [ ] Centered L2 
-- [ ] Unanchored L2 
-- [ ] Symmetric L2 
-- [ ] Fast Bound on Star
-- [ ] Diaphony ???
+- [X] L2
+- [X] GL2
+- [X] Centered L2 
+- [X] Unanchored L2 
+- [X] Symmetric L2 
+- [X] Fast Bound on Star
+- [X] Diaphony ???
+
+Note: to be validated (against utk ?)
 
 Distance : 
 
@@ -150,4 +152,4 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 - [ ] Add parametrisable seed for FastPoisson
 - [ ] Projective Blue Noise : Enhance projection method (not only axis based, MC evaluation,...)
 - [ ] NRooks: Integer sampling 
-
+- [ ] Add parametrization for openmp threads (Note: env variable OMP_NUM_THREADS could do the trick too)
