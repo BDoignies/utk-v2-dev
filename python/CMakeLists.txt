@@ -33,5 +33,19 @@ pybind11_add_module(pyutk
     ${SAMPLERS_CPP}
 )
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads)
+find_package(OpenMP)
+
 target_include_directories(pyutk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/)
 target_link_libraries(pyutk PRIVATE pybind11::module)
+
+if (OpenMP_FOUND)
+    message("Linking with OpenMP")
+    target_link_libraries(pyutk PRIVATE OpenMP::OpenMP_CXX)
+    target_compile_definitions(pyutk PRIVATE -DUTK_USE_OPENMP)
+endif()
+
+if (Threads_FOUND)
+    target_link_libraries(pyutk PRIVATE Threads::Threads)
+endif()

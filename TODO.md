@@ -149,6 +149,9 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 
 ## Misct : 
 
+- [ ] CMake precompiled header (for CLI11 ?)
+- [ ] Create an actual linkable library with <double> samplers ? 
+- [ ] data install path or included by samplers (or convert data to string, and parse it at runtime) ?
 - [ ] Add parametrisable seed for FastPoisson
 - [ ] Projective Blue Noise : Enhance projection method (not only axis based, MC evaluation,...)
 - [ ] NRooks: Integer sampling 

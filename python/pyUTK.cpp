@@ -33,6 +33,10 @@
 #include "../src/samplers/scrambling/OwenTreeScrambling.hpp"
 #include "../src/samplers/scrambling/CranleyPatterson.hpp"
 
+#include "../src/metrics/src/Spectrum.hpp"
+#include "../src/metrics/src/RadialSpectrum.hpp"
+#include "../src/metrics/src/PCF.hpp"
+
 namespace py = pybind11;
 using namespace utk;
 
@@ -100,6 +104,34 @@ auto GetScrambleFunction()
         Pointset<OutputType>* out = new Pointset<OutputType>;
         scrambler.Scramble(in, *out);
         return ToNumpyArray<OutputType>(out);
+    };
+}
+
+template<typename T, typename InputType = T>
+auto GetComputeFunction()
+{
+    return [](T& metrics, py::buffer b){
+        py::buffer_info info = b.request();
+
+        if (info.format != py::format_descriptor<InputType>::format())
+            throw std::runtime_error("Type not supported");
+
+        if (info.ndim != 2)
+            throw std::runtime_error("Only 2D array are supported");
+        
+        std::vector<py::ssize_t> desiredStride = {
+            info.shape[1] * static_cast<py::ssize_t>(sizeof(InputType)), sizeof(InputType)
+        };
+        if (info.strides != desiredStride)
+            throw std::runtime_error("Only contiguous C-ordered array are supported");
+        
+        Pointset<InputType> in = Pointset<InputType>::View(
+            static_cast<InputType*>(info.ptr), 
+            info.shape[0], info.shape[1]
+        );
+
+        auto out = metrics.compute(in);
+        return out;
     };
 }
 
@@ -391,10 +423,42 @@ void init_Scrambling(py::module& m)
         .def("iscramble", GetScrambleFunction<OwenTreeScramblingI, IntegerType, IntegerType>());
 }
 
+void init_Metrics(py::module& m)
+{
+    py::class_<Spectrum>(m, "Spectrum")
+        .def(py::init<uint32_t, bool>(), py::arg("resolution") = 0, py::arg("cancelDC") = true)
+        .def("setResoluion", &Spectrum::setResolution)
+        .def("setCancelDC", &Spectrum::setCancelDC)
+        .def("compute", GetComputeFunction<Spectrum, double>());
+
+    py::class_<RadialSpectrum>(m, "RadialSpectrum")
+        .def(py::init<uint32_t, double, uint32_t, bool>(), 
+            py::arg("nbins") = 0, py::arg("scale") = 0.5, py::arg("resolution") = 0, py::arg("cancelDC") = true
+        )
+        .def("setResoluion", &RadialSpectrum::setResolution)
+        .def("setScale", &RadialSpectrum::setScale)
+        .def("setCancelDC", &RadialSpectrum::setCancelDC)
+        .def("setBins", &RadialSpectrum::setBins)
+        .def("compute", GetComputeFunction<RadialSpectrum, double>());
+    
+    py::class_<PCF>(m, "PCF")
+        .def(py::init<bool, double, double, uint32_t, double>(), 
+            py::arg("toroidal") = true, py::arg("rmin") = 0.01, py::arg("rmax") = 0.15, 
+            py::arg("nbbins") = 200, py::arg("smoothing") = 0.001
+        )
+        .def("setToroidal", &PCF::setToroidal)
+        .def("setRmin", &PCF::setRmin)
+        .def("setRmax", &PCF::setRmax)
+        .def("setSmoothing", &PCF::setSmoothing)
+        .def("setNbBins", &PCF::setNbBins)
+        .def("compute", GetComputeFunction<PCF, double>());
+}
+
 PYBIND11_MODULE(pyutk, m) 
 {
     m.doc() = "UTK python binding";
 
     init_BasicSamplers(m);
     init_Scrambling(m);
+    init_Metrics(m);
 };
