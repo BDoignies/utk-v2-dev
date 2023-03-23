@@ -30,14 +30,14 @@
  */
 #pragma once
 
-#include "../pointsets/Pointset.hpp"
+#include "../../pointsets/Pointset.hpp"
 
 namespace utk
 {
-    class L2Discrepancy
+    class Diaphony
     {
     public:
-        L2Discrepancy() {}
+        Diaphony() {}
 
         template<typename T>
         T compute(const Pointset<T>& pts)
@@ -54,8 +54,8 @@ namespace utk
                     T product_over_k = 1;
                     for(unsigned k=0; k<D; k++)
                     {
-                        const T uik = arg_pts[i][k];
-                        const T ujk = arg_pts[j][k];
+                        const T uik = pts[i][k];
+                        const T ujk = pts[j][k];
 
                         const T delta = uik - ujk;
                         const T mod1_delta = delta - std::floor(delta);

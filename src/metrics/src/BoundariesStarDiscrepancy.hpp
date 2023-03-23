@@ -31,7 +31,7 @@
  */
 #pragma once
 
-#include "../pointsets/Pointset.hpp"
+#include "../../pointsets/Pointset.hpp"
 #include <cmath>
 
 namespace utk
@@ -51,18 +51,11 @@ namespace utk
     class BoundariesStarDiscrepancy
     {
     public:
-        template<typename T>
-        struct Bounds
-        {
-            T inf;
-            T sup;
-        };
-
         BoundariesStarDiscrepancy(double eps = -1.0) 
         { epsilon_ = eps; }
 
         template<typename T>
-        Bounds<T> compute(const Pointset<T>& pts)
+        std::pair<T, T> compute(const Pointset<T>& pts)
         {
             borne_sup = 0.0;
             borne_inf = 0.0;
@@ -110,6 +103,7 @@ namespace utk
 
             if constexpr(!std::is_same_v<T, double>)
                 delete[] newPts;
+                
             free(oalpha);
             free(obeta);
             free(superarbre);
@@ -121,7 +115,7 @@ namespace utk
             // Are seemingly freed by 'traiter'. 
             // TODO : check this with valgrind :( 
 
-            return {.inf = borne_inf, .sup = borne_sup };
+            return {borne_inf, borne_sup };
         }
     private:
         struct sommet

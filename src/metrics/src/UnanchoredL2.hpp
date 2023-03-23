@@ -31,14 +31,14 @@
  */
 #pragma once
 
-#include "../pointsets/Pointset.hpp"
+#include "../../pointsets/Pointset.hpp"
 
 namespace utk
 {
-    class GL2Discrepancy
+    class UnanchoredL2Discrepancy
     {
     public:
-        GL2Discrepancy() {}
+        UnanchoredL2Discrepancy() {}
 
         template<typename T>
         T compute(const Pointset<T>& pts)
@@ -50,7 +50,7 @@ namespace utk
             T sumsumprod2 = 0.0;
             T sumsumprod3 = 0.0;
             
-            #pragma omp parallel reduction(+:sumprod1,sumprod2,sumprod3)
+            #pragma omp parallel for reduction(+:sumprod1) reduction(+:sumsumprod2) reduction(+:sumsumprod3)
             for (uint32_t i = 0; i < N; i++)
             {
                 T prod1 = 1.0;
@@ -79,7 +79,7 @@ namespace utk
             const T invN  = 1. / (T) N;
             const T invN2 = invN * invN;
 
-            return std::pow(1. / 12., D) - std::pow(2, 1 - D) * invN * sumprod1 + invN2 * (sumsumprod2 + 2. * sumsumprod3);
+            return std::pow(1. / 12., D) - std::pow(2.0, ((T)1 - (T)D)) * invN * sumprod1 + invN2 * (sumsumprod2 + 2. * sumsumprod3);
         }
     private:
     };

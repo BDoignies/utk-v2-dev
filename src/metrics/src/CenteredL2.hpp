@@ -31,7 +31,7 @@
  */
 #pragma once
 
-#include "../pointsets/Pointset.hpp"
+#include "../../pointsets/Pointset.hpp"
 
 namespace utk
 {
@@ -50,7 +50,7 @@ namespace utk
             T sumsumprod2 = 0.0;
             T sumsumprod3 = 0.0;
             
-            #pragma omp parallel reduction(+:sumprod1,sumprod2,sumprod3)
+            #pragma omp parallel for reduction(+:sumprod1) reduction(+:sumsumprod2) reduction(+:sumsumprod3)
             for (uint32_t i = 0; i < N; i++)
             {
                 T prod1 = 1.0;

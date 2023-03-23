@@ -33,6 +33,15 @@
 #include "../src/samplers/scrambling/OwenTreeScrambling.hpp"
 #include "../src/samplers/scrambling/CranleyPatterson.hpp"
 
+#include "../src/metrics/src/Diaphony.hpp"
+#include "../src/metrics/src/BoundariesStarDiscrepancy.hpp"
+
+#include "../src/metrics/src/CenteredL2.hpp"
+#include "../src/metrics/src/GeneralizedL2.hpp"
+#include "../src/metrics/src/L2.hpp"
+#include "../src/metrics/src/SymmetricL2.hpp"
+#include "../src/metrics/src/UnanchoredL2.hpp"
+
 #include "../src/metrics/src/Spectrum.hpp"
 #include "../src/metrics/src/RadialSpectrum.hpp"
 #include "../src/metrics/src/PCF.hpp"
@@ -452,6 +461,40 @@ void init_Metrics(py::module& m)
         .def("setSmoothing", &PCF::setSmoothing)
         .def("setNbBins", &PCF::setNbBins)
         .def("compute", GetComputeFunction<PCF, double>());
+
+    py::class_<Diaphony>(m, "Diaphony")
+        .def(py::init<>())
+        .def("compute", GetComputeFunction<Diaphony, double>());
+
+
+    py::class_<CenteredL2Discrepancy>(m, "CenteredL2Discrepancy")
+        .def(py::init<>())
+        .def("compute", GetComputeFunction<CenteredL2Discrepancy, double>());
+
+    
+    py::class_<L2Discrepancy>(m, "L2Discrepancy")
+        .def(py::init<>())
+        .def("compute", GetComputeFunction<L2Discrepancy, double>());
+
+    
+    py::class_<GL2Discrepancy>(m, "GL2Discrepancy")
+        .def(py::init<>())
+        .def("compute", GetComputeFunction<GL2Discrepancy, double>());
+    
+
+    py::class_<SymemetricL2Discrepancy>(m, "SymemetricL2Discrepancy")
+        .def(py::init<>())
+        .def("compute", GetComputeFunction<SymemetricL2Discrepancy, double>());
+
+
+    py::class_<UnanchoredL2Discrepancy>(m, "UnanchoredL2Discrepancy")
+        .def(py::init<>())
+        .def("compute", GetComputeFunction<UnanchoredL2Discrepancy, double>());
+
+    
+    py::class_<BoundariesStarDiscrepancy>(m, "BoundariesStarDiscrepancy")
+        .def(py::init<double>(), py::arg("eps") = -1.)
+        .def("compute", GetComputeFunction<BoundariesStarDiscrepancy, double>());
 }
 
 PYBIND11_MODULE(pyutk, m) 
