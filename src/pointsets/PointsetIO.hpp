@@ -114,6 +114,7 @@ inline Pointset<T> read_text_pointset_stream(Stream& st)
     }
 
     pts.Resize(pts.Npts() / d, d);
+    pts.Shrink();
     return pts;
 }
 

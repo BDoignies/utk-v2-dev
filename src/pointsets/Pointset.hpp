@@ -207,6 +207,22 @@ namespace utk
             }
         }
 
+        void Shrink() 
+        {
+            if (C != N * D && !isView)
+            {
+                C = N * D;
+                T* oldData = data;
+                data = new T[C]; 
+
+                if (oldData != nullptr)
+                {
+                    std::memcpy(data, oldData, N * D * sizeof(T));
+                    delete[] oldData;
+                }
+            }
+        }
+
         T& PushBack()
         {
             auto n = N;
