@@ -69,6 +69,21 @@ namespace utk
             return rng.sample() & 1;
         }
 
+        void FillRandom(unsigned char depth = 0)
+        {
+            if (depth != 0)
+            {
+                uint32_t impliedDepth = (1 << (depth + 1));
+                if (permuts.size() < impliedDepth)
+                    permuts.resize(impliedDepth);
+            }
+            
+            RNG rng;
+            rng.seed(seed);
+            for (uint32_t i = 0; i < permuts.size(); i++)
+                permuts[i] = rng.sample() & 1;
+        }
+
         void SetBitPattern(std::string pattern, bool value = true)
         {
             std::vector<std::string> allPatterns;
@@ -142,13 +157,22 @@ namespace utk
 
         void setRandomSeed(long unsigned int arg_seed) 
         { 
-            std::cout << arg_seed << std::endl;
             mt.seed(arg_seed);
         }
 
         void setRandomSeed() 
         { 
             setRandomSeed(std::random_device{}());
+        }
+
+        void FillRandom(unsigned int d, unsigned char depth = 0)
+        {
+            if (trees.size() <= d)
+            {
+                trees.resize(d + 1);
+            }
+            trees[d].setSeed(mt());
+            trees[d].FillRandom(depth);
         }
 
         template<typename T>

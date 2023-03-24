@@ -32,61 +32,63 @@
 #include "../utils/FastPRNG.hpp"
 #include <random>
 
-template <typename IntegerType = uint32_t>
-class DigitalShift
+namespace utk
 {
-public:
-    DigitalShift()
-    { }
-
-    void setRandomSeed(long unsigned int arg_seed) 
-    { 
-        mt.seed(arg_seed);
-    }
-
-    void setRandomSeed() 
-    { 
-        setRandomSeed(std::random_device{}());
-    }
-
-    template<typename T>
-    void Scramble(Pointset<T>& in)
+    template <typename IntegerType = uint32_t>
+    class DigitalShift
     {
-        std::vector<IntegerType> shifts(in.Ndim());
-        for (unsigned int d = 0; d < in.Ndim(); d++)
-            shifts[d] = mt() % std::numeric_limits<IntegerType>::max();
-        
-        for (unsigned int i = 0; i < in.Npts(); i++)
-        {
-            for (unsigned int d = 0; d < in.Dim())
-            {
-                in[i][d] = in[i][d] ^ shifts[d];
-            }
+    public:
+        DigitalShift()
+        { }
+
+        void setRandomSeed(long unsigned int arg_seed) 
+        { 
+            mt.seed(arg_seed);
         }
-    }
 
-    template<typename T, typename D>
-    void Scramble(const Pointset<T>& in, Pointset<D>& out)
-    {
-        out.Resize(in.Ndpts(), in.Ndim());
+        void setRandomSeed() 
+        { 
+            setRandomSeed(std::random_device{}());
+        }
 
-        std::vector<IntegerType> shifts(in.Ndim());
-        for (unsigned int d = 0; d < in.Ndim(); d++)
-            shifts[d] = mt() % std::numeric_limits<IntegerType>::max();
-        
-        for (unsigned int i = 0; i < in.Npts(); i++)
+        template<typename T>
+        void Scramble(Pointset<T>& in)
         {
-            for (unsigned int d = 0; d < in.Dim())
+            std::vector<IntegerType> shifts(in.Ndim());
+            for (unsigned int d = 0; d < in.Ndim(); d++)
+                shifts[d] = mt() % std::numeric_limits<IntegerType>::max();
+            
+            for (unsigned int i = 0; i < in.Npts(); i++)
             {
-                out[i][d] = convert<D>(in[i][d] ^ shifts[d]);
+                for (unsigned int d = 0; d < in.Ndim(); d++)
+                {
+                    in[i][d] = in[i][d] ^ shifts[d];
+                }
             }
         }
 
-    }
-    
-private:
-    template<typename T>
-    static T convert(IntegerType x)
+        template<typename T, typename D>
+        void Scramble(const Pointset<T>& in, Pointset<D>& out)
+        {
+            out.Resize(in.Npts(), in.Ndim());
+
+            std::vector<IntegerType> shifts(in.Ndim());
+            for (unsigned int d = 0; d < in.Ndim(); d++)
+                shifts[d] = mt() % std::numeric_limits<IntegerType>::max();
+            
+            for (unsigned int i = 0; i < in.Npts(); i++)
+            {
+                for (unsigned int d = 0; d < in.Ndim(); d++)
+                {
+                    out[i][d] = convert<D>(in[i][d] ^ shifts[d]);
+                }
+            }
+
+        }
+        
+    private:
+        template<typename T>
+        static T convert(IntegerType x)
         {
             if constexpr (std::is_integral_v<T>)
             {
@@ -107,6 +109,7 @@ private:
                 return r;
             }
         }
-private:
-    std::mt19937 mt;
-};
+    private:
+        std::mt19937 mt;
+    };
+}

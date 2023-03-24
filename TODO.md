@@ -40,10 +40,10 @@
 
 ## Scramblers 
 
-- [X] Digital Shift
+- [X] Digital Shift (To be check for conversions. Is it optimal ?)
 - [X] Owen
 - [X] Cranley Patterson
-- [ ] Micro Jittering
+- [X] Micro Jittering
 
 ## Remaining Samplers
 
@@ -56,7 +56,7 @@ In UTK :
 
 - [ ] Genetric Owen    (requires owen version where the whole permutation tree is stored...)
 - [ ] Exhaustive Owen  (requires owen version where the whole permutation tree is stored...)
-- [~] GenerativeMatrix (To be removed?, matbuilder is way better !)
+- [ ] GenerativeMatrix (To be removed?, matbuilder is way better !)
 
 New samplers : 
 
@@ -85,9 +85,9 @@ Note: to be validated (against utk ?)
 
 Distance : 
 
-- [ ] Spectrum
-- [ ] Radial Spectrums
-- [ ] PCF
+- [X] Spectrum
+- [X] Radial Spectrums
+- [X] PCF
 - [ ] MinDist
 
 Test : 

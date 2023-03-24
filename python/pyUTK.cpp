@@ -32,10 +32,11 @@
 #include "../src/samplers/scrambling/Owen.hpp"
 #include "../src/samplers/scrambling/OwenTreeScrambling.hpp"
 #include "../src/samplers/scrambling/CranleyPatterson.hpp"
+#include "../src/samplers/scrambling/DigitalShift.hpp"
+#include "../src/samplers/scrambling/MicroJittering.hpp"
 
 #include "../src/metrics/src/Diaphony.hpp"
 #include "../src/metrics/src/BoundariesStarDiscrepancy.hpp"
-
 #include "../src/metrics/src/CenteredL2.hpp"
 #include "../src/metrics/src/GeneralizedL2.hpp"
 #include "../src/metrics/src/L2.hpp"
@@ -54,6 +55,8 @@ namespace utk
 {
     std::vector<uint32_t> HALTON_BASIS; 
     std::vector<double>   KRONECKER_ALPHAS;
+
+    static constexpr uint64_t NO_SEED = 0;
 };
 
 template<typename DataType>
@@ -149,7 +152,7 @@ auto GetSetSeedFunction()
 {
     return [](T& sp, uint64_t seed)
     {
-        if (seed == 0)
+        if (seed == NO_SEED)
             sp.setRandomSeed();
         else
             sp.setRandomSeed(seed);
@@ -162,7 +165,7 @@ void init_BasicSamplers(py::module& m)
     py::class_<SamplerWhitenoise>(m, "Whitenoise")
         .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerWhitenoise& wn) { return "Whitenoise(d=" + std::to_string(wn.GetDimension()) +")"; })
-        .def("setSeed", GetSetSeedFunction<SamplerWhitenoise>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerWhitenoise>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerWhitenoise>(), py::arg("N"));
 
     py::class_<SamplerHalton>(m, "Halton")
@@ -193,7 +196,7 @@ void init_BasicSamplers(py::module& m)
     py::class_<SamplerStratified>(m, "Stratified")
         .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerStratified& wn) { return "Stratified(d=" + std::to_string(wn.GetDimension()) +")"; })
-        .def("setSeed", GetSetSeedFunction<SamplerStratified>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerStratified>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerStratified>(), py::arg("N"));
 
     py::class_<SamplerHexagonalGrid>(m, "HexGrid")
@@ -204,7 +207,7 @@ void init_BasicSamplers(py::module& m)
     py::class_<SamplerCMJ>(m, "CMJ")
         .def(py::init<>())
         .def("__repr__", [](const SamplerCMJ& wn) { return "CMJ()"; })
-        .def("setSeed", GetSetSeedFunction<SamplerCMJ>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerCMJ>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerCMJ>() , py::arg("N"));
 
     py::class_<SamplerFaure>(m, "Faure")
@@ -216,7 +219,7 @@ void init_BasicSamplers(py::module& m)
     py::class_<SamplerNRooks>(m, "NRooks")
         .def(py::init<uint32_t>(), py::arg("d"))
         .def("__repr__", [](const SamplerNRooks& wn) { return "NRooks(d=" + std::to_string(wn.GetDimension()) +")"; })
-        .def("setSeed", GetSetSeedFunction<SamplerNRooks>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerNRooks>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerNRooks>(), py::arg("N"));
 
     py::class_<SamplerNiederreiter>(m, "Niederreiter")
@@ -240,7 +243,7 @@ void init_BasicSamplers(py::module& m)
         .def_static("getAvailableMethods", &SamplerPMJ::GetMethods)
         .def("setMethod", &SamplerPMJ::setMethod)
         .def("setNbCandidates", &SamplerPMJ::setCandidates)
-        .def("setSeed", GetSetSeedFunction<SamplerPMJ>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerPMJ>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerPMJ>(), py::arg("N"));
 
     py::class_<SamplerDartThrowing>(m, "DartThrowing")
@@ -257,7 +260,7 @@ void init_BasicSamplers(py::module& m)
         .def("setMaxTrials",     &SamplerDartThrowing::setMaxIters)
         .def("setRelaxedFactor", &SamplerDartThrowing::setRelaxedFactor)
         .def("setSpherePacking", &SamplerDartThrowing::setSpherePacking, py::arg("packing") = -1.0)
-        .def("setSeed", GetSetSeedFunction<SamplerDartThrowing>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerDartThrowing>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerDartThrowing>(), py::arg("N"));
 
     py::class_<SamplerProjectiveBlueNoise>(m, "ProjectiveBlueNoise")
@@ -273,7 +276,7 @@ void init_BasicSamplers(py::module& m)
         .def("setToroidal",      &SamplerProjectiveBlueNoise::setToroidal)
         .def("setMaxTrials",     &SamplerProjectiveBlueNoise::setMaxIters)
         .def("setRelaxedFactor", &SamplerProjectiveBlueNoise::setRelaxedFactor)
-        .def("setSeed", GetSetSeedFunction<SamplerProjectiveBlueNoise>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerProjectiveBlueNoise>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerProjectiveBlueNoise>(), py::arg("N"));
 
     py::class_<SamplerFastPoisson>(m, "FastPoisson")
@@ -339,7 +342,7 @@ void init_BasicSamplers(py::module& m)
         .def(py::init<>())
         .def("__repr__", [](const SamplerAAPatterns& wn) { return "AAPatterns()"; })
         .def_static("getAvailableTiling", &SamplerAAPatterns::GetDefaultFiles)
-        .def("setSeed", GetSetSeedFunction<SamplerAAPatterns>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerAAPatterns>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerAAPatterns>(), py::arg("N"));
 
     py::class_<SamplerART>(m, "ART")
@@ -370,7 +373,7 @@ void init_BasicSamplers(py::module& m)
     py::class_<SamplerStep>(m, "Step")
         .def(py::init<float, float>(), py::arg("critFreq") = 0.606, py::arg("smooth") = 8.f)
         .def("__repr__", [](const SamplerStep& wn) { return "STEP()"; })
-        .def("setSeed", GetSetSeedFunction<SamplerStep>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerStep>(), py::arg("seed") = NO_SEED)
         .def("setCriticalFrequency", &SamplerStep::setCriticalFrequency)
         .def("setSmoothing"        , &SamplerStep::setSmoothing)
         .def("sample",  GetSampleFunction <SamplerStep>(), py::arg("N"));
@@ -383,7 +386,7 @@ void init_BasicSamplers(py::module& m)
                 py::arg("peakSmoothing") = 2.0, py::arg("peakPower") = 16.0
         )
         .def("__repr__", [](const SamplerSinglePeak& wn) { return "SinglePeak()"; })
-        .def("setSeed", GetSetSeedFunction<SamplerSinglePeak>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SamplerSinglePeak>(), py::arg("seed") = NO_SEED)
         .def("setPeakPower"        , &SamplerSinglePeak::setPeakPower)
         .def("setPeakSmoothing"    , &SamplerSinglePeak::setPeakSmoothing)
         .def("setCriticalFrequency", &SamplerSinglePeak::setCriticalFrequency)
@@ -399,7 +402,7 @@ void init_BasicSamplers(py::module& m)
         .def("__repr__", [](const SobolSampler& wn) { return "Sobol(d=" + std::to_string(wn.GetDimension()) +")"; })
         .def("setDirectionFile", &SobolSampler::setDirectionFile)
         .def("setOwenDepth",     &SobolSampler::setOwenDepth)
-        .def("setSeed", GetSetSeedFunction<SobolSampler>()              , py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<SobolSampler>()              , py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SobolSampler>()              , py::arg("N"))
         .def("isample", GetSampleFunction <SobolSampler, uint32_t>(), py::arg("N"));
 }
@@ -409,25 +412,37 @@ void init_Scrambling(py::module& m)
     using IntegerType = uint32_t;
     using OwenScrambling = ScramblingOwen<IntegerType>;
     using OwenTreeScramblingI = OwenTreeScrambling<IntegerType>;
+    using DigitalShiftScramplingI = DigitalShift<IntegerType>;
 
     py::class_<OwenScrambling>(m, "OwenScrambling")
         .def(py::init<uint32_t>(), py::arg("depth") = 32)
         .def("setOwenDepth", &OwenScrambling::setOwenDepth)
-        .def("setSeed", GetSetSeedFunction<OwenScrambling>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<OwenScrambling>(), py::arg("seed") = NO_SEED)
         .def("scramble",  GetScrambleFunction<OwenScrambling, IntegerType, double>())
         .def("iscramble", GetScrambleFunction<OwenScrambling, IntegerType, IntegerType>());
     
     py::class_<CranleyPattersonScrambling>(m, "CranleyPattersonScrambling")
         .def(py::init<double, double>(), py::arg("max") = 1.0, py::arg("domain") = 1.0)
-        .def("setSeed" ,  GetSetSeedFunction <CranleyPattersonScrambling>(), py::arg("seed"))
+        .def("setSeed" ,  GetSetSeedFunction <CranleyPattersonScrambling>(), py::arg("seed") = NO_SEED)
         .def("scramble",  GetScrambleFunction<CranleyPattersonScrambling, double, double>());
+
+    py::class_<DigitalShiftScramplingI>(m, "DigitalShift")
+        .def(py::init<>())
+        .def("setSeed" ,  GetSetSeedFunction <DigitalShiftScramplingI>(), py::arg("seed") = NO_SEED)
+        .def("scramble",  GetScrambleFunction<DigitalShiftScramplingI, IntegerType, double>());
+
+    py::class_<MicroJittering>(m, "MicroJittering")
+        .def(py::init<double>(), py::arg("intensity") = -1.0)
+        .def("setSeed" ,  GetSetSeedFunction <MicroJittering>(), py::arg("seed") = NO_SEED)
+        .def("scramble",  GetScrambleFunction<MicroJittering, double, double>());
 
     
     py::class_<OwenTreeScramblingI>(m, "OwenTreeScrambling")
         .def(py::init<uint32_t>(), py::arg("depth") = 32)
         .def("setOwenDepth", &OwenTreeScramblingI::setOwenDepth)
-        .def("setSeed", GetSetSeedFunction<OwenTreeScramblingI>(), py::arg("seed"))
+        .def("setSeed", GetSetSeedFunction<OwenTreeScramblingI>(), py::arg("seed") = NO_SEED)
         .def("setBitPattern", &OwenTreeScramblingI::setBitPattern)
+        .def("fillRandom", &OwenTreeScramblingI::FillRandom, py::arg("dim"), py::arg("depth") = 0)
         .def("scramble",  GetScrambleFunction<OwenTreeScramblingI, IntegerType, double>())
         .def("iscramble", GetScrambleFunction<OwenTreeScramblingI, IntegerType, IntegerType>());
 }
@@ -482,9 +497,9 @@ void init_Metrics(py::module& m)
         .def("compute", GetComputeFunction<GL2Discrepancy, double>());
     
 
-    py::class_<SymemetricL2Discrepancy>(m, "SymemetricL2Discrepancy")
+    py::class_<SymmetricL2Discrepancy>(m, "SymmetricL2Discrepancy")
         .def(py::init<>())
-        .def("compute", GetComputeFunction<SymemetricL2Discrepancy, double>());
+        .def("compute", GetComputeFunction<SymmetricL2Discrepancy, double>());
 
 
     py::class_<UnanchoredL2Discrepancy>(m, "UnanchoredL2Discrepancy")
@@ -501,6 +516,7 @@ PYBIND11_MODULE(pyutk, m)
 {
     m.doc() = "UTK python binding";
 
+    // TODO : submodules ? 
     init_BasicSamplers(m);
     init_Scrambling(m);
     init_Metrics(m);

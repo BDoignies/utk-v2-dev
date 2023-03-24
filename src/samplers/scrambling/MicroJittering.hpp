@@ -1,7 +1,5 @@
 /*
- * Hélène Perrier helene.perrier@liris.cnrs.fr
- * and David Coeurjolly david.coeurjolly@liris.cnrs.fr
- *
+ * Coded by Hélène Perrier helene.perrier@liris.cnrs.fr
  * Copyright (c) 2018 CNRS Université de Lyon
  * All rights reserved.
  *
@@ -29,57 +27,71 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the Halton project.
  */
-#pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../utils/FastPRNG.hpp"
+#include <random>
 
 namespace utk
 {
-    class SymmetricL2Discrepancy
+    class MicroJittering
     {
     public:
-        SymmetricL2Discrepancy() {}
+        MicroJittering(double ip = -1.0) : intensityParam(ip)
+        { }
+
+        void setRandomSeed(long unsigned int arg_seed) 
+        { 
+            mt.seed(arg_seed);
+        }
+
+        void setRandomSeed() 
+        { 
+            setRandomSeed(std::random_device{}());
+        }
 
         template<typename T>
-        T compute(const Pointset<T>& pts)
+        T getIntensity(uint32_t hint_N, uint32_t hint_D) const
         {
-            const auto N = pts.Npts();
-            const auto D = pts.Ndim();
+            if (intensityParam < 0.0)
+                return std::pow(std::max(hint_N, (uint32_t)1), -(T)hint_D);
+            return intensityParam;
+        }
 
-            T sumprod1    = 0.0;
-            T sumsumprod3 = 0.0;
-            
-            #pragma omp parallel for reduction(+:sumprod1) reduction(+:sumsumprod3)
-            for (uint32_t i = 0; i < N; i++)
+        template<typename T>
+        void Scramble(Pointset<T>& in)
+        {
+            const T intensiy = getIntensity<T>(in.Npts(), in.Ndim());
+            std::uniform_real_distribution<T> dist(-intensiy, intensiy);
+
+            for (unsigned int i = 0; i < in.Npts(); i++)
             {
-                T prod1 = 1.0;
-                
-                for (uint32_t d = 0; d < D; d++)
+                for (unsigned int d = 0; d < in.Ndim(); d++)
                 {
-                    prod1 *= (1 + 2. * (pts[i][d] - pts[i][d] * pts[i][d]));
+                    in[i][d] = std::clamp(in[i][d] + dist(mt), (T)0.0, (T)1.0);
                 }
+            }
+        }
 
-                // Use the fact that max is a symetric function
-                for (uint32_t j = i + 1; j < N; j++)
+        template<typename T, typename D>
+        void Scramble(const Pointset<T>& in, Pointset<D>& out)
+        {
+            out.Resize(in.Npts(), in.Ndim());
+
+            const T intensiy = getIntensity<T>(in.Npts(), in.Ndim());
+            std::uniform_real_distribution<T> dist(-intensiy, intensiy);
+            
+            for (unsigned int i = 0; i < in.Npts(); i++)
+            {
+                for (unsigned int d = 0; d < in.Ndim(); d++)
                 {
-                    T prod3 = 1.0;
-                    for (uint32_t d = 0; d < D; d++)
-                    {
-                        T diffij = std::abs(pts[i][d] - pts[j][d]);
-                        prod3 *= (1. - diffij);
-                    }
-                    sumsumprod3 += prod3;
+                    out[i][d] = std::clamp(in[i][d] + dist(mt), (T)0.0, (T)1.0);
                 }
-
-                sumprod1 += prod1;
             }
 
-            const T invN  = 1. / (T) N;
-            const T invN2 = std::pow(2, D) * invN * invN;
-
-            T value = std::pow(4. / 3., D) - 2. * invN * sumprod1 + invN2 * (N + 2. * sumsumprod3);
-            return std::sqrt(value);
         }
     private:
+        double intensityParam;
+        std::mt19937 mt;
     };
-};
+}
