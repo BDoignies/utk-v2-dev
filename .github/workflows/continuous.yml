@@ -2,7 +2,7 @@ name: CI (linux/macOS/windows)
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   # if needdd
