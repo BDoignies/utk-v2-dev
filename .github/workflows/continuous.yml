@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  # if needdd
+  # if needed
   CONFIG_GLOBAL:
   CONFIG_LINUX:
   CONFIG_MAC:
