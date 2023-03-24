@@ -41,7 +41,7 @@ FOREACH(FILE ${SRCs})
     ENDIF()
 
     add_executable(${FILE} exe/${FILE}.cpp ${ADDITIONNAL_CODE})
-    target_link_libraries(${FILE} spdlog::spdlog)
+    target_link_libraries(${FILE} spdlog::spdlog )
 
     install(TARGETS ${FILE}
         RUNTIME DESTINATION bin

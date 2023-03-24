@@ -22,5 +22,6 @@ include(openmp)
 include(pybind11)
 include(spdlog)
 include(cli11)
+include(cgal)
 
 add_subdirectory(src)
