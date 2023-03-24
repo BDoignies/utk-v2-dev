@@ -132,15 +132,15 @@ protected:
 		for (uint32_t y = 0; y < 128; y+=16)
 		{
 			int tab[16];
-			for(uint n=0; n<16; n++) tab[n] = n;
-			for(uint n=0; n<16; n++) std::swap(tab[dist(m_mersenneTwister)], tab[dist(m_mersenneTwister)]);
+			for(uint32_t n=0; n<16; n++) tab[n] = n;
+			for(uint32_t n=0; n<16; n++) std::swap(tab[dist(m_mersenneTwister)], tab[dist(m_mersenneTwister)]);
 
-			for(uint n=0; n<16; n++)
+			for(uint32_t n=0; n<16; n++)
 			{
-				uint off = tab[n];
+				uint32_t off = tab[n];
 				
-				uint yn = y+n;
-				uint i; i_from_XY(i, x, yn);
+				uint32_t yn = y+n;
+				uint32_t i; i_from_XY(i, x, yn);
 				O[i][0] = radicalInverse_VdC(y+off);
 			}
 		}
@@ -150,15 +150,15 @@ protected:
 		for (uint32_t x = 0; x < 128; x += 16)
 		{
 			int tab[16];
-			for(uint n=0; n<16; n++) tab[n] = n;
-			for(uint n=0; n<16; n++) std::swap(tab[dist(m_mersenneTwister)], tab[dist(m_mersenneTwister)]);
+			for(uint32_t n=0; n<16; n++) tab[n] = n;
+			for(uint32_t n=0; n<16; n++) std::swap(tab[dist(m_mersenneTwister)], tab[dist(m_mersenneTwister)]);
 
-			for(uint n=0; n<16; n++)
+			for(uint32_t n=0; n<16; n++)
 			{
-				uint off = tab[n];
+				uint32_t off = tab[n];
 				
-				uint xn = x+n;
-				uint i; i_from_XY(i, xn, y);
+				uint32_t xn = x+n;
+				uint32_t i; i_from_XY(i, xn, y);
 				O[i][1] = radicalInverse_VdC(x+off);
 			}
 		}
@@ -224,7 +224,7 @@ protected:
 
     std::mt19937 m_mersenneTwister;
 
-	static float radicalInverse_VdC(uint bits) {
+	static float radicalInverse_VdC(uint32_t bits) {
 		bits = (bits << 16u) | (bits >> 16u);
 		bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
 		bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
@@ -233,13 +233,13 @@ protected:
 		return float(bits) * 2.3283064365386963e-10; // / 0x100000000
 	}
 
-	static void XY_from_i(uint i, uint& x, uint& y)
+	static void XY_from_i(uint32_t i, uint32_t  x, uint32_t  y)
 	{
 		x = i%128;
 		y = i/128;
 	}
 
-	static void i_from_XY(uint& i, uint x, uint y)
+	static void i_from_XY(uint32_t  i, uint32_t x, uint32_t y)
 	{
 		i = y*128 + x;
 	}

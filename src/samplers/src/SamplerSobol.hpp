@@ -35,6 +35,7 @@
 #include <fstream>
 #include <type_traits>
 #include <bitset>
+#include <array>
 #include <random>
 
 

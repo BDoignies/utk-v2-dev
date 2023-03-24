@@ -240,7 +240,7 @@ std::vector<Pair> search_MMD_R1Lattice_approxGR(int nb, long long& mmd){
 
 	std::vector<Pair> generators;
 	std::vector<Pair> rasters = rasterize_circle(ini);
-	for (uint i = 0; i < rasters.size(); i++){
+	for (uint32_t i = 0; i < rasters.size(); i++){
 		Pair e = rasters[i];
 		long long a = e.x, b = e.y;
 		if (compute_GCD(compute_GCD(nb, a), b) != 1){

@@ -56,18 +56,18 @@ namespace utk
             arg_pts.Resize(N, D);
 
             const T unit = (T) 1.0 / (T) N; 
-            for (uint i = 0; i < N; i++)
+            for (uint32_t i = 0; i < N; i++)
             {
                 T pos = i * unit;
-                for (uint d = 0; d < D; d++)
+                for (uint32_t d = 0; d < D; d++)
                     arg_pts[i][d] = pos;
             }
 
             /// N-Rooks Swapping
             std::uniform_int_distribution<uint32_t> dist(0, N - 1);
-            for (uint i = 0; i < N - 2; i++)
+            for (uint32_t i = 0; i < N - 2; i++)
             {
-                for (uint d = 0; d < D; d++)
+                for (uint32_t d = 0; d < D; d++)
                 {
                     uint32_t j = dist(m_mersenneTwister);
                     std::swap(arg_pts[i][d], arg_pts[j][d]);

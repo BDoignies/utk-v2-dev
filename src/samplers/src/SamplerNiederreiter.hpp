@@ -1270,7 +1270,7 @@ namespace utk
 	public:
 		SamplerNiederreiter(uint32_t d, uint32_t basis = 2) : D(d), m_basis(basis) { }
 	
-		void setBasis(uint arg_basis) { m_basis = arg_basis; }
+		void setBasis(uint32_t arg_basis) { m_basis = arg_basis; }
 	
 		void setDimension(uint32_t d) { D = d; }
 		uint32_t GetDimension() const { return D; }
