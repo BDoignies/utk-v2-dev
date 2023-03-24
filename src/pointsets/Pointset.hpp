@@ -52,6 +52,7 @@ namespace utk
         {
             N = 0;
             D = 0;
+            C = 0;
             isView = false;
             data = nullptr;
         }
@@ -60,6 +61,7 @@ namespace utk
         {
             N = 0;
             D = 0;
+            C = 0;
             isView = false;
             data = nullptr;
             Resize(n, d);
@@ -72,6 +74,7 @@ namespace utk
             pt.data = data;
             pt.N = n;
             pt.D = d;
+            pt.C = n * d;
 
             return pt;
         }
@@ -79,33 +82,28 @@ namespace utk
         static Pointset<T> Copy(const T* data, uint32_t n, uint32_t d)
         {
             Pointset<T> pt(n, d);
-            pt.isView = false;
             std::memcpy(pt.data, data, sizeof(T) * n * d);
             return pt;
         }
 
-        // Do not risk taking a view here, just use a copy
+        // Take a view ! (allow for simple passing and returns)
         Pointset(const Pointset& other)
         {
-            N = 0;
-            D = 0;
-            isView = false;
-            data = nullptr;
-            Resize(other.N, other.D);
-            std::memcpy(data, other.data, sizeof(T) * N * D);
+            N = other.N;
+            D = other.D;
+            isView = true;
+            data = other.data;
         }
 
-        // Do not risk taking a view here, just use a copy
+        // Take a view ! (allow for simple passing and returns)
         Pointset& operator=(const Pointset& other)
         {
             if (this != &other)
             {
-                N = 0;
-                D = 0;
-                isView = false;
-                data = nullptr;
-                Resize(other.N, other.D);
-                std::memcpy(data, other.data, sizeof(T) * N * D);   
+                N = other.N;
+                D = other.D;
+                isView = true;
+                data = other.data; 
             }
             return *this;
         }
@@ -148,40 +146,74 @@ namespace utk
             return D;
         }
 
+        uint32_t Capacity() const
+        {
+            return C;
+        }
+
         void Fill(T value = 0) const
         {
             std::fill(data, data + N * D, value);
         }
 
-        void Resize(uint32_t n, uint32_t d)
+        void Resize(uint32_t n, uint32_t d, uint32_t hint_Capacity = 0)
         {
             // Always realloc if it previously was a view
             if (isView)
             {
-                // isView is true, do not delete here
                 D = d;
                 N = n;
+
+                // At least N * D of memory
+                C = std::max(hint_Capacity, N * D);
+
                 isView = false;
 
-                data = new T[N * D];
+                T* oldData = data;
+                data = new T[C];
+                // Copy previous data, do not delete here !
+                // The pointset was not the owner of the data
+                std::memcpy(data, oldData, N * D * sizeof(T));
             }
             else
             {
                 // Realloc only if size do not match
                 if (n != N || d != D)
                 {
-                    // Safe to delete, isView == false here
-                    if (data != nullptr)
-                        delete[] data;
+                    // Enough memory, nothing to realloc, just change size
+                    if (C > n * d) 
+                    {
+                        N = n;
+                        D = d;
+                        return;
+                    }
 
-                    D = d;
+                    // At least n * d of memory
+                    C = std::max(hint_Capacity, n * d); 
+
+
+                    T* oldData = data;
+                    data = new T[C]; 
+
+                    if (oldData != nullptr)
+                    {
+                        std::memcpy(data, oldData, N * D * sizeof(T));
+                        delete[] oldData;
+                    }
+                    // Change size here as memcpy needs previous sizes
                     N = n;
-                    isView = false;
-
-                    data = new T[N * D];
+                    D = d;
                 }
             }
         }
+
+        T& PushBack()
+        {
+            auto n = N;
+            // Double size !
+            Resize(N + 1, D, C * 2);
+            return data[n];
+        }  
 
         ~Pointset()
         {      
@@ -190,8 +222,10 @@ namespace utk
         }
     private:
         bool isView;
+
         uint32_t N;
         uint32_t D;
+        uint32_t C;
 
         T* data;
 

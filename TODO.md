@@ -158,3 +158,4 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 - [ ] Projective Blue Noise : Enhance projection method (not only axis based, MC evaluation,...)
 - [ ] NRooks: Integer sampling 
 - [ ] Add parametrization for openmp threads (Note: env variable OMP_NUM_THREADS could do the trick too)
+- [ ] Adding a capacity to Pointset ? 

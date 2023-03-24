@@ -83,4 +83,38 @@ inline bool write_text_pointsets(const std::string& dest, const std::vector<Poin
     return true;
 }
 
+template<class Stream, typename T>
+inline Pointset<T> read_text_pointset_stream(Stream& st)
+{
+    // At least one element
+    Pointset<T> pts(0, 1);
+    std::string line = "#";
+
+    // Skips comments (at the beginning only) (if any)
+    while (line[0] == '#')
+        std::getline(st, line);
+
+    uint32_t d = 0;
+    std::istringstream sstream(line);
+    while(sstream.good())
+    {
+        sstream >> pts.PushBack();
+        d++;
+    }
+    
+    while(std::getline(st, line))
+    {
+        if (line[0] == '#') break;
+
+        std::istringstream tmp(line);
+        while(tmp.good()) 
+        {
+            tmp >> pts.PushBack();
+        }
+    }
+
+    pts.Resize(pts.Npts() / d, d);
+    return pts;
+}
+
 };
