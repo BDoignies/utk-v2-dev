@@ -117,6 +117,17 @@ namespace utk
 
             return {borne_inf, borne_sup };
         }
+   
+        template<typename T>
+        std::vector<std::pair<T, T>> compute(const std::vector<Pointset<T>>& ptss)
+        {
+            std::vector<std::pair<T, T>> rslts;
+            rslts.reserve(ptss.size());
+            for (const auto& pts : ptss)
+                rslts.push_back(compute(pts));
+            return rslts;
+        }
+        
     private:
         struct sommet
         {

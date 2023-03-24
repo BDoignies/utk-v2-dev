@@ -60,23 +60,21 @@ namespace utk
         }
 
         template<typename T>
-        std::vector<T> compute(const Pointset<T>& pts)
+        std::vector<T> fromSpectrum(const std::vector<T>& spectra, uint32_t N, uint32_t D)
         {
-            const uint32_t width  = spectrum.getWidth(pts.Npts());
+            const uint32_t width  = spectrum.getWidth(N);
             const uint32_t Origin = width >> 1;
-            const uint32_t totalIts = std::pow(width, pts.Ndim());
-            const uint32_t nbins = getNBBins(pts.Npts());
+            const uint32_t totalIts = std::pow(width, D);
+            const uint32_t nbins = getNBBins(N);
 
             std::vector<T> rp(nbins, 0.0);
             std::vector<uint32_t> hits(nbins, 0);
-
-            auto spectra = spectrum.compute(pts);
 
             for (uint32_t i = 0; i < totalIts; i++)
             {
                 T radius = 0.0;
                 uint32_t tmp = i;
-                for (uint32_t d = 0; d < pts.Ndim(); d++)
+                for (uint32_t d = 0; d < D; d++)
                 {
                     long long int coord = (static_cast<long long>(tmp % width) - Origin);
                     tmp /= width;
@@ -98,6 +96,23 @@ namespace utk
             }
 
             return rp;
+        }
+
+        template<typename T>
+        std::vector<T> compute(const Pointset<T>& pts)
+        {
+            return fromSpectrum(spectrum.compute(pts), pts.Npts(), pts.Ndim());
+        }
+
+        template<typename T>
+        std::vector<T> compute(const std::vector<Pointset<T>>& ptss)
+        {
+            if (ptss.size() == 0) return std::vector<T>();
+            
+            const uint32_t N = ptss[0].Npts();
+            const uint32_t D = ptss[0].Ndim();
+
+            return fromSpectrum(spectrum.compute(ptss), N, D);
         }
     private:
         double scale;

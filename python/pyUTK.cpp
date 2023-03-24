@@ -119,8 +119,73 @@ auto GetScrambleFunction()
     };
 }
 
-template<typename T, typename InputType = T>
+template<typename T, typename U>
+struct ComputeOutType
+{ using type = std::variant<T, U>; };
+
+template<typename T>
+struct ComputeOutType<T, T>
+{ using type = T; };
+
+
+template<typename T, typename InputType, typename OutputType = InputType, typename VectorizedOutputType = std::vector<OutputType>>
 auto GetComputeFunction()
+{
+    using outtype = typename ComputeOutType<OutputType, VectorizedOutputType>::type;
+
+    return [](T& metrics, py::buffer b){
+        py::buffer_info info = b.request();
+
+        if (info.format != py::format_descriptor<InputType>::format())
+            throw std::runtime_error("Type not supported");
+
+        if (info.ndim == 2)
+        {
+            std::vector<py::ssize_t> desiredStride = {
+                info.shape[1] * static_cast<py::ssize_t>(sizeof(InputType)), sizeof(InputType)
+            };
+
+            if (info.strides != desiredStride)
+                throw std::runtime_error("Only contiguous C-ordered array are supported");
+            
+            Pointset<InputType> in = Pointset<InputType>::View(
+                static_cast<InputType*>(info.ptr), 
+                info.shape[0], info.shape[1]
+            );
+            outtype out = metrics.compute(in);
+            return out;
+        }
+        else if (info.ndim == 3)
+        {
+             std::vector<py::ssize_t> desiredStride = {
+                info.shape[2] * info.shape[1] * static_cast<py::ssize_t>(sizeof(InputType)), 
+                                info.shape[2] * static_cast<py::ssize_t>(sizeof(InputType)), 
+                                                                         sizeof(InputType)
+            };
+
+            if (info.strides != desiredStride)
+                throw std::runtime_error("Only contiguous C-ordered array are supported");
+            
+            std::vector<Pointset<InputType>> ptss(info.shape[0]);
+            for (uint32_t k = 0; k < info.shape[0]; k++)
+            {
+                ptss[k] =  Pointset<InputType>::View(
+                    static_cast<InputType*>(info.ptr) + k * info.shape[1] * info.shape[2], 
+                    info.shape[1], info.shape[2]
+                );
+            }
+
+            outtype out = metrics.compute(ptss);
+            return out;
+        }
+
+        throw std::runtime_error("Only 2D/3D array are supported");
+        return outtype{};
+    };
+}
+
+template<typename T, typename InputType = T>
+auto GetVComputeFunction()
 {
     return [](T& metrics, py::buffer b){
         py::buffer_info info = b.request();
@@ -453,7 +518,7 @@ void init_Metrics(py::module& m)
         .def(py::init<uint32_t, bool>(), py::arg("resolution") = 0, py::arg("cancelDC") = true)
         .def("setResoluion", &Spectrum::setResolution)
         .def("setCancelDC", &Spectrum::setCancelDC)
-        .def("compute", GetComputeFunction<Spectrum, double>());
+        .def("compute", GetComputeFunction<Spectrum, double, std::vector<double>, std::vector<double>>());
 
     py::class_<RadialSpectrum>(m, "RadialSpectrum")
         .def(py::init<uint32_t, double, uint32_t, bool>(), 
@@ -463,7 +528,7 @@ void init_Metrics(py::module& m)
         .def("setScale", &RadialSpectrum::setScale)
         .def("setCancelDC", &RadialSpectrum::setCancelDC)
         .def("setBins", &RadialSpectrum::setBins)
-        .def("compute", GetComputeFunction<RadialSpectrum, double>());
+        .def("compute", GetComputeFunction<RadialSpectrum, double, std::vector<double>, std::vector<double>>());
     
     py::class_<PCF>(m, "PCF")
         .def(py::init<bool, double, double, uint32_t, double>(), 
@@ -475,7 +540,7 @@ void init_Metrics(py::module& m)
         .def("setRmax", &PCF::setRmax)
         .def("setSmoothing", &PCF::setSmoothing)
         .def("setNbBins", &PCF::setNbBins)
-        .def("compute", GetComputeFunction<PCF, double>());
+        .def("compute", GetComputeFunction<PCF, double, std::vector<double>, std::vector<double>>());
 
     py::class_<Diaphony>(m, "Diaphony")
         .def(py::init<>())
@@ -509,7 +574,7 @@ void init_Metrics(py::module& m)
     
     py::class_<BoundariesStarDiscrepancy>(m, "BoundariesStarDiscrepancy")
         .def(py::init<double>(), py::arg("eps") = -1.)
-        .def("compute", GetComputeFunction<BoundariesStarDiscrepancy, double>());
+        .def("compute", GetComputeFunction<BoundariesStarDiscrepancy, double, std::pair<double, double>>());
 }
 
 PYBIND11_MODULE(pyutk, m) 

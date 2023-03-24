@@ -82,6 +82,16 @@ namespace utk
             T value = std::pow(1. / 12., D) - std::pow(2.0, ((T)1 - (T)D)) * invN * sumprod1 + invN2 * (sumsumprod2 + 2. * sumsumprod3);
             return std::sqrt(value);
         }
+
+        template<typename T>
+        std::vector<T> compute(const std::vector<Pointset<T>>& ptss)
+        {
+            std::vector<T> rslts;
+            rslts.reserve(ptss.size());
+            for (const auto& pts : ptss)
+                rslts.push_back(compute(pts));
+            return rslts;
+        }
     private:
     };
 };

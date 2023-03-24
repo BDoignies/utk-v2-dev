@@ -101,6 +101,60 @@ namespace utk
 
             return pcf;
         }
+
+        template<typename T>
+        std::vector<T> compute(const std::vector<Pointset<T>>& ptss)
+        {
+            if (ptss.size() == 0) return std::vector<T>();
+
+            const uint32_t N = ptss[0].Npts();
+            const uint32_t D = ptss[0].Ndim();
+            const T invNPts = 1. / (T)ptss.size();
+            
+            static constexpr T invPI = 0.3183098861837907;
+            static constexpr T    PI = 3.1415926535897932;
+
+            T ra = rmin;
+            T rb = rmax;
+
+            auto dist = toroidal ? &PCF::toricDistance<T> :
+                                   &PCF::distance<T>;
+
+            std::vector<T> pcf(nbbins, 0.0);
+
+            #pragma omp parallel for
+            for (uint32_t pcfid = 0; pcfid < nbbins; ++pcfid)
+            {
+                T r = ra + pcfid * (rb - ra) / (T)nbbins;
+                pcf[pcfid] = 0.0;
+
+                for (uint32_t k = 0; k < ptss.size(); k++)
+                {
+                    T estimator = 0.0;
+                
+                    for (uint32_t i = 0; i < N; i++)
+                    {
+                        for (uint32_t j = i + 1; j < N; j++)
+                        {
+                            T val = gaussianKernel(smoothing, r - dist(D, ptss[k][i], ptss[k][j]));
+                            estimator += val;
+                            estimator += val;
+                        }
+                    }
+
+                    T cov = 1.0 - 2 * (2 * r * invPI) + r * r * invPI;
+                    T factor = 2 * PI * r * cov;
+                    factor = 1 / factor;
+
+                    estimator *= factor;
+                    estimator /= (N * (N - 1));
+                    pcf[pcfid] += estimator;
+                }
+                pcf[pcfid] *= invNPts;
+            }
+
+            return pcf;
+        }
     private:
         bool toroidal;
 

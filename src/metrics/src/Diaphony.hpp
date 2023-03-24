@@ -71,6 +71,16 @@ namespace utk
             const T bot = T(n*n) * ( std::pow ( 1.0 + M_PI * M_PI / 3.0, D ) - 1.0 );
             return std::sqrt(sum_over_i / bot);
         }
+
+        template<typename T>
+        std::vector<T> compute(const std::vector<Pointset<T>>& ptss)
+        {
+            std::vector<T> rslts;
+            rslts.reserve(ptss.size());
+            for (const auto& pts : ptss)
+                rslts.push_back(compute(pts));
+            return rslts;
+        }
     private:
     };
 };

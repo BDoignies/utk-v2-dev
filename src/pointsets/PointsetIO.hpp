@@ -91,16 +91,12 @@ inline Pointset<T> read_text_pointset_stream(Stream& st)
     std::string line = "#";
 
     // Skips comments (at the beginning only) (if any)
-    while (line[0] == '#')
-        std::getline(st, line);
+    while (line[0] == '#' && std::getline(st, line));
 
-    uint32_t d = 0;
     std::istringstream sstream(line);
-    while(sstream.good())
-    {
-        sstream >> pts.PushBack();
-        d++;
-    }
+    while(sstream.good())  sstream >> pts.PushBack();
+    
+    uint32_t d = pts.Npts();
     
     while(std::getline(st, line))
     {
@@ -108,13 +104,11 @@ inline Pointset<T> read_text_pointset_stream(Stream& st)
 
         std::istringstream tmp(line);
         while(tmp.good()) 
-        {
             tmp >> pts.PushBack();
-        }
     }
 
     pts.Resize(pts.Npts() / d, d);
-    pts.Shrink();
+    // pts.Shrink();
     return pts;
 }
 

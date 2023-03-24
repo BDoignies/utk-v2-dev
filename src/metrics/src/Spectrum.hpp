@@ -130,6 +130,89 @@ namespace utk
             }
             return spectrum;
         }
+        
+        // Specialized version here
+        // Loop over pointsets is pushed in the code to save on memory !
+        template<typename T>
+        std::vector<T> compute(const std::vector<Pointset<T>>& ptss)
+        {
+            if (ptss.size() == 0) return std::vector<T>();
+
+            static constexpr T TWOPI_NEG = -6.2831853071795864769;
+
+            const uint32_t N = ptss[0].Npts();
+            const uint32_t D = ptss[0].Ndim();
+            const T invNPts = 1. / (T)ptss.size();
+
+            const uint32_t width = getWidth(N);
+            const uint32_t Origin = width >> 1;
+            
+            std::vector<std::vector<T>> ws;     
+            std::vector<T> spectrum(std::pow(width, D), 0.0);
+
+            // Spectrum is computed by computing scalar products
+            // Between a grid and every point of the set
+            #pragma omp parallel 
+            {
+                // Pre-Allocate memory
+                #ifdef UTK_USE_OPENMP
+                    #pragma omp single
+                    {
+                        ws.resize(omp_get_num_threads(), std::vector<T>(D, 0.0));
+                    }
+                #else
+                    ws.resize(1, std::vector<T>(D, 0.0));
+                #endif
+
+                #pragma omp for
+                for (uint32_t i = 0; i < spectrum.size(); i++)
+                {
+                    #ifdef UTK_USE_OPENMP
+                        uint32_t tId = omp_get_thread_num();
+                    #else
+                        uint32_t tId = 0;
+                    #endif
+
+                    uint32_t tmp = i;
+                    // Coordinate of the grid point (in the frequency domain)
+                    for (uint32_t d = 0; d < D; d++)
+                    {
+                        ws[tId][d] = TWOPI_NEG * (static_cast<long long>(tmp % width) - Origin);
+                        tmp /= width;
+                    }
+
+                    T P = 0.0;
+                    for (uint32_t k = 0; k < ptss.size(); k++)
+                    {
+                        T ex = 0.0;
+                        T ey = 0.0;
+                        for (uint32_t j = 0; j < N; j++)
+                        {
+                            // Scalar product between 'j' and the grid point
+                            T angle = 0.0;
+                            for (uint32_t d = 0; d < D; d++)
+                                angle += ws[tId][d] * ptss[k][j][d];
+
+                            auto [s, c] = sincos<T>(angle);
+                            ex += c;
+                            ey += s;
+                        }
+                        P += ex * ex + ey * ey;
+                    }
+                    
+                    spectrum[i] = P * invNPts;
+                }
+            }
+            
+            if (cancelDC)
+            {
+                uint32_t origin = 0;
+                for (uint32_t d = 0; d < D; d++)
+                    origin = origin * width + Origin;
+                spectrum[origin] = 0;
+            }
+            return spectrum;
+        }
     private:
         uint32_t paramWidth;
         bool cancelDC;

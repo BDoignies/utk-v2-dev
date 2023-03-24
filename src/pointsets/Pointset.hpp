@@ -91,6 +91,7 @@ namespace utk
         {
             N = other.N;
             D = other.D;
+            C = other.C;
             isView = true;
             data = other.data;
         }
@@ -102,6 +103,7 @@ namespace utk
             {
                 N = other.N;
                 D = other.D;
+                C = other.C;
                 isView = true;
                 data = other.data; 
             }
