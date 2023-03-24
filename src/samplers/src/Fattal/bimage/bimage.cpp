@@ -2,7 +2,7 @@
 #include <string.h>
 #include <iostream>
 #include <fstream>
-#include <unistd.h>
+// #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -480,22 +480,22 @@ void BImage::show() {
   
   writeImage(filename) ;
   
-  if(fork() == 0) {
+  // if(fork() == 0) {
     //    if(fork() == 0)
      //execl("/usr/bin/kview", "kview", filename, NULL) ;
-     execl("/usr/bin/qiv", "qiv -e", filename, NULL) ;
+   //  execl("/usr/bin/qiv", "qiv -e", filename, NULL) ;
 //      else {
 //       sleep(400);
 //       execl("/bin/rm", "rm", filename, NULL) ;
 //     }
-  }  
+  //}  
 }
 
 
 void BImage::close() {
-  if(fork() == 0) {
-    execl("/usr/bin/killall", "killall qiv -9", NULL, NULL) ;
-  }  
+  // if(fork() == 0) {
+  //  execl("/usr/bin/killall", "killall qiv -9", NULL, NULL) ;
+  // }   
 }
 
 

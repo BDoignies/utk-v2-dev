@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include <getopt.h>
+// #include <getopt.h>
 #include <string>
 #include <fstream>
 #include <vector>

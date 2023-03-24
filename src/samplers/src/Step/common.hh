@@ -11,10 +11,17 @@
 
 #include <string>
 #include <vector>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <tuple> // std::ignore
 #include <stdint.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
+double drand48(){
+    return rand() / (RAND_MAX + 1.0);
+}
+#endif
 
 // -------------------- Math --------------------
 

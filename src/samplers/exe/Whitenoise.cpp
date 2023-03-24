@@ -29,13 +29,9 @@
  */
 #include "Parser.hpp"
 #include "../src/SamplerWhitenoise.hpp"
-#include "spdlog/spdlog.h"
-
 
 int main(int argc, char** argv)
 {
-  spdlog::info("Welcome to spdlog!");
-
     CLI::App app { "Whitenoise sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app);
 

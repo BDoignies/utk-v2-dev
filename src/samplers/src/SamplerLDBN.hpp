@@ -233,13 +233,13 @@ protected:
 		return float(bits) * 2.3283064365386963e-10; // / 0x100000000
 	}
 
-	static void XY_from_i(uint32_t i, uint32_t  x, uint32_t  y)
+	static void XY_from_i(uint32_t i, uint32_t& x, uint32_t& y)
 	{
 		x = i%128;
 		y = i/128;
 	}
 
-	static void i_from_XY(uint32_t  i, uint32_t x, uint32_t y)
+	static void i_from_XY(uint32_t&  i, uint32_t x, uint32_t y)
 	{
 		i = y*128 + x;
 	}
