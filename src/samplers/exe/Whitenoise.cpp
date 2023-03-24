@@ -29,16 +29,20 @@
  */
 #include "Parser.hpp"
 #include "../src/SamplerWhitenoise.hpp"
+#include "spdlog/spdlog.h"
+
 
 int main(int argc, char** argv)
 {
+  spdlog::info("Welcome to spdlog!");
+
     CLI::App app { "Whitenoise sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app);
-    
+
     CLI11_PARSE(app, argc, argv);
-    
+
     std::vector<utk::Pointset<double>> pts = args->GetPointsets();
-    
+
     utk::SamplerWhitenoise wn(args->D);
     wn.setRandomSeed(args->seed);
 
@@ -52,6 +56,8 @@ int main(int argc, char** argv)
     }
 
     args->WritePointsets(pts);
+
+
 
     delete args;
     return 0;

@@ -31,17 +31,18 @@
 #include "../../pointsets/Pointset.hpp"
 #include "../utils/FastPRNG.hpp"
 #include <random>
+#include <cmath>
 
 namespace utk
-{ 
+{
     class CranleyPattersonScrambling
     {
     public:
-        CranleyPattersonScrambling(double md = 1.0, double ds = 1.0) : 
+        CranleyPattersonScrambling(double md = 1.0, double ds = 1.0) :
             maxDispacement(md), domainSize(ds)
         { }
 
-        void setMaxDispacement(double mv = 1.0) 
+        void setMaxDispacement(double mv = 1.0)
         {
             maxDispacement = mv;
         }
@@ -51,13 +52,13 @@ namespace utk
             domainSize = ds;
         }
 
-        void setRandomSeed(long unsigned int arg_seed) 
-        { 
+        void setRandomSeed(long unsigned int arg_seed)
+        {
             mt.seed(arg_seed);
         }
 
-        void setRandomSeed() 
-        { 
+        void setRandomSeed()
+        {
             setRandomSeed(std::random_device{}());
         }
 
@@ -66,7 +67,7 @@ namespace utk
         {
             std::uniform_real_distribution<T> dist(-maxDispacement, maxDispacement);
             std::vector<T> shift(in.Ndim());
-            
+
             for (unsigned int d = 0; d < in.Ndim(); d++)
                 shift[d] = dist(mt);
 
@@ -74,7 +75,7 @@ namespace utk
             {
                 for (unsigned int d = 0; d < in.Ndim(); d++)
                 {
-                    in[i][d] = fmodf64(in[i][d] + shift[d], domainSize);
+                    in[i][d] = std::fmod(in[i][d] + shift[d], domainSize);
                 }
             }
         }
@@ -84,7 +85,7 @@ namespace utk
         {
             std::uniform_real_distribution<T> dist(-maxDispacement, maxDispacement);
             std::vector<T> shift(in.Ndim());
-            
+
             out.Resize(in.Npts(), in.Ndim());
 
             for (unsigned int d = 0; d < in.Ndim(); d++)
@@ -94,7 +95,7 @@ namespace utk
             {
                 for (unsigned int d = 0; d < in.Ndim(); d++)
                 {
-                    out[i][d] = fmodf64(in[i][d] + shift[d], domainSize);
+                    out[i][d] = std::fmod(in[i][d] + shift[d], domainSize);
                 }
             }
         }

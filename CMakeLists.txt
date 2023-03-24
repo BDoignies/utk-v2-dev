@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
+
 MESSAGE(STATUS "C++17 enabled by cmake. ")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
@@ -15,10 +18,9 @@ set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
 add_definitions(-DUTK_DATA_PATH=\"${UTK_DATA_PATH}\")
 
 # Finding libraries
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-
-# Threads (C++ standard library)
-find_package(Threads)
-find_package(OpenMP)
+include(openmp)
+include(pybind11)
+include(spdlog)
+include(cli11)
 
 add_subdirectory(src)

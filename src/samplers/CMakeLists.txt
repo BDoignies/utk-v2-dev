@@ -35,12 +35,13 @@ FOREACH(FILE ${SRCs})
     SET(ADDITIONNAL_CODE "")
 
     IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/${FILE})
-        FILE(GLOB_RECURSE ADDITIONNAL_CODE 
+        FILE(GLOB_RECURSE ADDITIONNAL_CODE
                     "${CMAKE_CURRENT_SOURCE_DIR}/src/${FILE}/*.cpp"
             )
     ENDIF()
 
     add_executable(${FILE} exe/${FILE}.cpp ${ADDITIONNAL_CODE})
+    target_link_libraries(${FILE} spdlog::spdlog)
 
     install(TARGETS ${FILE}
         RUNTIME DESTINATION bin

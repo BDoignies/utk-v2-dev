@@ -45,8 +45,8 @@ namespace utk
 
         using Type = double;
 
-        unsigned int N; 
-        unsigned int D; 
+        unsigned int N;
+        unsigned int D;
         unsigned int M;
         long long unsigned int seed;
         std::string outFile;
@@ -56,7 +56,7 @@ namespace utk
             std::vector<Pointset<Type>> pts(M, Pointset<Type>(N, D));
             return pts;
         }
-        
+
         bool WritePointsets(const std::vector<Pointset<Type>>& pts)
         {
             return write_text_pointsets(outFile, pts);
@@ -64,7 +64,7 @@ namespace utk
     };
 
     inline SamplerArguments* add_arguments(
-        CLI::App& app, 
+        CLI::App& app,
         unsigned int force_dim = SamplerArguments::ANY_DIM,
         bool seedable = true
     )
@@ -73,18 +73,18 @@ namespace utk
         args->seed = std::random_device{}();
 
         app.add_option("-n", args->N, "Number of points")->required();
-        
+
         if (force_dim == 0)
             app.add_option("-d", args->D, "Dimensions")->required();
         else
             args->D = force_dim;
-        
+
         if (seedable)
             app.add_option("-s,--seed", args->seed, "Seed (unspecified means 'random')");
-        
+
         app.add_option("-m", args->M, "Number of pointsets")->default_val(1);
         app.add_option("-o,--out", args->outFile, "Output file")->default_val("out.dat");
 
-        return args;   
+        return args;
     }
 };
