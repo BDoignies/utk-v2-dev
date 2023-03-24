@@ -14,6 +14,7 @@
 #include <cmath>
 #include <tuple> // std::ignore
 #include <stdint.h>
+#include <stdlib.h>
 
 // -------------------- Math --------------------
 

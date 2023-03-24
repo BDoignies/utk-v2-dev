@@ -7,7 +7,7 @@
 #include "../general/nor_dist.h"
 #include "../general/fft.h"
 //#include "hdrimage.h"
-#include <getopt.h>
+// #include <getopt.h>
 #include <string>
 #include <cassert>
 #include <iomanip>
