@@ -130,7 +130,7 @@ void Setup()
 	V2d offsetScale = 1.0 / static_cast<double>(sigma) * randomOffset * V2d(static_cast<double>(w_M)) / static_cast<double>(w_B);
 	deltaW = ToV2i(static_cast<double>(w_B) * offsetScale) * sigma;
 	blockDeltaW = deltaW / w_B;
-	tau = static_cast<double>(static_cast<__int64_t>(n) * static_cast<__int64_t>(w_M) * static_cast<__int64_t>(w_M)) / (static_cast<double>(s_W.x * s_W.y) * meanValue);
+	tau = static_cast<double>(static_cast<int64_t>(n) * static_cast<int64_t>(w_M) * static_cast<int64_t>(w_M)) / (static_cast<double>(s_W.x * s_W.y) * meanValue);
 }
 
 void CreateBlockwiseSortedList()

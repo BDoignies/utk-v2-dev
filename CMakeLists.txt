@@ -16,6 +16,7 @@ set(CMAKE_BUILD_TYPE "Release")
 set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
 
 add_definitions(-DUTK_DATA_PATH=\"${UTK_DATA_PATH}\")
+add_definitions(-D_USE_MATH_DEFINES) # Windows... Oh dear Windows...
 
 # Finding libraries
 # include(openmp)
