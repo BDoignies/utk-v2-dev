@@ -41,19 +41,19 @@ jobs:
        if: matrix.os == 'ubuntu-latest'
        shell: bash
        working-directory: ${{runner.workspace}}/build
-       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} $CONFIG_GLOBAL $CONFIG_LINUX" 
+       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} $CONFIG_GLOBAL $CONFIG_LINUX
 
      - name: Configure CMake (macOS)
        if: matrix.os == 'macOS-latest'
        shell: bash
        working-directory: ${{runner.workspace}}/build
-       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}  $CONFIG_GLOBAL $CONFIG_MAC"
+       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}  $CONFIG_GLOBAL $CONFIG_MAC
 
      - name: Configure CMake (windows)
        if: matrix.os == 'windows-latest'
        shell: bash
        working-directory: ${{runner.workspace}}/build
-       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}"
+       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}
 
      - name: Build
        working-directory: ${{runner.workspace}}/build
