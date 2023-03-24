@@ -78,7 +78,8 @@ namespace utk
             const T invN  = 1. / (T) N;
             const T invN2 = invN * invN;
 
-            return std::pow(4. / 3., D) - 2. * invN * sumprod1 + invN2 * (sumsumprod2 + 2. * sumsumprod3);
+            T value = std::pow(4. / 3., D) - 2. * invN * sumprod1 + invN2 * (sumsumprod2 + 2. * sumsumprod3);
+            return std::sqrt(value);
         }
     private:
     };

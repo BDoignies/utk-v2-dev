@@ -116,7 +116,7 @@ Exes :
 
 
 
-## Check samplers :
+## Checks :
 
 There are a few thing I've noticed, here is a (probably non-exhaustive) list of things to check
 
@@ -132,6 +132,8 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 - [ ] Lloyd3D : to be tested. Also link with openMP instead of ptheads ? Move Delaunay_psm to 'externals/' ? 
 - [ ] Step/SinglePeak : Link with OpenMP ? 
 - [ ] Penrose : is magfactor to be parametrized ? 
+- [ ] Check discrepancies : parallel computation yield differents results each time the function is called. It looks like 
+      numerical innacuracy and thread ordering being different... But still to be checked !
 
 ## Python Binding :
 
