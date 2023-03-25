@@ -88,7 +88,9 @@ namespace utk
             std::vector<T> rslts;
             rslts.reserve(ptss.size());
             for (const auto& pts : ptss)
+            {
                 rslts.push_back(compute(pts));
+            }
             return rslts;
         }
     private:

@@ -205,7 +205,7 @@ namespace utk
 
         bool supertree ()
         {
-            int i;
+            uint32_t i;
             superarbre = (sommet *) calloc ( (unsigned) n+1, sizeof(sommet) );
 
             for ( i = 1; i <= n; i++ )
@@ -463,7 +463,7 @@ namespace utk
         //  Purpose:
         //    LOWBOUND computes the lower bound.
         {
-            int i;
+            uint32_t i;
             int j;
             double tmp;
 

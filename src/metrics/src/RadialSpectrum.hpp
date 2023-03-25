@@ -40,7 +40,7 @@ namespace utk
     {
     public:
         RadialSpectrum(uint32_t nb = 0, double s = 0.5, uint32_t w = 0, bool cd = true) : 
-            paramNBins(nb), scale(s), spectrum(w, cd) 
+            scale(s), paramNBins(nb), spectrum(w, cd) 
         { }
 
         void setResolution(uint32_t nw) { spectrum.setResolution(nw); }

@@ -35,6 +35,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <memory>
 
 namespace utk
 {
@@ -49,32 +50,22 @@ namespace utk
     {
     public:
         Pointset()
-        {
-            N = 0;
-            D = 0;
-            C = 0;
-            isView = false;
-            data = nullptr;
-        }
+        { }
 
         Pointset(uint32_t n, uint32_t d) 
         {
-            N = 0;
-            D = 0;
-            C = 0;
-            isView = false;
-            data = nullptr;
             Resize(n, d);
         }
-
+        
         static Pointset<T> View(T* data, uint32_t n, uint32_t d)
         {
             Pointset<T> pt;
-            pt.isView = true;
-            pt.data = data;
             pt.N = n;
             pt.D = d;
             pt.C = n * d;
+
+            // This is a view, do not delete the data here...
+            pt.data = std::shared_ptr<T[]>(data, [](T* X){});
 
             return pt;
         }
@@ -93,7 +84,10 @@ namespace utk
             D = other.D;
             C = other.C;
             isView = true;
-            data = other.data;
+            
+            // Shared ptr copy, will inherit non deleter 
+            // if needed
+            data = other.data; 
         }
 
         // Take a view ! (allow for simple passing and returns)
@@ -105,6 +99,9 @@ namespace utk
                 D = other.D;
                 C = other.C;
                 isView = true;
+
+                // Shared ptr copy, will inherit non deleter 
+                // if needed
                 data = other.data; 
             }
             return *this;
@@ -112,22 +109,22 @@ namespace utk
 
         T* Data()
         {
-            return &data[0];
+            return data.get();
         }
 
         const T* Data() const
         {
-            return &data[0];
+            return data.get();
         }
 
         T* operator[](uint32_t i) 
         {
-            return &data[0] + i * D;
+            return Data() + i * D;
         }
 
         const T* operator[](uint32_t i) const
         {
-            return &data[0] + i * D;
+            return Data() + i * D;
         }
 
         void swap(Pointset<T>& other)
@@ -171,11 +168,11 @@ namespace utk
 
                 isView = false;
 
-                T* oldData = data;
-                data = new T[C];
-                // Copy previous data, do not delete here !
-                // The pointset was not the owner of the data
-                std::memcpy(data, oldData, N * D * sizeof(T));
+                // Obtain copy of ptr first to make sure it is not deleted
+                // by resetting data
+                std::shared_ptr<T[]> oldData = data;
+                data = std::shared_ptr<T[]>(new T[C]);
+                std::memcpy(data.get(), oldData.get(), N * D * sizeof(T));
             }
             else
             {
@@ -193,15 +190,14 @@ namespace utk
                     // At least n * d of memory
                     C = std::max(hint_Capacity, n * d); 
 
+                    // Obtain copy of ptr first to make sure it is not deleted
+                    // by resetting data
+                    std::shared_ptr<T[]> oldData = data;
+                    data = std::shared_ptr<T[]>(new T[C]);
+                
+                    if (oldData.get() != nullptr)
+                        std::memcpy(data.get(), oldData.get(), N * D * sizeof(T));
 
-                    T* oldData = data;
-                    data = new T[C]; 
-
-                    if (oldData != nullptr)
-                    {
-                        std::memcpy(data, oldData, N * D * sizeof(T));
-                        delete[] oldData;
-                    }
                     // Change size here as memcpy needs previous sizes
                     N = n;
                     D = d;
@@ -209,44 +205,23 @@ namespace utk
             }
         }
 
-        void Shrink() 
-        {
-            if (C != N * D && !isView)
-            {
-                C = N * D;
-                T* oldData = data;
-                data = new T[C]; 
-
-                if (oldData != nullptr)
-                {
-                    std::memcpy(data, oldData, N * D * sizeof(T));
-                    delete[] oldData;
-                }
-            }
-        }
-
         T& PushBack()
         {
-            auto n = N;
-            // Double size !
+            uint32_t n = N;
             Resize(N + 1, D, C * 2);
             return data[n];
         }  
 
         ~Pointset()
-        {      
-            if (data != nullptr && !isView)
-                delete[] data;
-        }
+        {  }
     private:
-        bool isView;
+        bool isView = false;
 
-        uint32_t N;
-        uint32_t D;
-        uint32_t C;
+        uint32_t N = 0;
+        uint32_t D = 1;
+        uint32_t C = 0;
 
-        T* data;
-
+        std::shared_ptr<T[]> data; 
         // Can not set data's pointer... Or maybe with custom allocators
         // Anyway keeping the pointer is simpler.
         // std::vector<T> data; 

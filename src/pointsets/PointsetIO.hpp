@@ -87,14 +87,14 @@ template<class Stream, typename T>
 inline Pointset<T> read_text_pointset_stream(Stream& st)
 {
     // At least one element
-    Pointset<T> pts(0, 1);
+    Pointset<T> pts = Pointset<T>(0, 1);
     std::string line = "#";
 
     // Skips comments (at the beginning only) (if any)
     while (line[0] == '#' && std::getline(st, line));
 
     std::istringstream sstream(line);
-    while(sstream.good())  sstream >> pts.PushBack();
+    while(sstream.good()) sstream >> pts.PushBack();
     
     uint32_t d = pts.Npts();
     
@@ -109,6 +109,7 @@ inline Pointset<T> read_text_pointset_stream(Stream& st)
 
     pts.Resize(pts.Npts() / d, d);
     // pts.Shrink();
+    // return pts;
     return pts;
 }
 
