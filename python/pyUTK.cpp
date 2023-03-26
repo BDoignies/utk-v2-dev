@@ -589,6 +589,20 @@ PYBIND11_MODULE(pyutk, m)
     m.def("enableLogs", [](){
         UTK_LOG_ENABLE();
     });
+    m.def("hasLogs", [](){
+        #ifdef UTK_LOG
+            return true;
+        #else 
+            return false;
+        #endif
+    });
+    m.def("setLogFile", [](const std::string& file){
+        UTK_LOG_FILE(file);
+    });
+
+    m.def("setLogConsole", [](){
+        UTK_LOG_CONSOLE();
+    });
 
     // TODO : submodules ? 
     init_BasicSamplers(m);

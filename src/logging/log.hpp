@@ -44,32 +44,28 @@ namespace utk
         void operator=(Logger const&)  = delete;
     
     public:
-        std::shared_ptr<spdlog::logger> logger; // Public ... Why no idea, but why not ?
+        std::shared_ptr<spdlog::logger> logger; // Public ... Why ? no idea, but why not ?
                                                 // Not static just to be sure it is properly constructed 
                                                 // but without cpp file :)
 
-        static void DisableLog()
+        void DisableLog()
         {
-            Logger& log = Logger::instance();
-            log.logger->set_level(spdlog::level::off);
+            logger->set_level(spdlog::level::off);
         }
 
-        static void EnableLog()
+        void EnableLog()
         {
-            Logger& log = Logger::instance();
-            log.logger->set_level(spdlog::level::trace);
+            logger->set_level(spdlog::level::trace);
         }
 
-        static void SetFileLogging(const std::string& file)
+        void SetFileLogging(const std::string& file)
         {
-            Logger& log = Logger::instance();
-            log.CreateFileLogger(file);
+            CreateFileLogger(file);
         }
 
-        static void SetConsoleLogging()
+        void SetConsoleLogging()
         {
-            Logger& log = Logger::instance();
-            log.CreateConsoleLogger();
+            CreateConsoleLogger();
         }
         
         static Logger& instance()
@@ -84,10 +80,10 @@ namespace utk
     #else
         #define UTK_DEBUG(message, ...) utk::Logger::instance().logger->debug(message, __VA_ARGS__);
     #endif
-    #define UTK_LOG_DISABLE()       utk::Logger::DisableLog();
-    #define UTK_LOG_ENABLE()        utk::Logger::EnableLog();
-    #define UTK_LOG_FILE(file)      utk::Logger::SetFileLogging(file);
-    #define UTK_LOG_CONSOLE()       utk::Logger::SetConsoleLogging();
+    #define UTK_LOG_DISABLE()       utk::Logger::instance().DisableLog();
+    #define UTK_LOG_ENABLE()        utk::Logger::instance().EnableLog();
+    #define UTK_LOG_FILE(file)      utk::Logger::instance().SetFileLogging(file);
+    #define UTK_LOG_CONSOLE()       utk::Logger::instance().SetConsoleLogging();
     #define UTK_INFO(message, ...)  utk::Logger::instance().logger->info (message, __VA_ARGS__);
     #define UTK_WARN(message, ...)  utk::Logger::instance().logger->warn (message, __VA_ARGS__);
     #define UTK_ERROR(message, ...) utk::Logger::instance().logger->error(message, __VA_ARGS__);
