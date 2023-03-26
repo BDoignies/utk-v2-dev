@@ -34,11 +34,23 @@ pybind11_add_module(pyutk
 )
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads)
-find_package(OpenMP)
+include(../cmake/openmp.cmake)
+include(../cmake/spdlog.cmake)
+
+option(UTK_LOG "Enable utk logging" ON)
+option(UTK_DEBUG "Enable utk debug logs" OFF)
+
+if (UTK_LOG)
+    add_definitions(-DUTK_LOG)
+
+    if (NOT UTK_DEBUG)
+        add_definitions(-DUTK_LOG_NO_DEBUG)
+    endif()
+endif()
+
 
 target_include_directories(pyutk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/)
-target_link_libraries(pyutk PRIVATE pybind11::module)
+target_link_libraries(pyutk PRIVATE pybind11::module spdlog::spdlog)
 
 if (OpenMP_FOUND)
     message("Linking with OpenMP")

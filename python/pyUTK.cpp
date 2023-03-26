@@ -2,6 +2,8 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
+#include "../src/logging/log.hpp"
+
 #include "../src/samplers/src/SamplerWhitenoise.hpp"
 #include "../src/samplers/src/SamplerHalton.hpp"
 #include "../src/samplers/src/SamplerHammersley.hpp"
@@ -580,6 +582,13 @@ void init_Metrics(py::module& m)
 PYBIND11_MODULE(pyutk, m) 
 {
     m.doc() = "UTK python binding";
+
+    m.def("disableLogs", [](){
+        UTK_LOG_DISABLE();
+    });
+    m.def("enableLogs", [](){
+        UTK_LOG_ENABLE();
+    });
 
     // TODO : submodules ? 
     init_BasicSamplers(m);
