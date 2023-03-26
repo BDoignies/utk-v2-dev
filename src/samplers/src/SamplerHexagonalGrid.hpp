@@ -29,6 +29,7 @@
  */
 #pragma once
 
+#include "../../logging/log.hpp"
 #include "../../pointsets/Pointset.hpp"
 #include <cmath>
 
@@ -50,8 +51,11 @@ public:
 		const uint32_t n = (uint32_t) std::round(std::sqrt(N));
         
         if (n * n != N)
+        {
+            UTK_ERROR("Sampler HexagonalGrid requires squared number of point {} != {}", N, n * n);
             return false;
-        
+        }
+            
         arg_pts.Resize(N, 2);
         const double s = std::sqrt(2.0 / (3.0 * N * sqrt(3.0)));
         

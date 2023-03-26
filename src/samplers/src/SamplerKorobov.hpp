@@ -29,6 +29,7 @@
  */
 #pragma once
 
+#include "../../logging/log.hpp"
 #include "../../pointsets/Pointset.hpp"
 #include <cmath>
 
@@ -63,6 +64,9 @@ public:
 				W[i] = (T)((int) std::pow(gen_a, i) % N) * step;
 		}
 		
+		if (std::gcd(N, gen_a) != 1)
+			UTK_WARN("Sampler Korobov: {} is not relatively prime with {}", N, gen_a);
+
 		for(uint32_t i = 0; i < N; i++)
 		{
 			for (uint32_t d = 0; d < D; d++)

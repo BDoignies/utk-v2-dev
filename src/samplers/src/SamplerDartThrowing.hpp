@@ -30,6 +30,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include <cstring> // memcpy
 #include <random>
 
@@ -171,7 +172,10 @@ private:
 			case 7: gamman_max = (1.0/105.0) * PI * PI * PI               ; break;
 			case 8: gamman_max = (1.0/384.0) * PI * PI * PI * PI;           break;
 			default:
+			{
 				gamman_max = (1.0/384.0) * PI * PI * PI * PI;
+				UTK_WARN("Sampler DartThrowing does not have builtin value for D > 8. Using value for D = 8, for D = {} ({})", D, gamman_max);
+			}
 		}
 
 		return gamman_max;

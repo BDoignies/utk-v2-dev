@@ -30,6 +30,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include "../utils/FastPRNG.hpp"
 #include "../utils/RadicalInversion.hpp"
 #include <fstream>
@@ -82,8 +83,11 @@ namespace utk
         {
             sobol_mk.resize(D);
             if (!load_mk(directionFile))
+            {
+                UTK_ERROR("SamplerSobol : no such file or directory {}", directionFile);
                 return false;
-
+            }
+                
             std::vector<uint64_t> seeds(D);
             for (uint32_t d = 0; d < D; d++)
                 seeds[d] = m_mersenneTwister();

@@ -117,7 +117,6 @@ void loadVectors(const char *fileName) {                                        
 
 } //end namespace nsaapattern
 
-
 namespace utk
 {
 
@@ -165,7 +164,7 @@ public:
 			arg_pts[i][1] = list[i].y;
 		}
 
-		return true;
+        return true;
 	};
 
 protected:

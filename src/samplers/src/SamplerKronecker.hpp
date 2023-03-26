@@ -29,6 +29,7 @@
  */
 #pragma once
 
+#include "../../logging/log.hpp"
 #include "../../pointsets/Pointset.hpp"
 #include "Kronecker/Kronecker.hpp"
 #include <random>
@@ -96,8 +97,11 @@ public:
 	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
         if (m_alphas == nullptr)
+        {
+            UTK_ERROR("Sampler Kronecker: No vector given", 0);
             return false;
-
+        }
+            
         arg_pts.Resize(N, D);
 		for(uint32_t i = 0; i < N; i++)
         {

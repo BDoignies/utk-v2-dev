@@ -21,6 +21,9 @@ int main(int argc, char** argv)
     CLI11_PARSE(app, argc, argv);
 
     std::vector<utk::Pointset<double>> ptss = margs->GetAllPointsets();
+    if (!utk::CheckPointsets(ptss))
+        return 1;
+        
     auto rslts = utk::PCF(toroidal, rmin, rmax, bins, smoothing).compute(ptss);
 
     auto& ostream = margs->GetOutputStream();

@@ -30,6 +30,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include "../utils/RadicalInversion.hpp"
 #include <cmath>
 
@@ -71,8 +72,12 @@ public:
 	template<typename T>
 	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
-		if(D > m_idBaseMax) return false;
-
+		if(D >= m_idBaseMax) 
+		{
+			UTK_ERROR("Sampler Halton: dimension {} exeed basis list size {}", D, m_idBaseMax);
+			return false;
+		}
+		
 		arg_pts.Resize(N, D);
 		if constexpr (std::is_integral_v<T>)
 		{

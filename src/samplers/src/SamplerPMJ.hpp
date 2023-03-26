@@ -35,6 +35,7 @@
 #include "PMJ/PMJ02SampleSequenceGenerator_Pharr.h"
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include <random>
 
 namespace utk
@@ -109,6 +110,9 @@ public:
         // {
         // 		return false;
         // }
+
+        if (N != Npts)
+            UTK_WARN("Sampler Penrose, returning {} samples when asked for {}", Npts, N);
 
         arg_pts.Resize(Npts, 2);
         for (uint32_t i = 0; i < Npts; i++)

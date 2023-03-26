@@ -38,3 +38,5 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang" OR
         "-Wno-sign-conversion"
     )
 endif()
+
+add_definitions(-DUTK_LOG_SPDLOG)

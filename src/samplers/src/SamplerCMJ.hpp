@@ -30,6 +30,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include <random>
 #include <cmath>
 
@@ -56,8 +57,11 @@ namespace utk
             const double gridSqr  = gridSize * gridSize;
 
             if (N != (n * n))
+            {
+                UTK_ERROR("Sampler CMJ requires square number of points: {} != {}", N, n * n);
                 return false;
-            
+            }
+                
             std::uniform_real_distribution<T> dist(0, 1);
             arg_pts.Resize(N, 2);
 

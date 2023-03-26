@@ -30,6 +30,7 @@
 #pragma once
 
 #include "LutLDBN/lutLDBN.h"
+#include "../../logging/log.hpp"
 #include "../../pointsets/Pointset.hpp"
 #include <random>
 
@@ -59,21 +60,25 @@ public:
 	{
 		const uint32_t n  = (uint32_t) std::round(std::sqrt(N));
 		if (n * n != N)
+		{
+            UTK_ERROR("Sampler LDBN requires squared number of point {} != {}", N, n * n);
 			return false;
-
+		}
+			
 		std::vector<Point> samples;
 		if (target == "STEP")
 		{
 			ldbnSTEP(N, samples);
 		}
-		else /* if (target == "BNOT") */
+		else if (target == "BNOT") 
 		{
 			ldbnBNOT(N, samples);
 		}
-		// else
-		// {
-		//     return false;
-		// }
+		else
+		{
+			UTK_WARN("Sampler LutLDBN unknown target {}, falling back to BNOT", target);
+			ldbnBNOT(N, samples);
+		}
 		
 		arg_pts.Resize(N, 2);
 		uint32_t pmax = std::ceil(std::log2(N));

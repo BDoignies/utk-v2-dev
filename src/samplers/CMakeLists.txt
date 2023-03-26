@@ -41,7 +41,7 @@ FOREACH(FILE ${SRCs})
     ENDIF()
 
     add_executable(${FILE} exe/${FILE}.cpp ${ADDITIONNAL_CODE})
-    target_link_libraries(${FILE})
+    target_link_libraries(${FILE} PRIVATE spdlog::spdlog)
 
     install(TARGETS ${FILE}
         RUNTIME DESTINATION bin
@@ -57,7 +57,7 @@ ENDFOREACH(FILE)
 IF(Threads_FOUND)
     # Lloyd
     add_executable(Lloyd exe/Lloyd.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Lloyd/Delaunay_psm.cpp)
-    target_link_libraries(Lloyd PRIVATE Threads::Threads)
+    target_link_libraries(Lloyd PRIVATE Threads::Threads spdlog::spdlog)
 
     install(TARGETS Lloyd
         RUNTIME DESTINATION bin

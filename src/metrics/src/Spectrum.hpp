@@ -36,6 +36,7 @@
 #endif
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 
 namespace utk
 {
@@ -59,6 +60,9 @@ namespace utk
             uint32_t w = paramWidth;
             if (paramWidth == 0)
                 w = static_cast<uint32_t>(2 * 5 * std::sqrt(hint_N));
+            else if ((w & 1) == 0)
+                UTK_WARN("Spectrum: only using odd resolution ({} => {})", w, w - !(w & 1));
+
             return w - !(w & 1);
         }
 

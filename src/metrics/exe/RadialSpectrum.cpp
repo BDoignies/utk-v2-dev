@@ -19,6 +19,9 @@ int main(int argc, char** argv)
     CLI11_PARSE(app, argc, argv);
 
     std::vector<utk::Pointset<double>> ptss = margs->GetAllPointsets();
+    if (!utk::CheckPointsets(ptss))
+        return 1;
+        
     auto rslts = utk::RadialSpectrum(bins, scale, res, cancelDc).compute(ptss);
 
     auto& ostream = margs->GetOutputStream();

@@ -30,6 +30,7 @@
 #pragma once
 
 #include "Penrose/quasisampler_prototype.h"
+#include "../../logging/log.hpp"
 #include "../../pointsets/Pointset.hpp"
 #include <random>
 
@@ -65,7 +66,10 @@ public:
 		MyQuasisampler test(magFactor * N);
 		std::vector<penrose::Point2D> points = test.getSamplingPoints();
 
-        arg_pts.Resize(N, 2);
+		if (N != points.size())
+            UTK_WARN("Sampler Penrose, returning {} samples when asked for {}", points.size(), N);
+       
+        arg_pts.Resize(points.size(), 2);
 		for (uint32_t i = 0; i < points.size(); i++)
 		{
 			arg_pts[i][0] = (points[i].x / 100.0);

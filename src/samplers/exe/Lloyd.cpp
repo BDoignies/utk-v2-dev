@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     {
         if(!lloyd.generateSamples(pts[i], args->N))
         {
-            std::cerr << "Warning: Sampler returned non-zero output" << std::endl;
+            std::cerr << "Sampler returned non-zero output" << std::endl; // No log here, must be visible whatsoever
             return 1;
         }
     }

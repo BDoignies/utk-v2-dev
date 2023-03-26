@@ -30,6 +30,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include <cstring> // memcpy
 #include <random>
 #include <algorithm>
@@ -207,7 +208,11 @@ private:
 			case 5: gamman_max = 1.0 / std::pow(8.0 * N * std::sqrt(2.0), 1.0 / 10.0); break;
 			case 6: gamman_max = 1.0 / std::pow(8.0 * N * std::sqrt(3.0), 1.0 / 12.0); break;
 			default:
+			{
 				gamman_max = 1.0 / std::pow(8.0 * N * std::sqrt(3.0), 1.0 / 12.0);
+				UTK_WARN("Sampler Projective blue noise does not have builtin packing values for D > 6. Using value for D = 6, for D = {} ({})", k, gamman_max);
+			}
+			
 		}
 
 		return gamman_max;

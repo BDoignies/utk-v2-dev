@@ -11,17 +11,28 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 MESSAGE(STATUS "C++17 enabled by cmake. ")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-# set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Release")
 
 set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
 
 add_definitions(-DUTK_DATA_PATH=\"${UTK_DATA_PATH}\")
 add_definitions(-D_USE_MATH_DEFINES) # Windows... Oh dear Windows...
 
+option(UTK_LOG "Enable utk logging" ON)
+option(UTK_DEBUG "Enable utk debug logs" OFF)
+
+if (UTK_LOG)
+    add_definitions(-DUTK_LOG)
+
+    if (NOT UTK_DEBUG)
+        add_definitions(-DUTK_LOG_NO_DEBUG)
+    endif()
+endif()
+
 # Finding libraries
 include(openmp)
 # include(pybind11)
-# include(spdlog)
+include(spdlog)
 # include(cli11)
 # include(cgal)
 

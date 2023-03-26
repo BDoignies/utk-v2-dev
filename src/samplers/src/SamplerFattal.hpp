@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Fattal/pdist_code/main.hh"
+#include "../../logging/log.hpp"
 #include "../../pointsets/Pointset.hpp"
 #include <random>
 
@@ -132,6 +133,10 @@ public:
 		// for(int i = 0 ; i < ndots ; i++)
 		// 	   if(dots[i].density_log4 > 0)
 		// 	       cout << "bad " << dots[i].density_log4 << endl ;
+
+        if (N != static_cast<uint32_t>(ndots))
+            UTK_WARN("Sampler Fattal, returning {} samples when asked for {}", ndots, N);
+
 
 		arg_pts.Resize(ndots, 2);
 		for(int i = 0 ; i < ndots ; i++)

@@ -29,6 +29,7 @@
  */
 #pragma once
 
+#include "../../logging/log.hpp"
 #include "../../externals/CLI11.hpp"
 #include "../../pointsets/PointsetIO.hpp"
 
@@ -55,7 +56,6 @@ namespace utk
                 if (pointset.Npts() > 0)
                     pointsets.push_back(pointset);
             }
-
             return pointsets;
         } 
 
@@ -79,5 +79,30 @@ namespace utk
         app.add_option("-o,--output", arguments->outFile, "Output file (empty is stdout)")->default_val("");
 
         return arguments;
+    }
+
+    template<typename T>
+    bool CheckPointsets(const std::vector<Pointset<T>>& pts)
+    {
+        // Can't say it's wrong ...
+        if (pts.size() == 0) 
+        {
+            UTK_WARN("No pointset read...", 0);
+            return true;
+        }
+
+        bool isValid = true;
+        uint32_t N = pts[0].Npts();
+        uint32_t D = pts[0].Ndim();
+
+        for (uint32_t i = 1; i < pts.size(); i++)
+        {
+            if (N != pts[i].Npts() || D != pts[i].Ndim())
+            {
+                UTK_WARN("Pointset shape mismatch: [0]: {}, {}, [{}]: {}, {}", N, D, pts[i].Npts(), pts[i].Ndim());
+                isValid = false;
+            }
+        }
+        return isValid;
     }
 }

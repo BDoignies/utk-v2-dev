@@ -30,6 +30,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include <random>
 #include <cmath>
 
@@ -56,7 +57,10 @@ namespace utk
             const double gridSize = 1. / (double)n;
 
             if (N != static_cast<uint32_t>(std::round(std::pow(n, D))))
+            {            
+                UTK_ERROR("Sampler Stratified requires to be a power of dimension {} != {} ** {}", N, n, D);
                 return false;
+            }
             
             std::uniform_real_distribution<T> dist(0, 1);
             arg_pts.Resize(N, D);

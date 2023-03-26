@@ -30,6 +30,7 @@
 #pragma once
 
 #include "../../pointsets/Pointset.hpp"
+#include "../../logging/log.hpp"
 #include "FastPoisson/PDSampling.h"
 #include <random>
 
@@ -110,6 +111,9 @@ public:
         if (maximize) sampler->maximize();
         for (uint32_t i = 0; i < relaxCount; i++) sampler->relax();
 
+        if (N != sampler->points.size())
+            UTK_WARN("Sampler FastPoisson, returning {} samples when asked for {}", sampler->points.size(), N);
+       
         N = sampler->points.size();
         arg_pts.Resize(N, 2);
         for (uint32_t i = 0; i < N; i++)
