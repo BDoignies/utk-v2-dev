@@ -3,6 +3,8 @@
 #ifdef UTK_USE_OPENMP
     #include <omp.h>
 #endif
+
+#include <iomanip>
 #include <fstream>
 #include <ostream>
 #include <istream>
@@ -28,7 +30,7 @@ namespace utk
         virtual void ReadFromStream(std::istream& stream) = 0;
         virtual void WriteInStream (std::ostream& stream) const = 0;
 
-        virtual double eval(const double* pts) = 0;
+        virtual double eval(const double* pts) const = 0;
 
         virtual bool hasCloseForm() const  { return false; }
         virtual double getIntegral() const { return 0.; }
@@ -80,6 +82,8 @@ namespace utk
             }
 
             std::ofstream f(file);
+            f << std::setprecision(std::numeric_limits<double>::digits10 + 2);
+
             for (unsigned int i = 0; i < count; i++)
             {
                 f << values[i] << " ";
@@ -123,7 +127,7 @@ namespace utk
         {
             if (integrands.size() == 0)
             {
-                // UTK_ERROR("No integrand. Load a database first or build it", 0);
+                UTK_ERROR("No integrand. Load a database first or build it", 0);
                 return ErrorReport{};
             }
 

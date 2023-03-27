@@ -5,6 +5,7 @@
 #include <vector>
 #include <random>
 
+#include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -169,9 +170,28 @@ namespace utk
         matrix_transpose(*Q);   
     }
 
+    void matrix_show(mat m)
+    {
+        for(int i = 0; i < m->m; i++) {
+            for (int j = 0; j < m->n; j++) {
+                printf(" %8.3f", m->v[i][j]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+
     mat random_unitary_matrix(uint32_t D, std::mt19937& mt)
     {
         std::normal_distribution<double> distribution(0, 1.0);
+        
+        if (D == 1)
+        {
+            mat Q = matrix_new(1, 1);
+            double val = distribution(mt);
+            Q->v[0][0] = (0.0 < val) - (val < 0.0);
+            return Q;
+        }
         mat matrix = matrix_new(D, D);
 
         for (uint32_t i = 0; i < D; i++)
@@ -184,7 +204,7 @@ namespace utk
         // Normalize Q to make sure decomposition is unique
         for (uint32_t i = 0; i < D; i++)
         {
-            double coef = R->v[i][i] / abs(R->v[i][i]);
+            double coef = 1.; // R->v[i][i] / abs(R->v[i][i]);
             for (uint32_t j = 0; j < D; j++) 
                 Q->v[i][j] = Q->v[i][j] * coef;
         }
@@ -207,6 +227,7 @@ namespace utk
     
         void GenerateRandom(const GenerationParameter& params, uint64_t seed)
         {
+            // Some default values...
             double sigmaMin = 0.01;
             double sigmaMax = 1.00;
 
@@ -224,14 +245,23 @@ namespace utk
             for (unsigned int i = 0; i < dim; i++)
                 mu[i] = unifMu(mt);
             
+            std::vector<double> sigmas(dim, 0.0);
+            for (unsigned int i = 0; i < dim; i++)
+                sigmas[i] = 1. / unifSigma(mt);
+
             // Q = rot matrix (rotation), S = diagonal matrix (size)
-            // Sigma = Q * S
-            // Sigma^-1 = S^-1 Q^-1 = S^-1 Q because Q is unary
+            // Covariance matrix is QSQ' which is SDP
+            // Its inverse : Q S^-1 Q', because Q^-1 = Q'
             for (unsigned int i = 0; i < dim; i++)
             {
-                double value = 1.; // 1. / unifSigma(mt);
                 for (unsigned int j = 0; j < dim; j++)
-                    invSigma[j + i * dim] = rot->v[i][j] * value;
+                {
+                    invSigma[j + i * dim] = 0.0;
+                    for (unsigned int k = 0; k < dim; k++)
+                    {
+                        invSigma[j + i * dim] += rot->v[i][k] * sigmas[k] * rot->v[k][j];
+                    }
+                }
             }
 
             matrix_delete(rot);
@@ -257,7 +287,7 @@ namespace utk
                     stream << invSigma[j + i * dim] << " ";
         }
 
-        virtual double eval(const double* pts)
+        virtual double eval(const double* pts) const override
         {
             double rslt = 0.0;
             for (uint32_t i = 0; i < dim; i++)
@@ -265,7 +295,7 @@ namespace utk
                 double tmp = 0.0;
                 for (uint32_t j = 0; j < dim; j++)
                     tmp += invSigma[j + i * dim] * (pts[j] - mu[j]);
-                rslt += (pts[i] - mu[i]);
+                rslt += tmp * (pts[i] - mu[i]);
             }
             return std::exp(-0.5 * rslt);
         }
