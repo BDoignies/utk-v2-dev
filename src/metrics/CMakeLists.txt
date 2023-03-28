@@ -10,6 +10,12 @@ SET(SRCs
     Spectrum
     RadialSpectrum
     PCF
+
+    GaussianIntegrationTest
+    HeavisideIntegrationTest
+
+    BuildGaussianIntegrandDatabase
+    BuildHeavisideIntegrandDatabase
 )
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")

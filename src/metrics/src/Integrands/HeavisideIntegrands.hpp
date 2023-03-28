@@ -62,7 +62,12 @@ namespace utk
             return value > 0.0;
         }
 
-        virtual bool hasCloseForm() const  { return (dim < MAX_CLOSE_FORM); }
+        virtual bool hasCloseForm() const  
+        { 
+            // Do not use close form formula for too high dimensions
+            // It is exponential in dimension : (~= (D + 1)2^D)
+            return (dim < MAX_CLOSE_FORM); 
+        }
 
         virtual double getIntegral() const 
         { 

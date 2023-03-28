@@ -33,6 +33,7 @@
 #include "../../externals/CLI11.hpp"
 #include "../../pointsets/PointsetIO.hpp"
 
+#include <iomanip>
 #include <vector>
 #include <fstream>
 
@@ -63,10 +64,12 @@ namespace utk
         {
             if (outFile.empty())
             {
+                std::cout << std::setprecision(17) << std::fixed;
                 return std::cout;
             }
             
             outputFileStream.open(outFile);
+            outputFileStream << std::setprecision(17) << std::fixed;
             return outputFileStream;
         }
     };

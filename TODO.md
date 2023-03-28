@@ -142,7 +142,8 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
     - [ ] Lloyd     (requires additionnal dependancies, waiting for proper CMake)
     - [X] Kronecker (Uses a global constant to store Alphas)
     - [X] Halton    (Uses a global constant to store Basis)
-- [ ] Discrepancies, Spectrum, PCF, ...
+- [X] Discrepancies, Spectrum, PCF, ...
+- [ ] Integration test
 - [X] Scramblers
 
 ## Design :

@@ -14,6 +14,8 @@
 #include <vector>
 #include <map>
 #include <variant>
+
+#include "../../logging/log.hpp"
 #include "../../pointsets/Pointset.hpp"
 
 namespace utk
@@ -57,7 +59,7 @@ namespace utk
 
 
         // T : integrand type, Args: parameters for integrand 
-        template<typename IntegrandType, typename ...Args>
+        template<typename IntegrandType>
         void BuildDatabase(
             const std::string& file,           /* Output file                         */
             uint32_t dim,                      /* Dimension                           */
@@ -93,12 +95,19 @@ namespace utk
         }
 
         template<typename IntegrandType>
-        void ReadDatabase(const std::string& file)
+        void ReadDatabase(const std::string& file, uint32_t D)
         {
             integrands.resize(0);
             values.resize(0);
 
             std::ifstream rfile(file);
+
+            if (!rfile.is_open())
+            {
+                UTK_WARN("File {} does not exists. No integrands loaded", file);
+                return;
+            }
+
             std::string buffer;
             while (std::getline(rfile, buffer))
             {
@@ -107,7 +116,7 @@ namespace utk
                 double value; 
                 f >> value;
                 
-                IntegrandType* integrand = new IntegrandType();
+                IntegrandType* integrand = new IntegrandType(D);
                 integrand->ReadFromStream(f);
 
                 integrands.push_back(integrand);
