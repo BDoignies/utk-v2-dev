@@ -92,19 +92,18 @@ Distance :
 
 Test : 
 
-- [ ] Integration test 
+- [X] Integration test 
     - Currently, ground thruth are evaluated with 16k Grid points...
     - What to do for ground thruth ?
 - [ ] ZonePlate test
 
 Exes :
 
-- [ ] Output format = ?? Keep the same as UTK ? 
-- [ ] Interface to run on directories : what directory structure ? 
+- [X] Output format = ?? Keep the same as UTK ? 
 
 ## Functionnalities (to be discussed)
 
-- [ ] Error reporting
+- [X] Error reporting
     - Global Error stack ?
     - Global logger ? 
     - Local logger : Requires an additionnal parameter for each sampler...
@@ -146,15 +145,15 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 - [ ] Integration test
 - [X] Scramblers
 
-## Design :
+## Big things
 
-- [ ] Check current interface. Is everything ok ? 
+- [ ] Documentation
+- [ ] Better directory structure
+- [ ] CMake fetch content CLI11 / Pybind 
+- [ ] FindUTK.cmake 
 
-## Misct : 
+## Misc : 
 
-- [ ] CMake precompiled header (for CLI11 ?)
-- [ ] Create an actual linkable library with <double> samplers ? 
-- [ ] data install path or included by samplers (or convert data to string, and parse it at runtime) ?
 - [ ] Add parametrisable seed for FastPoisson
 - [ ] Projective Blue Noise : Enhance projection method (not only axis based, MC evaluation,...)
 - [ ] NRooks: Integer sampling 
