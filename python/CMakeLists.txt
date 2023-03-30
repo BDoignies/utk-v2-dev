@@ -5,8 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 cmake_policy(SET CMP0048 NEW)
 
-add_subdirectory(externals/pybind11)
-
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+include(../cmake/externals/openmp.cmake)
+include(../cmake/externals/spdlog.cmake)
+include(../cmake/externals/pybind11.cmake)
 # Sampler that have author code 
 FILE(GLOB_RECURSE
     SAMPLERS_CPP
@@ -24,10 +26,6 @@ pybind11_add_module(pyutk
     ${SAMPLERS_CPP}
 )
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-include(../cmake/externals/openmp.cmake)
-include(../cmake/externals/spdlog.cmake)
-include(../cmake/externals/pybind11.cmake)
 
 option(UTK_LOG "Enable utk logging" ON)
 option(UTK_DEBUG "Enable utk debug logs" OFF)
