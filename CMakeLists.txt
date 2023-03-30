@@ -30,10 +30,13 @@ if (UTK_LOG)
 endif()
 
 # Finding libraries
-include(openmp)
+include(cmake/externals/openmp.cmake)
 # include(pybind11)
-include(spdlog)
-include(cli11)
+include(cmake/externals/spdlog.cmake)
+include(cmake/externals/cli11.cmake)
 # include(cgal)
 
-add_subdirectory(src)
+
+### UTK COMPILATION ###
+include(cmake/utk/Samplers.cmake)
+include(cmake/utk/Metrics.cmake)

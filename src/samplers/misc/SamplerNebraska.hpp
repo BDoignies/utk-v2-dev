@@ -29,7 +29,7 @@
  */
 #pragma once
 
-#include "../../pointsets/Pointset.hpp"
+#include <utk/utils/Pointset.hpp>
 #include <random>
 #include <array>
 

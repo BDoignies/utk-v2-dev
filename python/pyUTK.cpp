@@ -2,52 +2,52 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
-#include "../src/logging/log.hpp"
+#include <utk/utils/log.hpp>
 
-#include "../src/samplers/src/SamplerWhitenoise.hpp"
-#include "../src/samplers/src/SamplerHalton.hpp"
-#include "../src/samplers/src/SamplerHammersley.hpp"
-#include "../src/samplers/src/SamplerRegularGrid.hpp"
-#include "../src/samplers/src/SamplerStratified.hpp"
-#include "../src/samplers/src/SamplerHexagonalGrid.hpp"
-#include "../src/samplers/src/SamplerNRooks.hpp"
-#include "../src/samplers/src/SamplerCMJ.hpp"
-#include "../src/samplers/src/SamplerFaure.hpp"
-#include "../src/samplers/src/SamplerNiederreiter.hpp"
-#include "../src/samplers/src/SamplerLutLDBN.hpp"
-#include "../src/samplers/src/SamplerPMJ.hpp"
-#include "../src/samplers/src/SamplerDartThrowing.hpp"
-#include "../src/samplers/src/SamplerProjectiveBlueNoise.hpp"
-#include "../src/samplers/src/SamplerSobol.hpp"
-#include "../src/samplers/src/SamplerR1.hpp"
-#include "../src/samplers/src/SamplerKronecker.hpp"
-#include "../src/samplers/src/SamplerKorobov.hpp"
-#include "../src/samplers/src/SamplerAAPatterns.hpp"
-#include "../src/samplers/src/SamplerART.hpp"
-#include "../src/samplers/src/SamplerPenrose.hpp"
-#include "../src/samplers/src/SamplerFastPoisson.hpp"
-#include "../src/samplers/src/SamplerFattal.hpp"
-#include "../src/samplers/src/SamplerForcedRandom.hpp"
-#include "../src/samplers/src/SamplerStep.hpp"
-#include "../src/samplers/src/SamplerSinglePeak.hpp"
+#include <utk/samplers/SamplerWhitenoise.hpp>
+#include <utk/samplers/SamplerHalton.hpp>
+#include <utk/samplers/SamplerHammersley.hpp>
+#include <utk/samplers/SamplerRegularGrid.hpp>
+#include <utk/samplers/SamplerStratified.hpp>
+#include <utk/samplers/SamplerHexagonalGrid.hpp>
+#include <utk/samplers/SamplerNRooks.hpp>
+#include <utk/samplers/SamplerCMJ.hpp>
+#include <utk/samplers/SamplerFaure.hpp>
+#include <utk/samplers/SamplerNiederreiter.hpp>
+#include <utk/samplers/SamplerLutLDBN.hpp>
+#include <utk/samplers/SamplerPMJ.hpp>
+#include <utk/samplers/SamplerDartThrowing.hpp>
+#include <utk/samplers/SamplerProjectiveBlueNoise.hpp>
+#include <utk/samplers/SamplerSobol.hpp>
+#include <utk/samplers/SamplerR1.hpp>
+#include <utk/samplers/SamplerKronecker.hpp>
+#include <utk/samplers/SamplerKorobov.hpp>
+#include <utk/samplers/SamplerAAPatterns.hpp>
+#include <utk/samplers/SamplerART.hpp>
+#include <utk/samplers/SamplerPenrose.hpp>
+#include <utk/samplers/SamplerFastPoisson.hpp>
+#include <utk/samplers/SamplerFattal.hpp>
+#include <utk/samplers/SamplerForcedRandom.hpp>
+#include <utk/samplers/SamplerStep.hpp>
+#include <utk/samplers/SamplerSinglePeak.hpp>
 
-#include "../src/samplers/scrambling/Owen.hpp"
-#include "../src/samplers/scrambling/OwenTreeScrambling.hpp"
-#include "../src/samplers/scrambling/CranleyPatterson.hpp"
-#include "../src/samplers/scrambling/DigitalShift.hpp"
-#include "../src/samplers/scrambling/MicroJittering.hpp"
+#include <utk/scrambling/Owen.hpp>
+#include <utk/scrambling/OwenTreeScrambling.hpp>
+#include <utk/scrambling/CranleyPatterson.hpp>
+#include <utk/scrambling/DigitalShift.hpp>
+#include <utk/scrambling/MicroJittering.hpp>
 
-#include "../src/metrics/src/Diaphony.hpp"
-#include "../src/metrics/src/BoundariesStarDiscrepancy.hpp"
-#include "../src/metrics/src/CenteredL2.hpp"
-#include "../src/metrics/src/GeneralizedL2.hpp"
-#include "../src/metrics/src/L2.hpp"
-#include "../src/metrics/src/SymmetricL2.hpp"
-#include "../src/metrics/src/UnanchoredL2.hpp"
+#include <utk/metrics/Diaphony.hpp>
+#include <utk/metrics/BoundariesStarDiscrepancy.hpp>
+#include <utk/metrics/CenteredL2.hpp>
+#include <utk/metrics/GeneralizedL2.hpp>
+#include <utk/metrics/L2.hpp>
+#include <utk/metrics/SymmetricL2.hpp>
+#include <utk/metrics/UnanchoredL2.hpp>
 
-#include "../src/metrics/src/Spectrum.hpp"
-#include "../src/metrics/src/RadialSpectrum.hpp"
-#include "../src/metrics/src/PCF.hpp"
+#include <utk/metrics/Spectrum.hpp>
+#include <utk/metrics/RadialSpectrum.hpp>
+#include <utk/metrics/PCF.hpp>
 
 namespace py = pybind11;
 using namespace utk;

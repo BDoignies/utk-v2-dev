@@ -10,16 +10,7 @@ add_subdirectory(externals/pybind11)
 # Sampler that have author code 
 FILE(GLOB_RECURSE
     SAMPLERS_CPP
-        ../src/samplers/src/AAPatterns/*.cpp
-        ../src/samplers/src/ART/*.cpp
-        ../src/samplers/src/FastPoisson/*.cpp
-        ../src/samplers/src/Fattal/*.cpp
-        ../src/samplers/src/ForcedRandom/*.cpp
-        ../src/samplers/src/Kronecker/*
-        ../src/samplers/src/LutLDBN/*.cpp
-        ../src/samplers/src/Penrose/*.cpp
-        ../src/samplers/src/PMJ/*.cpp
-        ../src/samplers/src/STEP/*.cpp
+        ../authors/*.cppk
 )
 
 # TODO : 
@@ -34,8 +25,8 @@ pybind11_add_module(pyutk
 )
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-include(../cmake/openmp.cmake)
-include(../cmake/spdlog.cmake)
+include(../cmake/externals/openmp.cmake)
+include(../cmake/externals/spdlog.cmake)
 
 option(UTK_LOG "Enable utk logging" ON)
 option(UTK_DEBUG "Enable utk debug logs" OFF)
@@ -50,6 +41,9 @@ endif()
 
 
 target_include_directories(pyutk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/)
+target_include_directories(pyutk PRIVATE ../include/)
+target_include_directories(pyutk PRIVATE ../authors/)
+message("Adding: ${PROJECT_SOURCE_DIR}/include/")
 target_link_libraries(pyutk PRIVATE pybind11::module spdlog::spdlog)
 
 if (OpenMP_FOUND)
