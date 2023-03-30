@@ -31,14 +31,14 @@ SET(Samplers
 
 FOREACH(FILE ${Samplers})
     add_executable(${FILE} ${PROJECT_SOURCE_DIR}/src/samplers/${FILE}.cpp)
-    target_include_directories(${FILE} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+    target_include_directories(${FILE} PRIVATE "${PROJECT_SOURCE_DIR}/include/")
 
-    IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/authors/${FILE})
+    IF (EXISTS ${PROJECT_SOURCE_DIR}/authors/${FILE})
         FILE(GLOB_RECURSE ADDITIONNAL_CODE
-                    "${CMAKE_CURRENT_SOURCE_DIR}/authors/${FILE}/*.cpp"
+                    "${PROJECT_SOURCE_DIR}/authors/${FILE}/*.cpp"
             )
         target_sources(${FILE} PRIVATE ${ADDITIONNAL_CODE})
-        target_include_directories(${FILE} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/authors)
+        target_include_directories(${FILE} PRIVATE ${PROJECT_SOURCE_DIR}/authors)
     ENDIF()
 
     target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
@@ -48,3 +48,51 @@ FOREACH(FILE ${Samplers})
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 ENDFOREACH(FILE)
+
+# ===========================================
+#  Samplers requiring additional libraries  #
+# ===========================================
+
+# Threads is looked for in main cmake
+IF(OpenMP_FOUND)
+    # Lloyd
+    add_executable(Lloyd ${PROJECT_SOURCE_DIR}/src/samplers/Lloyd.cpp ${PROJECT_SOURCE_DIR}/authors/Lloyd/Delaunay_psm.cpp)
+    
+    target_include_directories(Lloyd PRIVATE "${PROJECT_SOURCE_DIR}/include/")
+    target_include_directories(Lloyd PRIVATE "${PROJECT_SOURCE_DIR}/authors/")
+    target_link_libraries(Lloyd PRIVATE spdlog::spdlog CLI11::CLI11 OpenMP::OpenMP_CXX)
+
+    install(TARGETS Lloyd
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+ELSEIF()
+    message("OpenMP not found, Lloyd will not be compiled. ")
+ENDIF()
+
+IF (SuiteSparse_FOUND)
+    add_executable(BoundedBNOT  ${PROJECT_SOURCE_DIR}/src/samplers/BoundedBNOT.cpp)
+    add_executable(PeriodicBNOT ${PROJECT_SOURCE_DIR}/src/samplers/PeriodicBNOT.cpp)
+
+    target_include_directories(BoundedBNOT PRIVATE "${PROJECT_SOURCE_DIR}/include/")
+    target_include_directories(BoundedBNOT PRIVATE "${PROJECT_SOURCE_DIR}/authors/")
+    target_link_libraries(BoundedBNOT PRIVATE spdlog::spdlog CLI11::CLI11)
+    target_link_libraries(BoundedBNOT PRIVATE CGAL::CGAL ${SUITESPARSE_LIBRARIES})
+    
+    target_include_directories(PeriodicBNOT PRIVATE "${PROJECT_SOURCE_DIR}/include/")
+    target_include_directories(PeriodicBNOT PRIVATE "${PROJECT_SOURCE_DIR}/authors/")
+    target_link_libraries(PeriodicBNOT PRIVATE spdlog::spdlog CLI11::CLI11)
+    target_link_libraries(PeriodicBNOT PRIVATE CGAL::CGAL ${SUITESPARSE_LIBRARIES})
+    
+    install(TARGETS BoundedBNOT
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+
+    install(TARGETS PeriodicBNOT
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+ELSE()
+    message("SuiteSparse not found. Can not compile BNOT")
+ENDIF()

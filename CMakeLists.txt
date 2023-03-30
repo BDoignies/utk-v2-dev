@@ -1,14 +1,9 @@
 Project(UnicornTK)
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required(VERSION 3.12)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
-
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-
-MESSAGE(STATUS "C++17 enabled by cmake. ")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_BUILD_TYPE "Release")
@@ -31,10 +26,10 @@ endif()
 
 # Finding libraries
 include(cmake/externals/openmp.cmake)
-# include(pybind11)
 include(cmake/externals/spdlog.cmake)
 include(cmake/externals/cli11.cmake)
-# include(cgal)
+include(cmake/externals/cgal.cmake)
+include(cmake/externals/suitesparse.cmake)
 
 
 ### UTK COMPILATION ###

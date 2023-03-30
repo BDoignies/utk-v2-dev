@@ -30,7 +30,7 @@
  */
 #pragma once
 
-#include "Lloyd/Delaunay_psm.h"
+#include <Lloyd/Delaunay_psm.h>
 #include <utk/utils/Pointset.hpp>
 
 #include <cstdlib>
