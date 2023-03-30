@@ -27,6 +27,7 @@ pybind11_add_module(pyutk
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 include(../cmake/externals/openmp.cmake)
 include(../cmake/externals/spdlog.cmake)
+include(../cmake/externals/pybind11.cmake)
 
 option(UTK_LOG "Enable utk logging" ON)
 option(UTK_DEBUG "Enable utk debug logs" OFF)
@@ -40,10 +41,10 @@ if (UTK_LOG)
 endif()
 
 
-target_include_directories(pyutk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/)
+# target_include_directories(pyutk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/)
 target_include_directories(pyutk PRIVATE ../include/)
 target_include_directories(pyutk PRIVATE ../authors/)
-message("Adding: ${PROJECT_SOURCE_DIR}/include/")
+
 target_link_libraries(pyutk PRIVATE pybind11::module spdlog::spdlog)
 
 if (OpenMP_FOUND)
