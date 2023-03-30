@@ -29,11 +29,14 @@
  */
 #pragma once
 
+#include <CLI/App.hpp>
+#include <CLI/Formatter.hpp>
+#include <CLI/Config.hpp>
+
 #include <vector>
 #include <random>
 #include <string>
 
-#include "../../externals/CLI11.hpp"
 #include "../../pointsets/PointsetIO.hpp"
 #include "../../pointsets/Pointset.hpp"
 

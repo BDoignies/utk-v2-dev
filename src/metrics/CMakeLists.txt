@@ -26,7 +26,7 @@ FOREACH(FILE ${SRCs})
     IF (OpenMP_FOUND)
         target_link_libraries(${FILE} PRIVATE OpenMP::OpenMP_CXX)
     ENDIF()
-    target_link_libraries(${FILE} PRIVATE spdlog::spdlog)
+    target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
 
     install(TARGETS ${FILE}
         RUNTIME DESTINATION bin

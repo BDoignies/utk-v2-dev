@@ -29,8 +29,11 @@
  */
 #pragma once
 
+#include <CLI/App.hpp>
+#include <CLI/Formatter.hpp>
+#include <CLI/Config.hpp>
+
 #include "../../logging/log.hpp"
-#include "../../externals/CLI11.hpp"
 #include "../../pointsets/PointsetIO.hpp"
 
 #include <iomanip>

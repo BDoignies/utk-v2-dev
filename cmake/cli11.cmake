@@ -24,4 +24,4 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cli11)
 
-set_target_properties(CLI11 PROPERTIES FOLDER third_party)
+# set_target_properties(CLI11 PROPERTIES third_party)
