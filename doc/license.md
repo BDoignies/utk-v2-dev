@@ -1,8 +1,11 @@
+``` cpp
 /*
  * Coded by Hélène Perrier helene.perrier@liris.cnrs.fr
+ * and David Coeurjolly David.coeurjolly@liris.cnrs.fr
+ *
  * Copyright (c) 2018 CNRS Université de Lyon
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -25,45 +28,6 @@
  *
  * The views and conclusions contained in the software and documentation are those
  * of the authors and should not be interpreted as representing official policies,
- * either expressed or implied, of the Halton project.
+ * either expressed or implied, of the UTK project.
  */
-#include <utk/utils/SamplerArgumentParser.hpp>
-#include <utk/samplers/SamplerAAPatterns.hpp>
-
-int main(int argc, char** argv)
-{
-    CLI::App app { "AAPatterns sampler" };
-    utk::SamplerArguments* args = utk::add_arguments(app, 2);
-    
-    auto files = utk::SamplerAAPatterns::GetDefaultFiles();
-    std::ostringstream helpDefault;
-    for (const auto& p : files)
-        helpDefault << p.first << ", ";
-
-    std::string vectorFile = "";
-    app.add_option("--vfile", vectorFile, "Path to vector file, or use one of default [ " + helpDefault.str() + "]")->default_val(files.begin()->first);
-    CLI11_PARSE(app, argc, argv);
-    
-    std::vector<utk::Pointset<double>> pts = args->GetPointsets();
-    
-    utk::SamplerAAPatterns aa;
-    if (files.find(vectorFile) != files.end())
-        vectorFile = files[vectorFile];
-        
-    aa.setVectorFile(vectorFile);
-    aa.setRandomSeed(args->seed);
-
-    for (unsigned int i = 0; i < pts.size(); i++)
-    {
-        if(!aa.generateSamples(pts[i], args->N))
-        {
-            std::cerr << "Sampler returned non-zero output" << std::endl; // No log here, must be visible whatsoever
-            return 1;
-        }
-    }
-
-    args->WritePointsets(pts);
-
-    delete args;
-    return 0;
-}
+```

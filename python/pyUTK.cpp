@@ -409,6 +409,7 @@ void init_BasicSamplers(py::module& m)
         .def(py::init<>())
         .def("__repr__", [](const SamplerAAPatterns& wn) { return "AAPatterns()"; })
         .def_static("getAvailableTiling", &SamplerAAPatterns::GetDefaultFiles)
+        .def("setVectorFile", &SamplerAAPatterns::setVectorFile, py::arg("file"))
         .def("setSeed", GetSetSeedFunction<SamplerAAPatterns>(), py::arg("seed") = NO_SEED)
         .def("sample",  GetSampleFunction <SamplerAAPatterns>(), py::arg("N"));
 
