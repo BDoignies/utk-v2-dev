@@ -25,13 +25,15 @@ if (UTK_LOG)
 endif()
 
 # Finding libraries
-include(cmake/externals/openmp.cmake)
-include(cmake/externals/spdlog.cmake)
-include(cmake/externals/cli11.cmake)
-include(cmake/externals/cgal.cmake)
-include(cmake/externals/suitesparse.cmake)
+set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include(openmp)
+include(spdlog)
+include(cli11)
+include(cgal)
+include(suitesparse)
 
 
 ### UTK COMPILATION ###
-include(cmake/utk/Samplers.cmake)
-include(cmake/utk/Metrics.cmake)
+add_subdirectory(src/samplers)
+add_subdirectory(src/metrics)

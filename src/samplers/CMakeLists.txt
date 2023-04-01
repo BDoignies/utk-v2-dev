@@ -30,7 +30,7 @@ SET(Samplers
 )
 
 FOREACH(FILE ${Samplers})
-    add_executable(${FILE} ${PROJECT_SOURCE_DIR}/src/samplers/${FILE}.cpp)
+    add_executable(${FILE} ${FILE}.cpp)
     target_include_directories(${FILE} PRIVATE "${PROJECT_SOURCE_DIR}/include/")
 
     IF (EXISTS ${PROJECT_SOURCE_DIR}/authors/${FILE})
@@ -56,7 +56,7 @@ ENDFOREACH(FILE)
 # Threads is looked for in main cmake
 IF(OpenMP_FOUND)
     # Lloyd
-    add_executable(Lloyd ${PROJECT_SOURCE_DIR}/src/samplers/Lloyd.cpp ${PROJECT_SOURCE_DIR}/authors/Lloyd/Delaunay_psm.cpp)
+    add_executable(Lloyd Lloyd.cpp ${PROJECT_SOURCE_DIR}/authors/Lloyd/Delaunay_psm.cpp)
     
     target_include_directories(Lloyd PRIVATE "${PROJECT_SOURCE_DIR}/include/")
     target_include_directories(Lloyd PRIVATE "${PROJECT_SOURCE_DIR}/authors/")
@@ -71,8 +71,8 @@ ELSEIF()
 ENDIF()
 
 IF (SuiteSparse_FOUND)
-    add_executable(BoundedBNOT  ${PROJECT_SOURCE_DIR}/src/samplers/BoundedBNOT.cpp)
-    add_executable(PeriodicBNOT ${PROJECT_SOURCE_DIR}/src/samplers/PeriodicBNOT.cpp)
+    add_executable(BoundedBNOT  BoundedBNOT.cpp)
+    add_executable(PeriodicBNOT PeriodicBNOT.cpp)
 
     target_include_directories(BoundedBNOT PRIVATE "${PROJECT_SOURCE_DIR}/include/")
     target_include_directories(BoundedBNOT PRIVATE "${PROJECT_SOURCE_DIR}/authors/")

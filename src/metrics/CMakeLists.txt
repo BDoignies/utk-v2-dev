@@ -19,8 +19,8 @@ SET(Metrics
 )
 
 FOREACH(FILE ${Metrics})
-    add_executable(${FILE} ${PROJECT_SOURCE_DIR}/src/metrics/${FILE}.cpp)
-    target_include_directories(${FILE} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+    add_executable(${FILE} ${FILE}.cpp)
+    target_include_directories(${FILE} PRIVATE "${PROJECT_SOURCE_DIR}/include/")
     target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
     
     IF (OpenMP_FOUND)
