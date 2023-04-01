@@ -30,16 +30,22 @@ SET(Samplers
 )
 
 FOREACH(FILE ${Samplers})
-    add_executable(${FILE} ${FILE}.cpp)
-    target_include_directories(${FILE} PRIVATE "${PROJECT_SOURCE_DIR}/include/")
+    # Compile external code disable and has an entry in the external folder
+    IF (EXISTS ${UTK_EXTERNALS_FOLDER}/${FILE} AND NOT UTK_BUILD_EXTERNAL_CODE)
+        CONTINUE()
+    ENDIF()
 
-    IF (EXISTS ${PROJECT_SOURCE_DIR}/authors/${FILE})
+    add_executable(${FILE} ${FILE}.cpp)
+    target_include_directories(${FILE} PRIVATE "${UTK_INCLUDE_DIR}")
+
+    IF (EXISTS ${UTK_EXTERNALS_FOLDER}/${FILE})
         FILE(GLOB_RECURSE ADDITIONNAL_CODE
-                    "${PROJECT_SOURCE_DIR}/authors/${FILE}/*.cpp"
+                    "${UTK_EXTERNALS_FOLDER}/${FILE}/*.cpp"
             )
         target_sources(${FILE} PRIVATE ${ADDITIONNAL_CODE})
-        target_include_directories(${FILE} PRIVATE ${PROJECT_SOURCE_DIR}/authors)
+        target_include_directories(${FILE} PRIVATE ${UTK_EXTERNALS_FOLDER})
     ENDIF()
+
 
     target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
 
@@ -54,33 +60,33 @@ ENDFOREACH(FILE)
 # ===========================================
 
 # Threads is looked for in main cmake
-IF(OpenMP_FOUND)
+IF(OpenMP_FOUND AND UTK_BUILD_EXTERNAL_CODE)
     # Lloyd
-    add_executable(Lloyd Lloyd.cpp ${PROJECT_SOURCE_DIR}/authors/Lloyd/Delaunay_psm.cpp)
+    add_executable(Lloyd Lloyd.cpp  ${UTK_EXTERNALS_FOLDER}/Lloyd/Delaunay_psm.cpp)
     
-    target_include_directories(Lloyd PRIVATE "${PROJECT_SOURCE_DIR}/include/")
-    target_include_directories(Lloyd PRIVATE "${PROJECT_SOURCE_DIR}/authors/")
+    target_include_directories(Lloyd PRIVATE "${UTK_INCLUDE_DIR}")
+    target_include_directories(Lloyd PRIVATE "${UTK_EXTERNALS_FOLDER}/")
     target_link_libraries(Lloyd PRIVATE spdlog::spdlog CLI11::CLI11 OpenMP::OpenMP_CXX)
 
     install(TARGETS Lloyd
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
-ELSEIF()
-    message("OpenMP not found, Lloyd will not be compiled. ")
+ELSE()
+    # message("Lloyd not compiled.")
 ENDIF()
 
-IF (SuiteSparse_FOUND)
+IF (CGAL_FOUND AND SuiteSparse_FOUND AND UTK_BUILD_EXTERNAL_CODE)
     add_executable(BoundedBNOT  BoundedBNOT.cpp)
     add_executable(PeriodicBNOT PeriodicBNOT.cpp)
 
-    target_include_directories(BoundedBNOT PRIVATE "${PROJECT_SOURCE_DIR}/include/")
-    target_include_directories(BoundedBNOT PRIVATE "${PROJECT_SOURCE_DIR}/authors/")
+    target_include_directories(BoundedBNOT PRIVATE "${UTK_INCLUDE_DIR}")
+    target_include_directories(BoundedBNOT PRIVATE "${UTK_EXTERNALS_FOLDER}/")
     target_link_libraries(BoundedBNOT PRIVATE spdlog::spdlog CLI11::CLI11)
     target_link_libraries(BoundedBNOT PRIVATE CGAL::CGAL ${SUITESPARSE_LIBRARIES})
     
-    target_include_directories(PeriodicBNOT PRIVATE "${PROJECT_SOURCE_DIR}/include/")
-    target_include_directories(PeriodicBNOT PRIVATE "${PROJECT_SOURCE_DIR}/authors/")
+    target_include_directories(PeriodicBNOT PRIVATE "${UTK_INCLUDE_DIR}")
+    target_include_directories(PeriodicBNOT PRIVATE "${UTK_EXTERNALS_FOLDER}/")
     target_link_libraries(PeriodicBNOT PRIVATE spdlog::spdlog CLI11::CLI11)
     target_link_libraries(PeriodicBNOT PRIVATE CGAL::CGAL ${SUITESPARSE_LIBRARIES})
     
@@ -94,5 +100,5 @@ IF (SuiteSparse_FOUND)
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 ELSE()
-    message("SuiteSparse not found. Can not compile BNOT")
+    # message("BNOT Not compiled")
 ENDIF()

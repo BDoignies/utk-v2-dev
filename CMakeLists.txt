@@ -8,31 +8,38 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_BUILD_TYPE "Release")
 
-set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
-
-add_definitions(-DUTK_DATA_PATH=\"${UTK_DATA_PATH}\")
-add_definitions(-D_USE_MATH_DEFINES) # Windows... Oh dear Windows...
-
 option(UTK_LOG "Enable utk logging" ON)
-option(UTK_DEBUG "Enable utk debug logs" OFF)
 
-if (UTK_LOG)
-    add_definitions(-DUTK_LOG)
-
-    if (NOT UTK_DEBUG)
-        add_definitions(-DUTK_LOG_NO_DEBUG)
-    endif()
-endif()
+# Disable by default, otherwise everything is downloaded when ccmake-ing 
+option(UTK_BUILD_EXTERNAL_CODE "Enable building of External codes" OFF)
+option(UTK_BUILD_CGAL "Enable download and 'building' of CGAL and its dependencies" OFF)
+option(UTK_USE_OPENMP "Enable USE of OpenMp" OFF)
 
 # Finding libraries
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-include(openmp)
 include(spdlog)
 include(cli11)
-include(cgal)
-include(suitesparse)
 
+if (UTK_LOG)
+    add_definitions(-DUTK_LOG)
+endif()
+
+if (UTK_USE_OPENMP)
+    include(openmp)
+endif()
+
+if (UTK_BUILD_CGAL)
+    include(cgal)
+    include(suitesparse)
+endif()
+
+set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
+set(UTK_EXTERNALS_FOLDER "${PROJECT_SOURCE_DIR}/externals/")
+set(UTK_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/")
+
+add_definitions(-DUTK_DATA_PATH=\"${UTK_DATA_PATH}\")
+add_definitions(-D_USE_MATH_DEFINES) # Windows... Oh dear Windows...
 
 ### UTK COMPILATION ###
 add_subdirectory(src/samplers)
