@@ -40,7 +40,7 @@ Options:
 ```  cpp
 #include <utk/utils/PointsetIO.hpp>
 #include <utk/utils/Pointset.hpp>
-#include <utk/samplers/Faure.hpp>
+#include <utk/samplers/SamplerFaure.hpp>
 
 int main()
 {

@@ -32,7 +32,7 @@
 
 int main(int argc, char** argv)
 {
-    CLI::App app { "Faure sampler" };
+    CLI::App app { "Kronecker sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app, 0 /*any dim*/, false);
     
     // TODO : Also support double array ? 

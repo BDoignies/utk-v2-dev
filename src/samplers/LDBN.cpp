@@ -47,6 +47,7 @@ int main(int argc, char** argv)
     
     utk::SamplerLDBN ldbn;
     ldbn.setPermutFile(tileFile);
+    ldbn.setTileSize(tileSize);
     ldbn.setRandomSeed(args->seed);
 
     for (unsigned int i = 0; i < pts.size(); i++)
