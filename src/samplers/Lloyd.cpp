@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     
     std::vector<utk::Pointset<double>> pts = args->GetPointsets();
     
-    utk::SamplerLloyd lloyd(toroidal);
+    utk::SamplerLloyd lloyd(nbSteps, toroidal);
     lloyd.setRandomSeed(args->seed);
 
     for (unsigned int i = 0; i < pts.size(); i++)

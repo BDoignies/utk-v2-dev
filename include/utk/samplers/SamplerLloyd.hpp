@@ -59,6 +59,8 @@ public:
 
     uint32_t GetDimension() const { return 3; }
 
+	void setNbSteps(uint32_t nb) { nbSteps = nb; }
+
 	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
 	void setRandomSeed() { m_mersenneTwister.seed(std::random_device{}()); }
 
