@@ -6,13 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 cmake_policy(SET CMP0048 NEW)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-include(../cmake/externals/openmp.cmake)
-include(../cmake/externals/spdlog.cmake)
-include(../cmake/externals/pybind11.cmake)
+include(../cmake/openmp.cmake)
+include(../cmake/spdlog.cmake)
+include(../cmake/pybind11.cmake)
 # Sampler that have author code 
 FILE(GLOB_RECURSE
     SAMPLERS_CPP
-        ../authors/*.cppk
+        ../externals/*.cpp
 )
 
 # TODO : 
@@ -41,7 +41,7 @@ endif()
 
 # target_include_directories(pyutk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/)
 target_include_directories(pyutk PRIVATE ../include/)
-target_include_directories(pyutk PRIVATE ../authors/)
+target_include_directories(pyutk PRIVATE ../externals)
 
 target_link_libraries(pyutk PRIVATE pybind11::module spdlog::spdlog)
 

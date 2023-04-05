@@ -71,5 +71,7 @@ nav:
     - Stratified: 'samplers/Stratified.md'
     - VenDerCorput: 'samplers/VanDerCorput.md'
     - Whitenoise: 'samplers/Whitenoise.md'
-
+  - Metrics:
+    - L2: 
+    - GL2:
   
