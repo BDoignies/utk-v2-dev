@@ -1,5 +1,5 @@
-Project(UnicornTK)
 cmake_minimum_required(VERSION 3.12)
+Project(UnicornTK)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,10 +10,10 @@ set(CMAKE_BUILD_TYPE "Release")
 
 option(UTK_LOG "Enable utk logging" ON)
 
-# Disable by default, otherwise everything is downloaded when ccmake-ing 
+# Disable by default, otherwise everything is downloaded when ccmake-ing
 option(UTK_BUILD_EXTERNAL_CODE "Enable building of External codes" OFF)
 option(UTK_BUILD_CGAL "Enable download and 'building' of CGAL and its dependencies" OFF)
-option(UTK_USE_OPENMP "Enable USE of OpenMp" OFF)
+option(UTK_USE_OPENMP "Enable USE of OpenMP" OFF)
 
 # Finding libraries
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")

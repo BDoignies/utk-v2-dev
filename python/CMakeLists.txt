@@ -1,6 +1,6 @@
+cmake_minimum_required (VERSION 3.12)
 project(pyutk)
 
-cmake_minimum_required (VERSION 3.12)
 set(CMAKE_CXX_STANDARD 17)
 
 cmake_policy(SET CMP0048 NEW)
@@ -9,13 +9,13 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 include(../cmake/openmp.cmake)
 include(../cmake/spdlog.cmake)
 include(../cmake/pybind11.cmake)
-# Sampler that have author code 
+# Sampler that have author code
 FILE(GLOB_RECURSE
     SAMPLERS_CPP
         ../externals/*.cpp
 )
 
-# TODO : 
+# TODO :
 # Lloyd (that depends on PTHREAD)
 
 set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/../data")
