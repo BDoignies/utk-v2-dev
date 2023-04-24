@@ -32,6 +32,7 @@
 #include <utk/utils/FastPRNG.hpp>
 #include <utk/utils/RadicalInversion.hpp>
 #include <random>
+#include <bitset>
 
 namespace utk
 {

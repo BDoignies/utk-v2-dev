@@ -29,6 +29,9 @@ SET(Samplers
     Sobol
 )
 
+SET(pyutk_samplers)
+SET(pyutk_samplers_libs pybind11::module spdlog::spdlog)
+
 FOREACH(FILE ${Samplers})
     # Compile external code disable and has an entry in the external folder
     IF (EXISTS ${UTK_EXTERNALS_FOLDER}/${FILE} AND NOT UTK_BUILD_EXTERNAL_CODE)
@@ -42,6 +45,9 @@ FOREACH(FILE ${Samplers})
         FILE(GLOB_RECURSE ADDITIONNAL_CODE
                     "${UTK_EXTERNALS_FOLDER}/${FILE}/*.cpp"
             )
+        
+        LIST(APPEND pyutk_samplers ${ADDITIONNAL_CODE})
+        
         target_sources(${FILE} PRIVATE ${ADDITIONNAL_CODE})
         target_include_directories(${FILE} PRIVATE ${UTK_EXTERNALS_FOLDER})
     ENDIF()
@@ -101,4 +107,21 @@ IF (CGAL_FOUND AND SuiteSparse_FOUND AND UTK_BUILD_EXTERNAL_CODE)
         ARCHIVE DESTINATION lib)
 ELSE()
     # message("BNOT Not compiled")
+ENDIF()
+
+IF (UTK_PYTHON)
+    SET(pyutk_samplers_bindings 
+        "python/Samplers.cpp"
+        "python/BaseSamplers.cpp"
+        "python/ExternalSamplers.cpp"
+        "python/Scrambling.cpp"
+    )
+    add_library(pyutkSamplers ${pyutk_samplers} ${pyutk_samplers_bindings})
+
+    # Required by pybind
+    set_target_properties(pyutkSamplers PROPERTIES POSITION_INDEPENDENT_CODE ON) 
+    
+    target_include_directories(pyutkSamplers PRIVATE "${UTK_INCLUDE_DIR}")
+    target_include_directories(pyutkSamplers PRIVATE ${UTK_EXTERNALS_FOLDER})
+    target_link_libraries(pyutkSamplers PRIVATE ${pyutk_samplers_libs})
 ENDIF()

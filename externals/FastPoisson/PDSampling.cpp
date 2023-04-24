@@ -1,6 +1,5 @@
 // $Id: PDSampling.cpp,v 1.12 2006/07/11 16:45:22 zr Exp $
 
-#define _USE_MATH_DEFINES
 #include "math.h"
 
 #include <ctime>

@@ -1,6 +1,5 @@
 // $Id: RangeList.cpp,v 1.4 2006/01/24 03:22:14 zr Exp $
 
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdio.h>
 
