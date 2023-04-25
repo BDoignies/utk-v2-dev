@@ -46,6 +46,7 @@ add_definitions(-D_USE_MATH_DEFINES) # Windows... Oh dear Windows...
 ### UTK COMPILATION ###
 
 IF (UTK_PYTHON)
+    # execute_process(COMMAND python3 -c "import sys; print(sys.executable)" OUTPUT_VARIABLE PYTHON_EXECUTABLE)
     include(pybind11)
 ENDIF()
 

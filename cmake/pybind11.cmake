@@ -26,8 +26,12 @@ FetchContent_Declare(
 # Pybind11 still uses the deprecated FindPythonInterp. So let's call CMake's
 # new FindPython module and set PYTHON_EXECUTABLE for Pybind11 to pick up.
 # This works well with conda environments.
-find_package(Python REQUIRED COMPONENTS Interpreter Development)
-set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+
+# (BD) Note : it does not work with conda environments !!!
+# But letting pybind find them works...
+
+# find_package(Python REQUIRED COMPONENTS Interpreter Development)
+# set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
 # FetchContent_MakeAvailable(pybind11)
 FetchContent_GetProperties(pybind11)
