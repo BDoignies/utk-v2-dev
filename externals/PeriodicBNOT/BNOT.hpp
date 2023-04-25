@@ -15,8 +15,14 @@
 #include <CGAL/Regular_triangulation_2.h>
 
 // Suitesparse
+#if defined(__APPLE__) || defined(__MACH__)
+#include <SuiteSparseQR.hpp>
+#include <cholmod.h>
+#else
 #include <suitesparse/SuiteSparseQR.hpp>
 #include <suitesparse/cholmod.h>
+#endif
+
 
 #define BASE_MATHS
 #ifdef  BASE_MATHS
