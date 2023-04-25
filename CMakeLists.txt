@@ -9,12 +9,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_BUILD_TYPE "Release")
 
 option(UTK_LOG "Enable utk logging" ON)
+option(UTK_PYTHON "Enable pyutk" ON)
 
-# Disable by default, otherwise everything is downloaded when ccmake-ing
-option(UTK_BUILD_EXTERNAL_CODE "Enable building of External codes" OFF)
-option(UTK_BUILD_CGAL "Enable download and 'building' of CGAL and its dependencies" OFF)
-option(UTK_USE_OPENMP "Enable USE of OpenMP" OFF)
-
+# Disable by default, otherwise everything is downloaded when ccmake-ing 
+option(UTK_BUILD_EXTERNAL_CODE "Enable building of External codes" ON)
+option(UTK_USE_OPENMP "Enable USE of OpenMp" ON)
+# CGal options
+option(UTK_BUILD_CGAL "Enable projects depending on CGAL. " OFF)
+ 
 # Finding libraries
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -42,5 +44,9 @@ add_definitions(-DUTK_DATA_PATH=\"${UTK_DATA_PATH}\")
 add_definitions(-D_USE_MATH_DEFINES) # Windows... Oh dear Windows...
 
 ### UTK COMPILATION ###
-add_subdirectory(src/samplers)
-add_subdirectory(src/metrics)
+
+IF (UTK_PYTHON)
+    include(pybind11)
+ENDIF()
+
+add_subdirectory(src)
