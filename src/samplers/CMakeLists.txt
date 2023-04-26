@@ -89,12 +89,13 @@ IF (CGAL_FOUND AND SuiteSparse_FOUND AND UTK_BUILD_EXTERNAL_CODE)
     target_include_directories(BoundedBNOT PRIVATE "${UTK_INCLUDE_DIR}")
     target_include_directories(BoundedBNOT PRIVATE "${UTK_EXTERNALS_FOLDER}/")
     target_link_libraries(BoundedBNOT PRIVATE spdlog::spdlog CLI11::CLI11)
-    target_link_libraries(BoundedBNOT PRIVATE CGAL::CGAL ${SUITESPARSE_LIBRARIES})
+    target_link_libraries(BoundedBNOT PRIVATE CGAL::CGAL SuiteSparse::AMD SuiteSparse::CHOLMOD SuiteSparse::SPQR)
         
+
     target_include_directories(PeriodicBNOT PRIVATE "${UTK_INCLUDE_DIR}")
     target_include_directories(PeriodicBNOT PRIVATE "${UTK_EXTERNALS_FOLDER}/")
     target_link_libraries(PeriodicBNOT PRIVATE spdlog::spdlog CLI11::CLI11)
-    target_link_libraries(PeriodicBNOT PRIVATE CGAL::CGAL ${SUITESPARSE_LIBRARIES})
+    target_link_libraries(PeriodicBNOT PRIVATE CGAL::CGAL SuiteSparse::AMD SuiteSparse::CHOLMOD SuiteSparse::SPQR)
   
     
     install(TARGETS BoundedBNOT

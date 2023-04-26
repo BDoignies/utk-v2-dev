@@ -33,7 +33,7 @@ endif()
 
 if (UTK_BUILD_CGAL)
     include(cgal)
-    include(suitesparse)
+    find_package(SuiteSparse)
 endif()
 
 set(UTK_DATA_PATH "${PROJECT_SOURCE_DIR}/data")

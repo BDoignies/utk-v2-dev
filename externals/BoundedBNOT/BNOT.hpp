@@ -536,9 +536,15 @@ public:
 #define SUITESPARSE
 #ifdef  SUITESPARSE
 
+
+// Suitesparse
+#if defined(__APPLE__) || defined(__MACH__)
+#include <SuiteSparseQR.hpp>
+#include <cholmod.h>
+#else
 #include <suitesparse/SuiteSparseQR.hpp>
 #include <suitesparse/cholmod.h>
-
+#endif
 
 #define SPARSE_MATRIX
 #ifdef  SPARSE_MATRIX

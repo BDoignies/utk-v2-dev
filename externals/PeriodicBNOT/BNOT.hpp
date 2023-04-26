@@ -19,8 +19,8 @@
 #include <SuiteSparseQR.hpp>
 #include <cholmod.h>
 #else
-#include <suitesparse/SuiteSparseQR.hpp>
-#include <suitesparse/cholmod.h>
+#include <SuiteSparseQR.hpp>
+#include <cholmod.h>
 #endif
 
 
