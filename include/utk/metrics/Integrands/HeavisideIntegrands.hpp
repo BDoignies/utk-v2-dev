@@ -95,12 +95,16 @@ namespace utk
                 while (tmp)
                 {
                     eval += normal[d++] * (tmp & 1);
-                    sum += !(tmp & 1);
+                    sum += (tmp & 1);
                     tmp >>= 1;
                 }
 
                 if (eval > 0)
-                    integralValue += (!(sum & 1) - (sum & 1)) * std::pow(eval, dim);
+                {
+                    const int zeros = dim - sum;
+                    integralValue += (!(zeros & 1) - (zeros & 1)) * std::pow(eval, dim);
+                }
+                    
             }
 
             return integralValue / (factorial * product); 

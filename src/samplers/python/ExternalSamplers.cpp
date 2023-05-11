@@ -32,4 +32,5 @@
 void init_Externals(py::module& m)
 {
     init_Lloyd(m);
+    init_BNOT(m);
 }

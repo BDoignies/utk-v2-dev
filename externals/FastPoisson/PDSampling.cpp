@@ -284,10 +284,10 @@ void PDSampler::relax()
 
 	tmp = fopen("relaxTmpOut.txt", "w");
 	fclose(tmp);
-	system("qvoronoi p FN < relaxTmpIn.txt > relaxTmpOut.txt");
+	if(system("qvoronoi p FN < relaxTmpIn.txt > relaxTmpOut.txt"));
 
 	tmp = fopen("relaxTmpOut.txt", "r");
-	fscanf(tmp, "%d\n%d\n", &dim, &numVerts);
+	if(fscanf(tmp, "%d\n%d\n", &dim, &numVerts));
 
 	if (dim!=2) {
 		printf("Error calling out to qvoronoi, skipping relaxation.\n");
@@ -296,20 +296,20 @@ void PDSampler::relax()
 
 	verts = new Vec2[numVerts];
 	for (int i=0; i<numVerts; i++) {
-		fscanf(tmp, "%f %f\n", &verts[i].x, &verts[i].y);
+		if(fscanf(tmp, "%f %f\n", &verts[i].x, &verts[i].y));
 	}
 
-	fscanf(tmp, "%d\n", &numFaces);
+	if(fscanf(tmp, "%d\n", &numFaces));
 
 	for (int i=0; i<(int) points.size(); i++) {
 		Vec2 center(0,0);
 		int N, skip=0;
 
-		fscanf(tmp, "%d", &N);
+		if(fscanf(tmp, "%d", &N));
 		for (int j=0; j<N; j++) {
 			int index;
 
-			fscanf(tmp, "%d", &index);
+			if(fscanf(tmp, "%d", &index));
 			if (index<0) {
 				skip = 1;
 			} else {
@@ -324,7 +324,7 @@ void PDSampler::relax()
 	}
 
 exit:
-	if (verts) delete verts;
+	if (verts) delete[] verts;
 }
 
 ///

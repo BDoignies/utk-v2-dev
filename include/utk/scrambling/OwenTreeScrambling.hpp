@@ -96,7 +96,7 @@ namespace utk
                 IntegerType idx = (1 << length) - 1 + StringToInt(pat);
                 if (permuts.size() <= idx)
                 {
-                    auto n = permuts.size();
+                    // auto n = permuts.size();
                     permuts.resize(1 << (length + 1), false);
                 }
                 permuts[idx] = value;

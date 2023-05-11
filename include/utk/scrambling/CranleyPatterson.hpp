@@ -39,7 +39,7 @@ namespace utk
     {
     public:
         CranleyPattersonScrambling(double md = 1.0, double ds = 1.0) :
-            maxDispacement(md), domainSize(ds)
+            domainSize(ds), maxDispacement(md)
         { }
 
         void setMaxDispacement(double mv = 1.0)
