@@ -1,4 +1,7 @@
 SET(Metrics
+    
+    MinDist   
+
     L2
     CenteredL2
     Diaphony
@@ -38,6 +41,7 @@ FOREACH(FILE ${Metrics})
 ENDFOREACH(FILE)
 
 IF (UTK_PYTHON)
+    # TODO : OpenMP !!!
     SET(pyutk_metrics_bindings 
         "python/Metrics.cpp"
         "python/BaseMetrics.cpp"

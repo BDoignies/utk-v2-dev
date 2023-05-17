@@ -112,7 +112,6 @@ namespace utk
             while (std::getline(rfile, buffer))
             {
                 std::istringstream f(buffer);
-
                 double value; 
                 f >> value;
                 
@@ -167,7 +166,7 @@ namespace utk
 
                     errors[tId].count ++;
                     errors[tId].min = std::min(errors[tId].min, error);
-                    errors[tId].max = std::min(errors[tId].max, error);
+                    errors[tId].max = std::max(errors[tId].max, error);
 
                     double delta  = error - errors[tId].mean;
                     errors[tId].mean += delta / errors[tId].count;

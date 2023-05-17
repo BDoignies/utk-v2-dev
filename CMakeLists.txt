@@ -29,6 +29,7 @@ endif()
 
 if (UTK_USE_OPENMP)
     include(openmp)
+    add_definitions(-DUTK_USE_OPENMP)
 endif()
 
 if (UTK_BUILD_CGAL)

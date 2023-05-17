@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     CLI::App app { "Dart Throwing sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app);
     
-    bool relaxed = false;
+    bool relaxed = true;
     bool euclidean = true;
     unsigned int trials = 1000;
     double relaxedFactor = 0.9;
