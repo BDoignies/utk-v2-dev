@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-    CLI::App app { "GeneralizedL2 calculator" };
+    CLI::App app { "MinDist calculator" };
     utk::MetricArguments* margs = utk::add_arguments(app);
     
     bool euclidean = false;

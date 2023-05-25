@@ -148,8 +148,12 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 ## Big things
 
 - [ ] Documentation
-- [ ] Better directory structure
-- [ ] CMake fetch content CLI11 / Pybind 
+    - [X] Sampler
+    - [ ] Metrics
+    - [ ] Interacting with utk
+- [X] Better directory structure
+- [ ] Licenses
+- [X] CMake fetch content CLI11 / Pybind 
 - [ ] FindUTK.cmake 
 
 ## Misc : 

@@ -32,6 +32,7 @@
 #pragma once
 
 #include <utk/utils/Pointset.hpp>
+#include <cmath>
 #include "Spectrum.hpp"
 
 namespace utk

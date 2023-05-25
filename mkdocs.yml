@@ -72,6 +72,14 @@ nav:
     - VenDerCorput: 'samplers/VanDerCorput.md'
     - Whitenoise: 'samplers/Whitenoise.md'
   - Metrics:
-    - L2: 
-    - GL2:
-  
+    - BoundaryStars: 'metrics/BoundaryStar.md'
+    - L2: 'metrics/L2.md'
+    - GeneralizedL2: 'metrics/GeneralizedL2.md'
+    - SymmetricL2: 'metrics/SymmetricL2.md'
+    - UnanchoredL2: 'metrics/UnanchoredL2.md'
+    - Diaphony: 'metrics/Diaphony.md'
+    - MinDist: 'metrics/MinDist.md'
+    - PCF: 'metrics/PCF.md'
+    - Spectrum: 'metrics/Spetrum.md'
+    - RadialSpectrum: 'metrics/RadialSpectrum.md'
+    - IntegrationTest: 'metrics/IntegrationTest.md'
