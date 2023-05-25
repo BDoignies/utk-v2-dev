@@ -88,7 +88,7 @@ Distance :
 - [X] Spectrum
 - [X] Radial Spectrums
 - [X] PCF
-- [ ] MinDist
+- [X] MinDist
 
 Test : 
 
@@ -160,3 +160,12 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 - [ ] Add parametrization for openmp threads (Note: env variable OMP_NUM_THREADS could do the trick too)
 - [ ] Adding a capacity to Pointset ? 
 - [ ] Spectrum to image 
+
+
+## TESt : 
+
+
+- [ ] All samplers
+- [ ] Deployments
+    - [ ] With and without: OpenMP, Pybind, CGAL, ...
+- [ ] Metric
