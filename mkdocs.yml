@@ -43,6 +43,8 @@ site_dir: 'docs'
 
 nav:
   - Home: 'index.md'
+  - Library:
+    - Cpp UTK: 'libraries/CppUtk.md'
   - Samplers:
     - AAPatterns: 'samplers/AAPatterns.md'
     - ART: 'samplers/ART.md'
@@ -68,6 +70,7 @@ nav:
     - RegularGrid: 'samplers/RegularGrid.md'
     - SinglePeak: 'samplers/SinglePeak.md'
     - Sobol: 'samplers/Sobol.md'
+    - Step: 'samplers/Step.md'
     - Stratified: 'samplers/Stratified.md'
     - VenDerCorput: 'samplers/VanDerCorput.md'
     - Whitenoise: 'samplers/Whitenoise.md'
@@ -77,9 +80,11 @@ nav:
     - GeneralizedL2: 'metrics/GeneralizedL2.md'
     - SymmetricL2: 'metrics/SymmetricL2.md'
     - UnanchoredL2: 'metrics/UnanchoredL2.md'
+    - CenteredL2: 'metrics/CenteredL2.md'
     - Diaphony: 'metrics/Diaphony.md'
     - MinDist: 'metrics/MinDist.md'
     - PCF: 'metrics/PCF.md'
-    - Spectrum: 'metrics/Spetrum.md'
+    - Spectrum: 'metrics/Spectrum.md'
     - RadialSpectrum: 'metrics/RadialSpectrum.md'
     - IntegrationTest: 'metrics/IntegrationTest.md'
+  - License: 'license.md'

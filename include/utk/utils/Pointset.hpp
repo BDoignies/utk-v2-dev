@@ -63,6 +63,7 @@ namespace utk
             pt.N = n;
             pt.D = d;
             pt.C = n * d;
+            pt.isView = true;
 
             // This is a view, do not delete the data here...
             pt.data = std::shared_ptr<T[]>(data, [](T* X){});
