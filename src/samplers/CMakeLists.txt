@@ -66,21 +66,29 @@ ENDFOREACH(FILE)
 # ===========================================
 
 # Threads is looked for in main cmake
-IF(OpenMP_FOUND AND UTK_BUILD_EXTERNAL_CODE)
-    # Lloyd
-    add_executable(Lloyd Lloyd.cpp  ${UTK_EXTERNALS_FOLDER}/Lloyd/Delaunay_psm.cpp)
-    
-    target_include_directories(Lloyd PRIVATE "${UTK_INCLUDE_DIR}")
-    target_include_directories(Lloyd PRIVATE "${UTK_EXTERNALS_FOLDER}/")
-    target_link_libraries(Lloyd PRIVATE spdlog::spdlog CLI11::CLI11 OpenMP::OpenMP_CXX)
 
-    install(TARGETS Lloyd
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
+# Disable compilation on windows... GEOGRAM dllspec is problematic for an unknown reason...
+IF(NOT WIN32)
+
+    IF(OpenMP_FOUND AND UTK_BUILD_EXTERNAL_CODE)
+        # Lloyd
+        add_executable(Lloyd Lloyd.cpp  ${UTK_EXTERNALS_FOLDER}/Lloyd/Delaunay_psm.cpp)
+        
+        target_include_directories(Lloyd PRIVATE "${UTK_INCLUDE_DIR}")
+        target_include_directories(Lloyd PRIVATE "${UTK_EXTERNALS_FOLDER}/")
+        target_link_libraries(Lloyd PRIVATE spdlog::spdlog CLI11::CLI11 OpenMP::OpenMP_CXX)
+
+        install(TARGETS Lloyd
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib)
+    ELSE()
+        # message("Lloyd not compiled.")
+    ENDIF()
 ELSE()
-    # message("Lloyd not compiled.")
+    message("Lloyd not compiled on Windows !")
 ENDIF()
+
 
 IF (CGAL_FOUND AND SuiteSparse_FOUND AND UTK_BUILD_EXTERNAL_CODE)
     add_executable(BoundedBNOT  BoundedBNOT.cpp)

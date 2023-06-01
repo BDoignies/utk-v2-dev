@@ -14,6 +14,7 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         'numpy'
+        # TODO : install GCC ?
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
