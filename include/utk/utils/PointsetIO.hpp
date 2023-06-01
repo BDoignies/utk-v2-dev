@@ -93,6 +93,11 @@ inline Pointset<T> read_text_pointset_stream(Stream& st)
     // Skips comments (at the beginning only) (if any)
     while (line[0] == '#' && std::getline(st, line));
 
+    // Check for end of file. Not sure if empty line is possible
+    // Better safe than sorry
+    if (st.eof() || line.empty())
+        return pts;
+
     std::istringstream sstream(line);
     while(sstream.good()) sstream >> pts.PushBack();
     
@@ -101,7 +106,6 @@ inline Pointset<T> read_text_pointset_stream(Stream& st)
     while(std::getline(st, line))
     {
         if (line[0] == '#') break;
-
         std::istringstream tmp(line);
         while(tmp.good()) 
             tmp >> pts.PushBack();

@@ -11,7 +11,10 @@ setup(
     package_dir={'':'build/src/pyutk/'},
     url="https://utk-team.github.io/utk/",
     zip_safe=False,
-    python_requires=">=3.5",
+    python_requires=">=3.6",
+    install_requires=[
+        'numpy'
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",

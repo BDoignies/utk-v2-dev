@@ -120,7 +120,7 @@ Exes :
 There are a few thing I've noticed, here is a (probably non-exhaustive) list of things to check
 
 - [ ] Check parameter names and documentation in exe.
-- [ ] CMake : proper CMake for dependancy handling
+- [X] CMake : proper CMake for dependancy handling
 - [ ] LDBN : What is the target ? Points are weird...
 - [ ] LutLDBN : Cmake fetch content / git submodule
 - [ ] Sampler sampling 'random' number of points : AAPatterns, FastPoisson, Fattal. What to do ? 
@@ -147,10 +147,10 @@ There are a few thing I've noticed, here is a (probably non-exhaustive) list of 
 
 ## Big things
 
-- [ ] Documentation
+- [X] Documentation
     - [X] Sampler
-    - [ ] Metrics
-    - [ ] Interacting with utk
+    - [X] Metrics
+    - [X] Interacting with utk
 - [X] Better directory structure
 - [ ] Licenses
 - [X] CMake fetch content CLI11 / Pybind 

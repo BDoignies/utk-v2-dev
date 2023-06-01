@@ -105,7 +105,7 @@ namespace utk
         {
             if (N != pts[i].Npts() || D != pts[i].Ndim())
             {
-                UTK_WARN("Pointset shape mismatch: [0]: {}, {}, [{}]: {}, {}", N, D, pts[i].Npts(), pts[i].Ndim());
+                UTK_WARN("Pointset shape mismatch: [0]: {}, {}, [{}]: {}, {}", N, D, i, pts[i].Npts(), pts[i].Ndim());
                 isValid = false;
             }
         }
