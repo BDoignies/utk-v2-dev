@@ -1,4 +1,4 @@
-#include "../npde/tensor2d.h"
+#include "../npde/tensor2d.hh"
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -11,6 +11,7 @@
 #include <string>
 #include <cassert>
 #include <iomanip>
+#include <iostream>
 
 namespace fattal
 {
