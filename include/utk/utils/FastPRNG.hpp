@@ -5,17 +5,17 @@ namespace utk
     // Simple Linear Congruential Generator. 
     // For some reason, even though this is (more or less) the same as GCC, 
     // using rand/srand is 100 times slower on my machine... 
-    template<unsigned int rng_a, unsigned int rng_c, unsigned int rng_m>
+    template<uint32_t rng_a, uint32_t rng_c, uint32_t rng_m>
     struct FastRNGGenerator {
         FastRNGGenerator() :
                 mstate(1u), mseed(1u) {
         }
 
-        FastRNGGenerator(const unsigned int _seed) :
+        FastRNGGenerator(const uint32_t _seed) :
                 mstate(_seed), mseed(_seed) {
         }
 
-        void seed(const unsigned int _seed) {
+        void seed(const uint32_t _seed) {
             //~ mseed= _seed;
             mseed = hash(_seed);
             mstate = mseed;
@@ -24,11 +24,11 @@ namespace utk
         void index(const int _index) {
             // advance
             // cf http://www.pcg-random.org, c++ implementation
-            unsigned int cur_mul = rng_a;
-            unsigned int cur_add = rng_c;
-            unsigned int acc_mul = 1u;
-            unsigned int acc_add = 0u;
-            unsigned int delta = _index;
+            uint32_t cur_mul = rng_a;
+            uint32_t cur_add = rng_c;
+            uint32_t acc_mul = 1u;
+            uint32_t acc_add = 0u;
+            uint32_t delta = _index;
             while (delta > 0u) {
                 if (delta & 1u) {
                     acc_mul = acc_mul * cur_mul;
@@ -48,11 +48,11 @@ namespace utk
             mstate = acc_mul * mseed + acc_add;
         }
 
-        unsigned int operator()() {
+        uint32_t operator()() {
             return sample();
         }
 
-        unsigned int sample() {
+        uint32_t sample() {
             mstate = (mstate * rng_a + rng_c) % rng_m;
             return mstate;
         }
@@ -61,23 +61,23 @@ namespace utk
             return sample() / double(rng_m);
         }
 
-        unsigned int sample_range(const unsigned int range) {
+        uint32_t sample_range(const uint32_t range) {
             // Efficiently Generating a Number in a Range
             // cf http://www.pcg-random.org/posts/bounded-rands.html
-            unsigned int divisor = rng_m / range;
+            uint32_t divisor = rng_m / range;
             if (divisor == 0)
                 return 0;
 
             while (true) {
-                unsigned int x = sample() / divisor;
+                uint32_t x = sample() / divisor;
                 if (x < range)
                     return x;
             }
         }
 
         protected:
-            unsigned int mstate;
-            unsigned int mseed;
+            uint32_t mstate;
+            uint32_t mseed;
 
             // cf http://www.burtleburtle.net/bob/hash/integer.html
             uint32_t hash(uint32_t a) {

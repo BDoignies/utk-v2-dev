@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     
     bool relaxed = true;
     bool euclidean = true;
-    unsigned int trials = 1000;
+    uint32_t trials = 1000;
     double relaxedFactor = 0.9;
     double packing = -1.0;
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
     );
     dt.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!dt.generateSamples(pts[i], args->N))
         {

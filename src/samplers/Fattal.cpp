@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     utk::SamplerArguments* args = utk::add_arguments(app, 2, false);
     
     double temperature = 0.5;
-    unsigned int levels = 2;
+    uint32_t levels = 2;
     app.add_option("-t,--temperature", temperature, "Temperature")->default_val(temperature);
     app.add_option("-l,--level", levels, "Levels")->default_val(levels);
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     
     utk::SamplerFattal fattal(temperature, levels);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!fattal.generateSamples(pts[i], args->N))
         {

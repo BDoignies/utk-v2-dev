@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     );
 
     std::string method = "PMJ02";
-    unsigned int nbCandidates = 10;
+    uint32_t nbCandidates = 10;
 
     app.add_option("--method", method, "Method to use. Available (other will be treaded as PMJ02): " + helpMethod.str())->default_val(method);
     app.add_option("-c,--candidates", nbCandidates, "Number of candidates for PMJ02* methods")->default_val(nbCandidates);
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     utk::SamplerPMJ pmj(method, nbCandidates);
     pmj.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!pmj.generateSamples(pts[i], args->N))
         {

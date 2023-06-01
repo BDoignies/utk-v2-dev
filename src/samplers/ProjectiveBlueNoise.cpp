@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     
     bool relaxed = false;
     bool euclidean = true;
-    unsigned int trials = 1000;
+    uint32_t trials = 1000;
     double relaxedFactor = 0.9;
 
     app.add_flag("--relax", relaxed, "Enable relaxation")->default_val(true);
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     );
     dt.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!dt.generateSamples(pts[i], args->N))
         {

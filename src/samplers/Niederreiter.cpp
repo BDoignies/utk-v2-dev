@@ -35,14 +35,14 @@ int main(int argc, char** argv)
     CLI::App app { "Niederreiter sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app, 0 /*any dim*/, false);
     
-    unsigned int basis = 2;
+    uint32_t basis = 2;
     app.add_option("-b,--basis", basis, "Sampler basis")->default_val(2);
     
     CLI11_PARSE(app, argc, argv);
     std::vector<utk::Pointset<double>> pts = args->GetPointsets();
     
     utk::SamplerNiederreiter nd(args->D, basis);
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!nd.generateSamples(pts[i], args->N))
         {

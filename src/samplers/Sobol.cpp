@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     CLI::App app { "Sobol sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app);
     
-    unsigned int depth = 0;
+    uint32_t depth = 0;
     app.add_option("--depth", depth, "Owen depth (0: no randomness, 32: recommended).")->default_val(depth);
 
     CLI11_PARSE(app, argc, argv);
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     utk::SamplerSobol sobol(args->D, depth);
     sobol.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!sobol.generateSamples(pts[i], args->N))
         {

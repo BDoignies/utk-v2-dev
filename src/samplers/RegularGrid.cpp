@@ -41,7 +41,7 @@ int main(int argc, char** argv)
     
     utk::SamplerRegularGrid rg(args->D);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!rg.generateSamples(pts[i], args->N))
         {

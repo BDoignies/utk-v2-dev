@@ -42,14 +42,14 @@ class SamplerBoundedBNOT
 protected:
 public:
 
-	SamplerBoundedBNOT(unsigned int i = 20, unsigned int ni = 20, double e = 0.2) : 
+	SamplerBoundedBNOT(uint32_t i = 20, uint32_t ni = 20, double e = 0.2) : 
 		its(i), nits(ni), epsilon(e)
 	{ setRandomSeed(); }
 
     uint32_t GetDimension() const { return 2; }
 
-	void setIterations(unsigned int i) { its = i; }
-	void setNewtonIterations(unsigned int i) { nits = i; }
+	void setIterations(uint32_t i) { its = i; }
+	void setNewtonIterations(uint32_t i) { nits = i; }
 	void setEpsilon(double e) { epsilon = e; }
 
 	void setRandomSeed( uint64_t arg_seed ) { m_mersenneTwister.seed(arg_seed); }
@@ -92,8 +92,8 @@ public:
 protected:
     std::mt19937 m_mersenneTwister;
 
-	unsigned int its;
-	unsigned int nits;
+	uint32_t its;
+	uint32_t nits;
 	double epsilon;
 };
 

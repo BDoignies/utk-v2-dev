@@ -44,7 +44,7 @@ public:
 	SamplerNebraska() {  }
 
 	template<typename T>
-	bool generateSamples(Pointset<T>& arg_pts, unsigned int N)
+	bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
 	{
         using Point = std::array<T, 2>;
         std::vector<Point> points;
@@ -175,7 +175,7 @@ public:
         }
 
         arg_pts.Resize(points.size(), 2);
-        for (unsigned int i = 0; i < points.size(); i++)
+        for (uint32_t i = 0; i < points.size(); i++)
         {
             arg_pts[i][0] = points[i][0];
             arg_pts[i][1] = points[i][1];

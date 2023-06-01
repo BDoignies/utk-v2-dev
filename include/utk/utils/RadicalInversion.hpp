@@ -1,11 +1,15 @@
 #pragma once
 
+#ifndef __CHAR_BIT__
+    #define __CHAR_BIT__ 8
+#endif
+
 namespace utk
 {    
-    template<typename IntegerType = unsigned int>
+    template<typename IntegerType = uint32_t>
     inline IntegerType RadicalInverseBase2(IntegerType n)
     {
-        // unsigned int
+        // uint32_t
         if constexpr (sizeof(IntegerType) <= 4)
         {
             n = (n << 16u) | (n >> 16u);
@@ -24,10 +28,10 @@ namespace utk
         }
     }
 
-    template<typename T = double, typename IntegerType = unsigned int>
+    template<typename T = double, typename IntegerType = uint32_t>
     inline T RadicalInverseBase2Double(IntegerType n)
     {
-        // unsigned int or int
+        // uint32_t or int
         if constexpr (sizeof(IntegerType) <= 4)
         {
             n = RadicalInverseBase2(n);
@@ -44,7 +48,7 @@ namespace utk
     // Ex: x / 3 <=> (static_cast<uint64_t>(x) * 2863311531) >> 33
     // Ref: 
     //      https://doc.lagout.org/security/Hackers%20Delight.pdf: pages 190 and followings
-    template<unsigned int Base, typename IntegerType = unsigned int>
+    template<uint32_t Base, typename IntegerType = uint32_t>
     inline IntegerType RadicalInverseIntInternal(IntegerType N)
     {
         IntegerType result = 0;
@@ -61,8 +65,8 @@ namespace utk
     }
 
     // Non-templated version
-    template<typename IntegerType = unsigned int>
-    inline IntegerType RadicalInverseIntInternal(IntegerType N, unsigned int Base)
+    template<typename IntegerType = uint32_t>
+    inline IntegerType RadicalInverseIntInternal(IntegerType N, uint32_t Base)
     {
         IntegerType result = 0;
         while (N)
@@ -76,7 +80,7 @@ namespace utk
         return result;
     }
 
-    template<unsigned int Base, typename T = double, typename IntegerType = unsigned int>
+    template<uint32_t Base, typename T = double, typename IntegerType = uint32_t>
     inline T RadicalInverseDoubleInternal(IntegerType N)
     {
         const T invBase = (T) 1.0 / (T) Base;
@@ -97,17 +101,17 @@ namespace utk
     }
 
     // Non-templated version
-    template<typename T = double, typename IntegerType = unsigned int>
-    inline T RadicalInverseDoubleInternal(unsigned int N, unsigned int Base)
+    template<typename T = double, typename IntegerType = uint32_t>
+    inline T RadicalInverseDoubleInternal(uint32_t N, uint32_t Base)
     {
         const T invBase = (T) 1.0 / (T) Base;
         T invBaseN = (T)1.0;
 
-        unsigned int result = 0;
+        uint32_t result = 0;
         while (N)
         {
-            const unsigned int next = N / Base;
-            const unsigned int digit = N - next * Base;
+            const uint32_t next = N / Base;
+            const uint32_t digit = N - next * Base;
 
             result = result * Base + digit;
             invBaseN *= invBase;
@@ -117,8 +121,8 @@ namespace utk
         return result * invBaseN;
     }
 
-    template<typename IntegerType = unsigned int>
-    inline IntegerType RadicalInverseInt(IntegerType N, unsigned int Base)
+    template<typename IntegerType = uint32_t>
+    inline IntegerType RadicalInverseInt(IntegerType N, uint32_t Base)
     {
         switch (Base)
         {
@@ -137,8 +141,8 @@ namespace utk
         }
     }
 
-    template<typename T = double, typename IntegerType = unsigned int>
-    inline T RadicalInverseDouble(IntegerType N, unsigned int Base)
+    template<typename T = double, typename IntegerType = uint32_t>
+    inline T RadicalInverseDouble(IntegerType N, uint32_t Base)
     {
         switch (Base)
         {
@@ -157,7 +161,7 @@ namespace utk
         }
     }
 
-    template<typename T = double, typename IntegerType = unsigned int>
+    template<typename T = double, typename IntegerType = uint32_t>
     inline T convertFullRadicalInverseBase2(IntegerType x)
     {
         // Just forward integers

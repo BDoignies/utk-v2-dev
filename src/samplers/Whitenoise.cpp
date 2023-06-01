@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     utk::SamplerWhitenoise wn(args->D);
     wn.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!wn.generateSamples(pts[i], args->N))
         {

@@ -40,7 +40,7 @@ int main(int argc, char** argv)
     std::vector<utk::Pointset<double>> pts = args->GetPointsets();
     
     utk::SamplerHexagonalGrid hg;
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!hg.generateSamples(pts[i], args->N))
         {

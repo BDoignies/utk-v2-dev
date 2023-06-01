@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     aa.setVectorFile(vectorFile);
     aa.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!aa.generateSamples(pts[i], args->N))
         {

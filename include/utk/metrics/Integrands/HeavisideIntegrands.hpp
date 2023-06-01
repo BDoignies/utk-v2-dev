@@ -7,7 +7,7 @@ namespace utk
     class HeavisideIntegrand : public Integrand
     {
     public:
-        static constexpr unsigned int MAX_CLOSE_FORM = 15;
+        static constexpr uint32_t MAX_CLOSE_FORM = 15;
 
         HeavisideIntegrand(uint32_t d) : Integrand(d) 
         { 
@@ -22,7 +22,7 @@ namespace utk
             std::normal_distribution<double>    normalDist(0, 1);
 
             double norm = 0.0;
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
             {
                 normal[i] = normalDist(mt);
 
@@ -30,7 +30,7 @@ namespace utk
             }
 
             norm = std::sqrt(norm);
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
             {
                 normal[i] /= norm;
                 r -= normal[i] * posDist(mt);
@@ -42,7 +42,7 @@ namespace utk
         {
             stream >> r;
             
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
                 stream >> normal[i];
         }
 
@@ -50,14 +50,14 @@ namespace utk
         {
             stream << r << " ";
             
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
                 stream << normal[i] << " ";
         }
 
         virtual double eval(const double* pts) const override
         {
             double value = r;
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
                 value += normal[i] * pts[i];
             return value > 0.0;
         }
@@ -79,7 +79,7 @@ namespace utk
             double integralValue = 0.0;
             uint32_t vertices = ((uint32_t)1 << dim);
 
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
             {
                 factorial *= (i + 1);
                 product *= normal[i];
@@ -88,10 +88,10 @@ namespace utk
             for (uint32_t i = 0; i < vertices; i++)
             {
                 double eval = r;
-                unsigned int sum = 0;
+                uint32_t sum = 0;
                 
                 uint32_t tmp = i;
-                unsigned int d = 0;
+                uint32_t d = 0;
                 while (tmp)
                 {
                     eval += normal[d++] * (tmp & 1);

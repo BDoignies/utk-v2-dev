@@ -242,22 +242,22 @@ namespace utk
             std::uniform_real_distribution<double> unifMu(0, 1);
             std::uniform_real_distribution<double> unifSigma(sigmaMin, sigmaMax);
             
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
                 mu[i] = unifMu(mt);
             
             std::vector<double> sigmas(dim, 0.0);
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
                 sigmas[i] = 1. / unifSigma(mt);
 
             // Q = rot matrix (rotation), S = diagonal matrix (size)
             // Covariance matrix is QSQ' which is SDP
             // Its inverse : Q S^-1 Q', because Q^-1 = Q'
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
             {
-                for (unsigned int j = 0; j < dim; j++)
+                for (uint32_t j = 0; j < dim; j++)
                 {
                     invSigma[j + i * dim] = 0.0;
-                    for (unsigned int k = 0; k < dim; k++)
+                    for (uint32_t k = 0; k < dim; k++)
                     {
                         invSigma[j + i * dim] += rot->v[i][k] * sigmas[k] * rot->v[k][j];
                     }
@@ -269,21 +269,21 @@ namespace utk
 
         void ReadFromStream(std::istream& stream) override 
         {
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
                 stream >> mu[i];
             
-            for (unsigned int i = 0; i < dim; i++)
-                for (unsigned int j = 0; j < dim; j++)
+            for (uint32_t i = 0; i < dim; i++)
+                for (uint32_t j = 0; j < dim; j++)
                     stream >> invSigma[j + i * dim];
         }
 
         virtual void WriteInStream (std::ostream& stream) const override
         {
-            for (unsigned int i = 0; i < dim; i++)
+            for (uint32_t i = 0; i < dim; i++)
                 stream << mu[i] << " ";
             
-            for (unsigned int i = 0; i < dim; i++)
-                for (unsigned int j = 0; j < dim; j++)
+            for (uint32_t i = 0; i < dim; i++)
+                for (uint32_t j = 0; j < dim; j++)
                     stream << invSigma[j + i * dim] << " ";
         }
 

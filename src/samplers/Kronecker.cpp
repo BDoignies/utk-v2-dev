@@ -59,7 +59,7 @@ int main(int argc, char** argv)
     
     utk::SamplerKronecker kk(args->D);
     kk.setAlphas(alphas);
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!kk.generateSamples(pts[i], args->N))
         {

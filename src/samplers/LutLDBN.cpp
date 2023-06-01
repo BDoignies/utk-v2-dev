@@ -52,7 +52,7 @@ int main(int argc, char** argv)
     utk::SamplerLutLDBN ldbn;
     ldbn.setTarget(target);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!ldbn.generateSamples(pts[i], args->N))
         {

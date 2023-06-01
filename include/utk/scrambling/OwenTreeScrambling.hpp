@@ -134,11 +134,11 @@ namespace utk
     public:
         static constexpr unsigned char MAX_BITS = (sizeof(IntegerType) * __CHAR_BIT__);
     
-        OwenTreeScrambling(unsigned int dp = MAX_BITS) : 
+        OwenTreeScrambling(uint32_t dp = MAX_BITS) : 
             depth(dp)
         { }
 
-        void setBitPattern(unsigned int d, const std::string& pattern, bool value = true)
+        void setBitPattern(uint32_t d, const std::string& pattern, bool value = true)
         {
             if (trees.size() <= d)
             {
@@ -147,7 +147,7 @@ namespace utk
             trees[d].SetBitPattern(pattern, value);
         }
 
-        void setOwenDepth(unsigned int dp)
+        void setOwenDepth(uint32_t dp)
         {
             if (dp < MAX_BITS)
                 depth = dp;
@@ -155,7 +155,7 @@ namespace utk
                 depth = MAX_BITS;
         }
 
-        void setRandomSeed(long unsigned int arg_seed) 
+        void setRandomSeed(uint64_t arg_seed) 
         { 
             mt.seed(arg_seed);
         }
@@ -165,7 +165,7 @@ namespace utk
             setRandomSeed(std::random_device{}());
         }
 
-        void FillRandom(unsigned int d, unsigned char depth = 0)
+        void FillRandom(uint32_t d, unsigned char depth = 0)
         {
             if (trees.size() <= d)
             {
@@ -184,12 +184,12 @@ namespace utk
             }
 
             std::vector<unsigned long long int> seeds(in.Ndim());
-            for (unsigned int d = 0; d < in.Ndim(); d++)
+            for (uint32_t d = 0; d < in.Ndim(); d++)
                 trees[d].setSeed(mt());
             
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     in[i][d] = owen(in[i][d], d, depth);
                 }
@@ -206,12 +206,12 @@ namespace utk
             }
 
             std::vector<unsigned long long int> seeds(in.Ndim());
-            for (unsigned int d = 0; d < in.Ndim(); d++)
+            for (uint32_t d = 0; d < in.Ndim(); d++)
                 trees[d].setSeed(mt());
             
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     out[i][d] = convertFullRadicalInverseBase2<D>(owen(in[i][d], d, depth));
                 }
@@ -229,7 +229,7 @@ namespace utk
 
         IntegerType owen(
             IntegerType i,
-            unsigned int dim, 
+            uint32_t dim, 
             unsigned char depth
         )
         {
@@ -237,7 +237,7 @@ namespace utk
             std::bitset<MAX_BITS> newDigits = i;
 
             RNG rng;
-            for (unsigned int idigit = 0; idigit < depth; idigit++)
+            for (uint32_t idigit = 0; idigit < depth; idigit++)
             {
                 IntegerType indPermut = (1 << idigit) - 1 + ConvertBitset(digitsBase2 >> (MAX_BITS - idigit));
                 
@@ -248,7 +248,7 @@ namespace utk
             return ConvertBitset(newDigits);
         }
     private:
-        unsigned int depth;
+        uint32_t depth;
         std::vector<OwenTree<IntegerType>> trees;
         std::mt19937 mt;
     };

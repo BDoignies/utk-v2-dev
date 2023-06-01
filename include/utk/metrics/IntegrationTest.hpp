@@ -17,6 +17,7 @@
 
 #include <utk/utils/log.hpp>
 #include <utk/utils/Pointset.hpp>
+#include <utk/utils/utk_types.hpp>
 
 namespace utk
 {
@@ -72,7 +73,7 @@ namespace utk
             values.resize(count);
 
             #pragma omp parallel for
-            for (unsigned int i = 0; i < count; i++)
+            for (OPENMP_UINT i = 0; i < count; i++)
             {
                 integrands[i] = new IntegrandType(dim);
                 integrands[i]->GenerateRandom(params, seed + i);
@@ -86,7 +87,7 @@ namespace utk
             std::ofstream f(file);
             f << std::setprecision(std::numeric_limits<double>::digits10 + 2);
 
-            for (unsigned int i = 0; i < count; i++)
+            for (uint32_t i = 0; i < count; i++)
             {
                 f << values[i] << " ";
                 integrands[i]->WriteInStream(f);
@@ -153,7 +154,7 @@ namespace utk
                 #endif
     
                 #pragma omp for
-                for (unsigned int i = 0; i < integrands.size(); i++)
+                for (OPENMP_UINT i = 0; i < integrands.size(); i++)
                 {
                     #ifdef UTK_USE_OPENMP
                         uint32_t tId = omp_get_thread_num();
@@ -177,7 +178,7 @@ namespace utk
             }
             
             ErrorReport report = errors[0];
-            for (unsigned int i = 1; i < errors.size(); i++)
+            for (uint32_t i = 1; i < errors.size(); i++)
             {
                 uint32_t newCount = report.count + errors[i].count;
                 double delta = report.mean - errors[i].mean;

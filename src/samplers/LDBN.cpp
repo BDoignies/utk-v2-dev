@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     utk::SamplerArguments* args = utk::add_arguments(app, 2);
     
     std::string tileFile = "";
-    unsigned int tileSize = 128;
+    uint32_t tileSize = 128;
     
     app.add_option("--tilesize", tileSize, "Tile size. WARNING: Other values than 128 might not be properly supported for random generation.")->default_val(tileSize);
     app.add_option("--tileFile", tileFile, "File containing tiles. If empty a new one will be generated on the fly. Tilesize must be set accordingly.")->default_val(tileFile);
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     ldbn.setTileSize(tileSize);
     ldbn.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!ldbn.generateSamples(pts[i], args->N))
         {

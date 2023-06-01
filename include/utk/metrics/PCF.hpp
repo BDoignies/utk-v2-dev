@@ -36,6 +36,7 @@
 #endif
 
 #include <utk/utils/Pointset.hpp>
+#include <utk/utils/utk_types.hpp>
 
 namespace utk
 {
@@ -75,7 +76,7 @@ namespace utk
             std::vector<T> pcf(nbbins, 0.0);
 
             #pragma omp parallel for
-            for (uint32_t pcfid = 0; pcfid < nbbins; ++pcfid)
+            for (OPENMP_UINT pcfid = 0; pcfid < nbbins; ++pcfid)
             {
                 T r = ra + pcfid * (rb - ra) / (T)nbbins;
                 T estimator = 0.0;
@@ -123,7 +124,7 @@ namespace utk
             std::vector<T> pcf(nbbins, 0.0);
 
             #pragma omp parallel for
-            for (uint32_t pcfid = 0; pcfid < nbbins; ++pcfid)
+            for (OPENMP_UINT pcfid = 0; pcfid < nbbins; ++pcfid)
             {
                 T r = ra + pcfid * (rb - ra) / (T)nbbins;
                 pcf[pcfid] = 0.0;

@@ -46,11 +46,11 @@ int main(int argc, char** argv)
 
     std::string method_ = "DartThrowing";
     double radius_ = 0.0;
-    unsigned int throwMultiplier_ = 1;
-    unsigned int throws_ = 1000;
+    uint32_t throwMultiplier_ = 1;
+    uint32_t throws_ = 1000;
     bool maximize_ = false;
     bool isTiled_ = false;
-    unsigned int relaxCount_ = 0;
+    uint32_t relaxCount_ = 0;
 
 
     app.add_option("--method", method_, "Method. [" + helpMethod.str() + "]")->default_val(method_);
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
         method_, radius_, throwMultiplier_,
         throws_, maximize_, isTiled_, relaxCount_
     );
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!fp.generateSamples(pts[i], args->N))
         {

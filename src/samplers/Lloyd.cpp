@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     CLI::App app { "Lloyd sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app, 3);
     
-    unsigned int nbSteps = 100;
+    uint32_t nbSteps = 100;
     bool toroidal = false;
     
     app.add_flag("--steps", nbSteps, "Number of steps to perform")->default_val(nbSteps);
@@ -47,7 +47,7 @@ int main(int argc, char** argv)
     utk::SamplerLloyd lloyd(nbSteps, toroidal);
     lloyd.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!lloyd.generateSamples(pts[i], args->N))
         {

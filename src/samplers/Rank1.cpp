@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     
     utk::SamplerRank1 hg(exhaustiveSearch, fibonacci);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!hg.generateSamples(pts[i], args->N))
         {

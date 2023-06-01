@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     utk::SamplerArguments* args = utk::add_arguments(app, 2, false);
     
     int sparsity = 8;
-    unsigned int matrixSize = 512;
+    uint32_t matrixSize = 512;
     app.add_option("--sparsity", sparsity, "Sparsity coeff")->default_val(sparsity);
     app.add_option("--matrixSize", matrixSize, "Matrix Size (512, 1024, 2048. Other will be interpreted as 512)")->default_val(matrixSize);
     
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     
     utk::SamplerForcedRandom fr(sparsity, matrixSize);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!fr.generateSamples(pts[i], args->N))
         {

@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     utk::SamplerCMJ cmj;
     cmj.setRandomSeed(args->seed);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!cmj.generateSamples(pts[i], args->N))
         {

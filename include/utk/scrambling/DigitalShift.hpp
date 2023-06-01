@@ -41,7 +41,7 @@ namespace utk
         DigitalShift()
         { }
 
-        void setRandomSeed(long unsigned int arg_seed) 
+        void setRandomSeed(uint64_t arg_seed) 
         { 
             mt.seed(arg_seed);
         }
@@ -55,12 +55,12 @@ namespace utk
         void Scramble(Pointset<T>& in)
         {
             std::vector<IntegerType> shifts(in.Ndim());
-            for (unsigned int d = 0; d < in.Ndim(); d++)
+            for (uint32_t d = 0; d < in.Ndim(); d++)
                 shifts[d] = mt() % std::numeric_limits<IntegerType>::max();
             
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     in[i][d] = in[i][d] ^ shifts[d];
                 }
@@ -73,12 +73,12 @@ namespace utk
             out.Resize(in.Npts(), in.Ndim());
 
             std::vector<IntegerType> shifts(in.Ndim());
-            for (unsigned int d = 0; d < in.Ndim(); d++)
+            for (uint32_t d = 0; d < in.Ndim(); d++)
                 shifts[d] = mt() % std::numeric_limits<IntegerType>::max();
             
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     out[i][d] = convert<D>(in[i][d] ^ shifts[d]);
                 }

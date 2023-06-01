@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     CLI::App app { "Korobov sampler" };
     utk::SamplerArguments* args = utk::add_arguments(app, 0, false);
     
-    unsigned int generator = 3;
+    uint32_t generator = 3;
     app.add_option("-g,--gen", generator, "Generator (highly recommended to be prime with N)")->default_val(3);
 
     CLI11_PARSE(app, argc, argv);
@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     std::vector<utk::Pointset<double>> pts = args->GetPointsets();
     
     utk::SamplerKorobov kb(args->D, generator);
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!kb.generateSamples(pts[i], args->N))
         {

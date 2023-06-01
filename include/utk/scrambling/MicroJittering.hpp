@@ -40,7 +40,7 @@ namespace utk
         MicroJittering(double ip = -1.0) : intensityParam(ip)
         { }
 
-        void setRandomSeed(long unsigned int arg_seed) 
+        void setRandomSeed(uint64_t arg_seed) 
         { 
             mt.seed(arg_seed);
         }
@@ -64,9 +64,9 @@ namespace utk
             const T intensiy = getIntensity<T>(in.Npts(), in.Ndim());
             std::uniform_real_distribution<T> dist(-intensiy, intensiy);
 
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     in[i][d] = std::clamp(in[i][d] + dist(mt), (T)0.0, (T)1.0);
                 }
@@ -81,9 +81,9 @@ namespace utk
             const T intensiy = getIntensity<T>(in.Npts(), in.Ndim());
             std::uniform_real_distribution<T> dist(-intensiy, intensiy);
             
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     out[i][d] = std::clamp(in[i][d] + dist(mt), (T)0.0, (T)1.0);
                 }

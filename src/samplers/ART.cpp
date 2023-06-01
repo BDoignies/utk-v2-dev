@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     if (!tableFile.empty())
         art.setTileFile(tableFile);
 
-    for (unsigned int i = 0; i < pts.size(); i++)
+    for (uint32_t i = 0; i < pts.size(); i++)
     {
         if(!art.generateSamples(pts[i], args->N))
         {

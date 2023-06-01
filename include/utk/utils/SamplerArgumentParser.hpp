@@ -43,14 +43,14 @@ namespace utk
 {
     struct SamplerArguments
     {
-        static constexpr unsigned int ANY_DIM = 0;
+        static constexpr uint32_t ANY_DIM = 0;
 
         using Type = double;
 
-        unsigned int N;
-        unsigned int D;
-        unsigned int M;
-        long long unsigned int seed;
+        uint32_t N;
+        uint32_t D;
+        uint32_t M;
+        uint64_t seed;
         std::string outFile;
 
         std::vector<Pointset<Type>> GetPointsets()
@@ -67,7 +67,7 @@ namespace utk
 
     inline SamplerArguments* add_arguments(
         CLI::App& app,
-        unsigned int force_dim = SamplerArguments::ANY_DIM,
+        uint32_t force_dim = SamplerArguments::ANY_DIM,
         bool seedable = true
     )
     {

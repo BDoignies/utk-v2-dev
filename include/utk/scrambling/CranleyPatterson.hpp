@@ -52,7 +52,7 @@ namespace utk
             domainSize = ds;
         }
 
-        void setRandomSeed(long unsigned int arg_seed)
+        void setRandomSeed(uint64_t arg_seed)
         {
             mt.seed(arg_seed);
         }
@@ -68,12 +68,12 @@ namespace utk
             std::uniform_real_distribution<T> dist(-maxDispacement, maxDispacement);
             std::vector<T> shift(in.Ndim());
 
-            for (unsigned int d = 0; d < in.Ndim(); d++)
+            for (uint32_t d = 0; d < in.Ndim(); d++)
                 shift[d] = dist(mt);
 
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     in[i][d] = std::fmod(in[i][d] + shift[d], domainSize);
                 }
@@ -88,12 +88,12 @@ namespace utk
 
             out.Resize(in.Npts(), in.Ndim());
 
-            for (unsigned int d = 0; d < in.Ndim(); d++)
+            for (uint32_t d = 0; d < in.Ndim(); d++)
                 shift[d] = dist(mt);
 
-            for (unsigned int i = 0; i < in.Npts(); i++)
+            for (uint32_t i = 0; i < in.Npts(); i++)
             {
-                for (unsigned int d = 0; d < in.Ndim(); d++)
+                for (uint32_t d = 0; d < in.Ndim(); d++)
                 {
                     out[i][d] = std::fmod(in[i][d] + shift[d], domainSize);
                 }
