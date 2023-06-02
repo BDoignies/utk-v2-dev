@@ -3,4 +3,4 @@ add_subdirectory(samplers)
 
 IF (UTK_PYTHON)
     add_subdirectory(pyutk)
-ELSE()
+ENDIF()
