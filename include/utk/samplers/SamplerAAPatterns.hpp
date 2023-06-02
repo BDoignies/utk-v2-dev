@@ -126,7 +126,7 @@ class SamplerAAPatterns
 protected:
 public:
 
-	SamplerAAPatterns() { setRandomSeed(); m_vectorfile = GetDefaultFiles()[0]; }
+	SamplerAAPatterns() { setRandomSeed(); m_vectorfile = GetDefaultFiles().begin()->second; }
 
     uint32_t GetDimension() const { return 2; }
 	

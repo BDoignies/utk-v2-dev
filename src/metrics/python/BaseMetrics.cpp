@@ -17,18 +17,6 @@
 #include <utk/metrics/Integrands/GaussianIntegrands.hpp>
 #include <utk/metrics/Integrands/HeavisideIntegrands.hpp>
 
-template<typename T>
-void ExposeIntegrationTest(py::module& m, const std::string& name)
-{
-    using namespace utk;
-
-    py::class_<IntegrationTest>(m, name.c_str())
-        .def(py::init<>())
-        .def("BuildDatabase", &IntegrationTest::BuildDatabase<T>)
-        .def("ReadDatabse"  , &IntegrationTest::ReadDatabase<T>)
-        .def("compute"      , GetComputeFunction<IntegrationTest, double, IntegrationTest::ErrorReport>());
-}
-
 void init_Metrics(py::module& m)
 {
     using namespace utk;
@@ -107,7 +95,15 @@ void init_Metrics(py::module& m)
         .def_readonly("min", &IntegrationTest::ErrorReport::var)
         .def_readonly("min", &IntegrationTest::ErrorReport::count);
 
-    ExposeIntegrationTest<GaussianIntegrand> (m, "GaussianIntegrationTest");
-    ExposeIntegrationTest<HeavisideIntegrand>(m, "HeavisideIntegrationTest");
-    
+
+    // Not the cleanest, but pybind disallow binding same class to 
+    // different name. So either IntegrationTest becomes templated
+    // Or this works...
+    py::class_<IntegrationTest>(m, "IntegrationTest")
+        .def(py::init<>())
+        .def("BuildGaussianDatabase" , &IntegrationTest::BuildDatabase<GaussianIntegrand>)
+        .def( "ReadGaussianDatabse"  , &IntegrationTest:: ReadDatabase<GaussianIntegrand>)
+        .def("BuildHeavisideDatabase", &IntegrationTest::BuildDatabase<HeavisideIntegrand>)
+        .def( "ReadHeavisideDatabse" , &IntegrationTest:: ReadDatabase<HeavisideIntegrand>)
+        .def("compute"      , GetComputeFunction<IntegrationTest, double, IntegrationTest::ErrorReport>());   
 }

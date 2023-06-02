@@ -227,7 +227,7 @@ void init_BaseSampler(py::module& m)
 
     py::class_<SamplerPenrose>(m, "Penrose")
         .def(py::init<>())
-        .def("__repr__", [](const SamplerPenrose& wn) { return "ART()"; })
+        .def("__repr__", [](const SamplerPenrose& wn) { return "Penrose()"; })
         .def("sample",  GetSampleFunction <SamplerAAPatterns>(), py::arg("N"));
 
     

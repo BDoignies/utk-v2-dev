@@ -73,9 +73,6 @@ jobs:
      
      - name: Installing pyutk
        run: |
-          ls
-          echo 'runner.workspace === ${{ runner.workspace }}'
-          echo 'Build  === ${{ runner.workspace }}/build'  
           python -m pip install -e . 
 
      - name: Test
