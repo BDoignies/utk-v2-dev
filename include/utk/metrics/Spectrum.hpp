@@ -172,7 +172,7 @@ namespace utk
                 #endif
 
                 #pragma omp for
-                for (uint32_t i = 0; i < spectrum.size(); i++)
+                for (OPENMP_UINT i = 0; i < spectrum.size(); i++)
                 {
                     #ifdef UTK_USE_OPENMP
                         uint32_t tId = omp_get_thread_num();

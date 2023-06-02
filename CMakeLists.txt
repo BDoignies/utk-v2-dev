@@ -14,6 +14,8 @@ if (NOT WIN32)
     # Disable pyutk on windows... For some reason
     # there is a conflicting declaration... of 'byte'
     option(UTK_PYTHON "Enable pyutk" ON)
+else()
+    set(UTK_PYTHON OFF)
 endif()
 
 # Disable by default, otherwise everything is downloaded when ccmake-ing 
