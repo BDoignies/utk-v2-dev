@@ -13,13 +13,9 @@ SET(Metrics
     Spectrum
     RadialSpectrum
     PCF
-
-    GaussianIntegrationTest
-    HeavisideIntegrationTest
-
-    BuildGaussianIntegrandDatabase
-    BuildHeavisideIntegrandDatabase
 )
+
+add_subdirectory(Integration)
 
 SET(pyutk_metrics)
 SET(pyutk_metrics_libs pybind11::module spdlog::spdlog)

@@ -72,6 +72,7 @@ jobs:
          pip install numpy
      
      - name: Installing pyutk
+       # Only for linux. TODO : set proper version for macos
        if: matrix.os == 'ubuntu-latest'
        run: |
           python -m pip install -e . 
