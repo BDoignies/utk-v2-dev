@@ -16,7 +16,7 @@ namespace utk
             normal.resize(dim);
         }
     
-        void GenerateRandom(const GenerationParameter& params, uint64_t seed)
+        void GenerateRandom(const GenerationParameter& params, uint64_t seed) override
         {
             std::mt19937 mt(seed);
             std::uniform_real_distribution<double> posDist(0, 1);
@@ -63,14 +63,14 @@ namespace utk
             return value > 0.0;
         }
 
-        virtual bool hasCloseForm() const  
+        virtual bool hasCloseForm() const override
         { 
             // Do not use close form formula for too high dimensions
             // It is exponential in dimension : (~= (D + 1)2^D)
             return (dim < MAX_CLOSE_FORM); 
         }
 
-        virtual double getIntegral() const 
+        virtual double getIntegral() const override 
         { 
             // https://arxiv.org/pdf/1512.07768.pdf
 

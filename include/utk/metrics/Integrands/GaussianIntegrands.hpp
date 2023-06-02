@@ -225,7 +225,7 @@ namespace utk
             invSigma.resize(dim * dim);
         }
     
-        void GenerateRandom(const GenerationParameter& params, uint64_t seed)
+        void GenerateRandom(const GenerationParameter& params, uint64_t seed) override
         {
             // Some default values...
             double sigmaMin = 0.01;

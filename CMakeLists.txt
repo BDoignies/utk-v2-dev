@@ -9,7 +9,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_BUILD_TYPE "Release")
 
 option(UTK_LOG "Enable utk logging" ON)
-option(UTK_PYTHON "Enable pyutk" ON)
+
+if (NOT WIN32)
+    # Disable pyutk on windows... For some reason
+    # there is a conflicting declaration... of 'byte'
+    option(UTK_PYTHON "Enable pyutk" ON)
+endif()
 
 # Disable by default, otherwise everything is downloaded when ccmake-ing 
 option(UTK_BUILD_EXTERNAL_CODE "Enable building of External codes" ON)
