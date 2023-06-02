@@ -31,6 +31,7 @@
 
 #include <SinglePeak/common.hh>
 #include <utk/utils/Pointset.hpp>
+#include <cmath>
 #include <random>
 
 #ifndef STEP_COMMON_IMPLEMENTATION

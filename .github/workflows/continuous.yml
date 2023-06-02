@@ -41,28 +41,28 @@ jobs:
        run: echo "nothing to install with brew"
 
      - name: Create Build Environment
-       run: cmake -E make_directory ${{runner.workspace}}/build
+       run: cmake -E make_directory build
 
      - name: Configure CMake (linux)
        if: matrix.os == 'ubuntu-latest'
        shell: bash
-       working-directory: ${{runner.workspace}}/build
+       working-directory: build
        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }} $CONFIG_GLOBAL $CONFIG_LINUX
 
      - name: Configure CMake (macOS)
        if: matrix.os == 'macOS-latest'
        shell: bash
-       working-directory: ${{runner.workspace}}/build
+       working-directory: build
        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}  $CONFIG_GLOBAL $CONFIG_MAC
 
      - name: Configure CMake (windows)
        if: matrix.os == 'windows-latest'
        shell: bash
-       working-directory: ${{runner.workspace}}/build
+       working-directory: build
        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }}
 
      - name: Build
-       working-directory: ${{runner.workspace}}/build
+       working-directory: build
        shell: bash
        run: cmake --build . --config ${{ matrix.BUILD_TYPE }} --parallel 3
 
@@ -72,7 +72,6 @@ jobs:
          pip install numpy
      
      - name: Installing pyutk
-       working-directory: ${{runner.workspace}}
        run: |
           ls
           echo 'runner.workspace === ${{ runner.workspace }}'
@@ -80,7 +79,7 @@ jobs:
           python -m pip install -e . 
 
      - name: Test
-       working-directory: ${{runner.workspace}}/build
+       working-directory: build
        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
        shell: bash
        run: |

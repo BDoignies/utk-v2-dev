@@ -32,6 +32,7 @@
 #include <Step/common.hh>
 #include <utk/utils/Pointset.hpp>
 #include <random>
+#include <cmath>
 
 
 #ifndef STEP_COMMON_IMPLEMENTATION

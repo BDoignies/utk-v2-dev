@@ -33,6 +33,7 @@
 #include <utk/utils/log.hpp>
 #include <utk/utils/Pointset.hpp>
 #include <random>
+#include <cmath>
 
 namespace utk
 {

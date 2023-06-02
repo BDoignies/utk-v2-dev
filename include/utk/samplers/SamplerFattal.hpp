@@ -4,7 +4,7 @@
 #include <utk/utils/Pointset.hpp>
 
 #include <Fattal/pdist_code/main.hh>
-
+#include <cmath>
 #include <random>
 
 namespace utk

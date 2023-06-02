@@ -37,6 +37,7 @@
 
 #include <utk/utils/Pointset.hpp>
 #include <utk/utils/utk_types.hpp>
+#include <cmath>
 
 namespace utk
 {

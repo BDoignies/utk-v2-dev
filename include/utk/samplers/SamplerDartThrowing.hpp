@@ -33,6 +33,7 @@
 #include <utk/utils/log.hpp>
 #include <cstring> // memcpy
 #include <random>
+#include <cmath>
 
 namespace utk
 {

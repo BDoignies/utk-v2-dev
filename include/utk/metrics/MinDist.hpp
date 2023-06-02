@@ -38,6 +38,7 @@
 #include <limits>
 #include <utk/utils/Pointset.hpp>
 #include <utk/utils/utk_types.hpp>
+#include <cmath>
 
 namespace utk
 {
@@ -58,7 +59,10 @@ namespace utk
 
             T minDist = std::numeric_limits<T>::max();
 
+#ifndef _WIN32
+            // On windows, min reduction is not available...
             #pragma omp parallel for reduction(min: minDist)
+#endif
             for (OPENMP_UINT i = 0; i < pts.Npts(); i++)
             {
                 for (uint32_t j = i + 1; j < pts.Npts(); j++)

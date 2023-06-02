@@ -32,6 +32,7 @@
 #include <utk/utils/Pointset.hpp>
 #include <array>
 #include <random>
+#include <cmath>
 
 namespace utk
 {

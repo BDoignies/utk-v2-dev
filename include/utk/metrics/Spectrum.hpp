@@ -35,8 +35,11 @@
     #include <omp.h>
 #endif
 
+#include <utk/utils/utk_types.hpp>
 #include <utk/utils/Pointset.hpp>
 #include <utk/utils/log.hpp>
+
+#include <cmath>
 
 namespace utk
 {
@@ -92,7 +95,7 @@ namespace utk
                 #endif
 
                 #pragma omp for
-                for (uint32_t i = 0; i < spectrum.size(); i++)
+                for (OPENMP_UINT i = 0; i < spectrum.size(); i++)
                 {
                     #ifdef UTK_USE_OPENMP
                         uint32_t tId = omp_get_thread_num();

@@ -35,6 +35,7 @@
 #include <random>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 class CombinationGenerator
 {

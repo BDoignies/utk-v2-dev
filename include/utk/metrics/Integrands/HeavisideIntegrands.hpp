@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include "../IntegrationTest.hpp"
 
 namespace utk

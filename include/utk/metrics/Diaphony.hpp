@@ -31,6 +31,7 @@
 #pragma once
 
 #include <utk/utils/Pointset.hpp>
+#include <cmath>
 
 namespace utk
 {

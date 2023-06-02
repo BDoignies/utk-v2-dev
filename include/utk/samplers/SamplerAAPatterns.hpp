@@ -33,6 +33,7 @@
 #include <utk/utils/Pointset.hpp>
 #include <random>
 #include <tuple> // std::ignore
+#include <cmath>
 
 
 namespace nsaapattern
