@@ -18,8 +18,6 @@ else()
     set(UTK_PYTHON OFF)
 endif()
 
-# Disable by default, otherwise everything is downloaded when ccmake-ing 
-option(UTK_BUILD_EXTERNAL_CODE "Enable building of External codes" ON)
 option(UTK_USE_OPENMP "Enable USE of OpenMp" ON)
 # CGal options
 option(UTK_BUILD_CGAL "Enable projects depending on CGAL. " OFF)

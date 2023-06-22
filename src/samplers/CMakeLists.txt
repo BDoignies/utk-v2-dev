@@ -65,12 +65,9 @@ ENDFOREACH(FILE)
 #  Samplers requiring additional libraries  #
 # ===========================================
 
-# Threads is looked for in main cmake
-
 # Disable compilation on windows... GEOGRAM dllspec is problematic for an unknown reason...
 IF(NOT WIN32)
-
-    IF(OpenMP_FOUND AND UTK_BUILD_EXTERNAL_CODE)
+    IF(OpenMP_FOUND)
         # Lloyd
         add_executable(Lloyd Lloyd.cpp  ${UTK_EXTERNALS_FOLDER}/Lloyd/Delaunay_psm.cpp)
         

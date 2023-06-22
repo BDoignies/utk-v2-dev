@@ -34,6 +34,7 @@
 #include <random>
 #include <tuple> // std::ignore
 #include <cmath>
+#include <map>
 
 
 namespace nsaapattern

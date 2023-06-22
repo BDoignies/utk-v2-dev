@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #ifndef __CHAR_BIT__
     #define __CHAR_BIT__ 8
 #endif

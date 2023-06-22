@@ -124,7 +124,7 @@ namespace utk
             }
         }
 
-        double Evaluate(const Pointset<double>& pts, Integrand* integrand)
+        double Evaluate(const Pointset<double>& pts, Integrand* integrand) const
         {
             double contribs = 0.0;
             for (uint32_t i = 0; i < pts.Npts(); i++)
@@ -132,7 +132,7 @@ namespace utk
             return contribs / pts.Npts();
         }
 
-        ErrorReport compute(const Pointset<double>& pts)
+        ErrorReport compute(const Pointset<double>& pts) const
         {
             if (integrands.size() == 0)
             {
@@ -198,7 +198,7 @@ namespace utk
             return report;
         }
 
-        std::vector<ErrorReport> compute(const std::vector<Pointset<double>>& ptss)
+        std::vector<ErrorReport> compute(const std::vector<Pointset<double>>& ptss) const
         {
             if (integrands.size() == 0)
             {
