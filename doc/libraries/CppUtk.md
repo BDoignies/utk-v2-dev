@@ -18,15 +18,15 @@ upon such as : `std::vector<Point>`. *While technically undefined behavior (but 
 
 ## Linking and Building
 
-Most of UTK is header only. Hence, setting include path to `include/` is sufficient. However, some code provided by authors
-are not header only and should be compiled along your project. Only the files required for the utk library to work have '.cpp'. 
-extension. If building with CMake, you may use the following lines to get all files required: 
+Most of UTK is header only. Hence, setting include path to `include/` is sufficient. However, some code provided by authors are not header only and should be compiled along your project. 
+
+If building with CMake, you may use the following lines to get all files required: 
 
 ```cmake
-FILE(GLOB_RECURSE ADDITIONNAL_CODE
-        "PATH_TO_UTK/externals/AUTHOR_CODE_DIRECTORY/*.cpp"
-)
-
-target_include_directories(YOUR_PROJECT PRIVATE PATH_TO_UTK/externals/)
-target_sources(YOUR_PROJECT PRIVATE ${ADDITIONNAL_CODE})
+find_package(UTK)
+# Depending on install location, the following line may be better
+# find_package(UTK PATHS PATH_TO_UTK)
+target_link_libraries(YOUR_TARGET UTK_LIBRARY)
 ```
+
+See `examples/` folder for more information. 

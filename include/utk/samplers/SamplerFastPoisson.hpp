@@ -118,8 +118,9 @@ public:
         arg_pts.Resize(N, 2);
         for (uint32_t i = 0; i < N; i++)
         {
-            arg_pts[i][0] = sampler->points[i].x;
-            arg_pts[i][1] = sampler->points[i].y;
+            // Points are in [-1, 1]
+            arg_pts[i][0] = 0.5 * (sampler->points[i].x + 1);
+            arg_pts[i][1] = 0.5 * (sampler->points[i].y + 1);
         }
         
 		return true;

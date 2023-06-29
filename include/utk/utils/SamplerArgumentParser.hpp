@@ -51,6 +51,9 @@ namespace utk
         uint32_t D;
         uint32_t M;
         uint64_t seed;
+
+        uint32_t dumbD;
+        uint64_t dumbS; 
         std::string outFile;
 
         std::vector<Pointset<Type>> GetPointsets()
@@ -77,13 +80,25 @@ namespace utk
         app.add_option("-n", args->N, "Number of points")->required();
 
         if (force_dim == 0)
+        {
             app.add_option("-d", args->D, "Dimensions")->required();
+        }
         else
-            args->D = force_dim;
+        {
+            // Leave it here so all sampler have the same arguments !
+            app.add_option("-d", args->dumbD, "Dimension (unused)");
+        }
 
         if (seedable)
+        {
             app.add_option("-s,--seed", args->seed, "Seed (unspecified means 'random')");
-
+        }
+        else
+        {
+            // Leave it here so all sampler have the same arguments !
+            app.add_option("-s,--seed", args->dumbS, "Seed (unused)");
+        }
+            
         app.add_option("-m", args->M, "Number of pointsets")->default_val(1);
         app.add_option("-o,--out", args->outFile, "Output file")->default_val("out.dat");
 

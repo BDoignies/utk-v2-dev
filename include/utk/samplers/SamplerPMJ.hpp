@@ -68,16 +68,13 @@ public:
     template<typename T>
     bool generateSamples(Pointset<T>& arg_pts, uint32_t N)
     {
-        const SamplePMJ* samples;
-        uint32_t Npts;
         if (method == "PJ")
         {
             // Increment seed for samples not to be the same next time they are asked.
             PJSampleSequenceGenerator g = PJSampleSequenceGenerator(seed++);
             g.progressiveJitteredAlgorithm2D(N);
             
-            samples = g.GetSamples();
-            Npts = g.GetSampleCount();
+            SetSamples(N, arg_pts, g);
         }
         else if (method == "PMJ")
         {
@@ -85,8 +82,7 @@ public:
             PMJSampleSequenceGenerator g = PMJSampleSequenceGenerator(seed++);
             g.ProgressiveMultiJitteredAlgorithm2D(N, candidates);
         
-            samples = g.GetSamples();
-            Npts = g.GetSampleCount();
+            SetSamples(N, arg_pts, g);
         }
         else if (method == "PMJ02_Pharr")
         {
@@ -94,25 +90,29 @@ public:
             PMJ02SampleSequenceGenerator_Pharr g = PMJ02SampleSequenceGenerator_Pharr(seed++);
             g.ProgressiveMultiJittered02Algorithm2D(N, candidates);
         
-            samples = g.GetSamples();
-            Npts = g.GetSampleCount();
+            SetSamples(N, arg_pts, g);
         }
         else /* if (method == "PMJ02") */ // Assume method == "PMJ02"
         {
             // Increment seed for samples not to be the same next time they are asked.
             PMJ02SampleSequenceGenerator g = PMJ02SampleSequenceGenerator(seed++);
             g.ProgressiveMultiJittered02Algorithm2D(N, candidates);
-        
-            samples = g.GetSamples();
-            Npts = g.GetSampleCount();
-        }
-        // else
-        // {
-        // 		return false;
-        // }
 
+            SetSamples(N, arg_pts, g);
+        }
+
+        return true;
+    };
+
+protected:
+    template<typename Pts, typename Sampler>
+    void SetSamples(uint32_t N, Pts& arg_pts, const Sampler& sampler)
+    {
+        const SamplePMJ* samples = sampler.GetSamples();
+        const uint32_t Npts = sampler.GetSampleCount();
+        
         if (N != Npts)
-            UTK_WARN("Sampler Penrose, returning {} samples when asked for {}", Npts, N);
+            UTK_WARN("Sampler PMJ, returning {} samples when asked for {}", Npts, N);
 
         arg_pts.Resize(Npts, 2);
         for (uint32_t i = 0; i < Npts; i++)
@@ -120,10 +120,8 @@ public:
             arg_pts[i][0] = samples[i][0];
             arg_pts[i][1] = samples[i][1];
         }
-        return true;
-    };
+    }
 
-protected:
     uint32_t candidates;
     unsigned long long int seed;
     std::string method;

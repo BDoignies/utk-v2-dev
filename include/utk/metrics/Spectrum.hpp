@@ -76,6 +76,7 @@ namespace utk
 
             const uint32_t width = getWidth(pts.Npts());
             const uint32_t Origin = width >> 1;
+            const T invNPts = 1. / (pts.Npts());
             
             std::vector<std::vector<T>> ws;     
             std::vector<T> spectrum(std::pow(width, pts.Ndim()), 0.0);
@@ -124,7 +125,7 @@ namespace utk
                         ex += c;
                         ey += s;
                     }
-                    spectrum[i] = ex * ex + ey * ey;
+                    spectrum[i] = (ex * ex + ey * ey) * invNPts;
                 }
             }
             
@@ -149,7 +150,7 @@ namespace utk
 
             const uint32_t N = ptss[0].Npts();
             const uint32_t D = ptss[0].Ndim();
-            const T invNPts = 1. / (T)ptss.size();
+            const T invNPts = 1. / ((T)ptss.size() * N);
 
             const uint32_t width = getWidth(N);
             const uint32_t Origin = width >> 1;

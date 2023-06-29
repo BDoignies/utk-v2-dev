@@ -55,7 +55,7 @@ class SamplerPenrose
 protected:
 public:
 
-	SamplerPenrose(/*uint32_t mag = 100*/) : magFactor(100) { }
+	SamplerPenrose(/*uint32_t mag = 100*/) : magFactor(10) { }
 	
     uint32_t GetDimension() const { return 2; }
 	// void setMagFactor(uint32_t mag) { magFactor = mag; }

@@ -28,10 +28,12 @@ theme:
 
 extra_css:
   - 'stylesheets/multilanguage_snippet.css'
+  - 'stylesheets/show_results.css'
 
 extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
   - 'javascript/multilanguage_snippet.js'
+  - 'javascript/show_results.js'
 
 repo_name: 'utk-team/utk'
 repo_url: 'https://github.com/utk-team/utk'
@@ -48,7 +50,7 @@ nav:
   - Samplers:
     - AAPatterns: 'samplers/AAPatterns.md'
     - ART: 'samplers/ART.md'
-    - CMK: 'samplers/CMJ.md'
+    - CMJ: 'samplers/CMJ.md'
     - DartThrowing: 'samplers/DartThrowing.md'
     - FastPoisson: 'samplers/FastPoisson.md'
     - Fattal: 'samplers/Fattal.md'

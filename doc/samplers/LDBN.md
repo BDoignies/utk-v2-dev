@@ -143,6 +143,13 @@ samples = kron.sample(1024)  # This is a numpy array !
 
 </div>
 
+## Results
+
+<div class="results"></div>
+<script>
+  window.addEventListener('DOMContentLoaded', function() { show_results("LutLDBN"); }); 
+</script>
+
 ## License
 
 BSD, see `SamplerLDBN.hpp`.

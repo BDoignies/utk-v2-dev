@@ -33,11 +33,6 @@ SET(pyutk_samplers)
 SET(pyutk_samplers_libs pybind11::module spdlog::spdlog)
 
 FOREACH(FILE ${Samplers})
-    # Compile external code disable and has an entry in the external folder
-    IF (EXISTS ${UTK_EXTERNALS_FOLDER}/${FILE} AND NOT UTK_BUILD_EXTERNAL_CODE)
-        CONTINUE()
-    ENDIF()
-
     add_executable(${FILE} ${FILE}.cpp)
     target_include_directories(${FILE} PRIVATE "${UTK_INCLUDE_DIR}")
 

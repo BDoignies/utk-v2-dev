@@ -73,6 +73,13 @@ int main()
 
 </div>
 
+## Results
+
+<div class="results"></div>
+<script>
+  window.addEventListener('DOMContentLoaded', function() { show_results(); }); 
+</script>
+
 ## License
 
 BSD, see `SamplerLDBN.hpp`.

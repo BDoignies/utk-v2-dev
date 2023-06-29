@@ -67,6 +67,13 @@ samples = ndr.sample(1024) # This is a numpy array !
 
 </div>
 
+## Results
+
+<div class="results"></div>
+<script>
+  window.addEventListener('DOMContentLoaded', function() { show_results(); }); 
+</script>
+
 ## License
 
 [GNU LGPL](https://people.sc.fsu.edu/~jburkardt/txt/gnu_lgpl.txt), code from [https://people.sc.fsu.edu/~jburkardt/cpp_src/faure/faure.html](https://people.sc.fsu.edu/~jburkardt/cpp_src/faure/faure.html)

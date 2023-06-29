@@ -62,16 +62,19 @@ public:
         switch (dim)
         {
         case 2:
+            if (name.empty())     return Kronecker::R2;
             if (name == "R2")     return Kronecker::R2;
             if (name == "K21_2")  return Kronecker::K21_2;
             if (name == "K21b_2") return Kronecker::K21b_2;
             return nullptr;
         case 3:
+            if (name.empty())     return Kronecker::R3;
             if (name == "R3")     return Kronecker::R3;
             if (name == "K21_3")  return Kronecker::K21_3;
             if (name == "K21b_3") return Kronecker::K21b_3;
             return nullptr;
         case 4:
+            if (name.empty())     return Kronecker::R4;
             if (name == "R4")     return Kronecker::R4;
             if (name == "K21_4")  return Kronecker::K21_4;
             if (name == "K21b_4") return Kronecker::K21b_4;
