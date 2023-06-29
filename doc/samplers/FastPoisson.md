@@ -101,16 +101,7 @@ samples = fp.sample(1024) # This is a numpy array !
 <script>
   window.addEventListener('DOMContentLoaded', function() { show_results(); }); 
 </script>
+
 ## License
 
-Public Domain:
-
-```
-This code is released into the public domain. You can do whatever
-you want with it.
-
-I do ask that you respect the authorship and credit myself (Daniel
-Dunbar) when referencing the code. Additionally, if you use the
-code in an interesting or integral manner I would like to hear
-about it.
-```
+See Licence.md file. Author code from 'Daniel Dunbar' is released into the public domain. 

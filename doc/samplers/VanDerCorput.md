@@ -75,4 +75,4 @@ int main()
 
 ## License
 
-BSD, see `SamplerVanDerCorput.hpp`.
+See Licence.md file.

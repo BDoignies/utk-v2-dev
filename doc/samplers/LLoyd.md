@@ -82,6 +82,4 @@ int main()
 
 ## License
 
-BSD, see `SamplerLDBN.hpp`.
-
-
+See Licence.md file.

@@ -77,4 +77,4 @@ samples = ndr.sample(1024) # This is a numpy array !
 
 ## License
 
-[GNU LGPL](https://people.sc.fsu.edu/~jburkardt/txt/gnu_lgpl.txt), code from [https://people.sc.fsu.edu/~jburkardt/cpp_src/faure/faure.html](https://people.sc.fsu.edu/~jburkardt/cpp_src/faure/faure.html)
+See Licence.md file.

@@ -77,4 +77,6 @@ samples = faure.sample(1024) # This is a numpy array !
 
 ## License
 
+See Licence.md file. Author code is provided with the following license : 
+
 [GNU LGPL](https://people.sc.fsu.edu/~jburkardt/txt/gnu_lgpl.txt), code from [https://people.sc.fsu.edu/~jburkardt/cpp_src/faure/faure.html](https://people.sc.fsu.edu/~jburkardt/cpp_src/faure/faure.html)

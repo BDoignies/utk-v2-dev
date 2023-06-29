@@ -75,6 +75,8 @@ samples = ndr.sample(1024) # This is a numpy array !
 
 ## License
 
+See Licence.md file. Author code from 'Charles Donohue' has no licence but is provided with following header.
+
 ```
 File: quasisampler_prototype.h
  Quasisampler prototype.

@@ -90,6 +90,8 @@ samples = sp.sample(1024) # This is a numpy array !
 
 ## License
 
+See Licence.md file. Author code from has no licence but is provided with following header.
+
 ```
 //
 // Source code for the paper, edited to fit the utk framework

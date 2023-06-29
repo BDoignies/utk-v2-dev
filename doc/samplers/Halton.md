@@ -84,4 +84,4 @@ samples = halton.sample(1024)  # This is a numpy array !
 
 ## License
 
-BSD, see `SamplerHalton.hpp`.
+See licence.md file. 

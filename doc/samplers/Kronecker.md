@@ -92,5 +92,4 @@ samples = kron.sample(1024)  # This is a numpy array !
 
 ## License
 
-BSD, see `SamplerKorobov.hpp`
-
+See Licence.md file.

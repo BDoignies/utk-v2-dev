@@ -80,6 +80,7 @@ samples = fattal.sample(1024) # This is a numpy array !
 <script>
   window.addEventListener('DOMContentLoaded', function() { show_results(); }); 
 </script>
+
 ## License
 
-See author's page.
+See Licence.md file. Author code from 'Raanan Fattal' is provided without license. 

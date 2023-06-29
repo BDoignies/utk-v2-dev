@@ -87,4 +87,4 @@ samples = sobol.sample(1024) # This is a numpy array !
 
 ## License
 
-BSD
+See Licence.md file.

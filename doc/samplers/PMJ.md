@@ -97,4 +97,4 @@ samples = pmj.sample(1024) # This is a numpy array !
 
 ## License
 
-BSD, see source codes
+See Licence.md file. Licence may differ by methods. See corresponding author files. 

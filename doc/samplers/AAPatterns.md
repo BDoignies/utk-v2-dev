@@ -84,6 +84,7 @@ samples = aa.sample(1024) # This is a numpy array !
 
 ## License
 
+See Licence.md file. Author code from 'Abdalla Ahmed' has no licence but is provided with following header.
 
 ```
 /* Generate a distribution based on an AA pattern and a loadable displacement map

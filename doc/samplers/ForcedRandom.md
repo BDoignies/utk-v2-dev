@@ -2,8 +2,8 @@
 
 ## Description
 
-The sampler from [[FAT*11]](https://www.cs.huji.ac.il/w~raananf/projects/kdm/)  
-For a more precise description of this sampler and its performances in terms of aliasing and discrepancy, please refer to the following web bundle [https://liris.cnrs.fr/ldbn/HTML_bundle/index.html](https://liris.cnrs.fr/ldbn/HTML_bundle/index.html).
+A sampler based on dithering matrices from [[CTS*17]](https://link.springer.com/article/10.1007/s00371-017-1392-7).
+
 
 ## Files
 
@@ -82,4 +82,4 @@ samples = fr.sample(1024) # This is a numpy array !
 
 ## License
 
-See author's page.
+See Licence.md file. Author code from is licenced under 'Unlicence' licence. 

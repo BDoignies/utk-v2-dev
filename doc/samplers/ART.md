@@ -79,4 +79,4 @@ samples = aa.sample(1024) # This is a numpy array !
 
 ## License
 
-See author's page.
+See Licence.md file. Author code from 'Abdalla Ahmed' is provided without license. 

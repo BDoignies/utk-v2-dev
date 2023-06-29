@@ -100,4 +100,4 @@ samples = dt.sample(1024) # This is a numpy array !
 
 ## License
 
-See author's page.
+See Licence.md file.
