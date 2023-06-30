@@ -74,7 +74,7 @@ nav:
     - Sobol: 'samplers/Sobol.md'
     - Step: 'samplers/Step.md'
     - Stratified: 'samplers/Stratified.md'
-    - VenDerCorput: 'samplers/VanDerCorput.md'
+    - VanDerCorput: 'samplers/VanDerCorput.md'
     - Whitenoise: 'samplers/Whitenoise.md'
   - Metrics:
     - BoundaryStars: 'metrics/BoundaryStar.md'
