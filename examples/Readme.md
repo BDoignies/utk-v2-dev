@@ -7,6 +7,9 @@ of most samplers provided with UTK. More specifically, it creates a
 csv file containing integration error for gaussian / heaviside 
 functions as well as Generalized Discrepancy values. 
 
+Dimension, samples size can be controlled by modifying defaults
+values of the `Config` class (in both C++ and Python version).
+
 |name |N   |dim|metric|value                 |
 |-----|----|---|------|----------------------|
 |WN   |16  |2  |gl2   |0.15174487523539448   |
@@ -30,7 +33,7 @@ functions as well as Generalized Discrepancy values.
 
 ----------------------------------------------
 
-Both version should produce idendical results (up to seeding which is
+Both version should produce similar results (up to seeding which is
 not properly done). Code might be long to run depending on configs
 option (which should be set in the code directly). Parrallelization can be
 controlled by setting `OMP_NUM_THREADS` environment variable. 
@@ -56,7 +59,7 @@ Building is done via CMake and the following command lines :
 mkdir build
 cd build
 cmake ..
-make -j 8 # Highe
+make -j 4
 ./Evaluation/C++/Evaluate
 ```
 
@@ -67,4 +70,4 @@ spectrum. A few option are to be set directly in the code.
 
 It can be run with the following command `bash sample.sh`
 
-This is the  code that is used to generates documentation figures. 
+This is the code that is used to generates documentation figures. 

@@ -45,8 +45,10 @@ site_dir: 'docs'
 
 nav:
   - Home: 'index.md'
-  - Library:
-    - Cpp UTK: 'libraries/CppUtk.md'
+  - Using UTK:
+    - Exe UTK: 'usingutk/ExeUtk.md'
+    - Cpp UTK: 'usingutk/CppUtk.md'
+    - PyUTK: 'usingutk/PyUtk.md'
   - Samplers:
     - AAPatterns: 'samplers/AAPatterns.md'
     - ART: 'samplers/ART.md'

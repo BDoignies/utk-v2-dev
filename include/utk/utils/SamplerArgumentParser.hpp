@@ -89,7 +89,7 @@ namespace utk
         else
         {
             // Leave it here so all sampler have the same arguments !
-            app.add_option("-d", args->dumbD, "Dimension (unused)");
+            app.add_option("-d", args->dumbD, "UNUSED ! Here for compatibility with others.");
         }
 
         if (seedable)
@@ -99,7 +99,7 @@ namespace utk
         else
         {
             // Leave it here so all sampler have the same arguments !
-            app.add_option("-s,--seed", args->dumbS, "Seed (unused)");
+            app.add_option("-s,--seed", args->dumbS, "UNUSED ! Here for compatibility with others.");
         }
             
         app.add_option("-m", args->M, "Number of pointsets")->default_val(1);
