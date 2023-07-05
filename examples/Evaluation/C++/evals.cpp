@@ -64,8 +64,13 @@
 
 #include <vector>
 
+void WriteProgress(const char* name, unsigned int nmax, unsigned int n, float progress)
+{
+    std::cout << "\r" << name << ": " << n << " / " << nmax << " (" << int(progress * 100) << "%)"  << std::flush;
+}
+
 template<typename T>
-std::vector<Evaluator::Eval> TestSampler(const Config& config, const Evaluator& evaluator, T sampler)
+std::vector<Evaluator::Eval> TestSampler(const Config& config, const Evaluator& evaluator, const char* name, T sampler)
 {
     std::vector<Evaluator::Eval> ret;
     utk::Pointset<double> pts(config.nmax, config.dim);
@@ -74,6 +79,7 @@ std::vector<Evaluator::Eval> TestSampler(const Config& config, const Evaluator& 
         Evaluator::Eval eval {.N = i, .d = config.dim};
         for (unsigned int k = 0; k < config.m; k++)
         {
+            WriteProgress(name, config.nmax, i, k / float(config.m));
             sampler.generateSamples(pts, i);
             eval += evaluator.EvalPointset(pts);
         }
@@ -91,7 +97,7 @@ std::pair<std::vector<const char*>, std::vector<std::vector<Evaluator::Eval>>> T
     const T&... samplers)
 {
     std::vector<std::vector<Evaluator::Eval>> evals = { 
-        { TestSampler(config, evaluator, samplers.second)... } 
+        { TestSampler(config, evaluator, samplers.first, samplers.second)... } 
     };
     std::vector<const char*> names = { { samplers.first... } };
 
@@ -103,6 +109,11 @@ int main(int argc, char** argv)
     Config config;
     Evaluator eval(config);
 
+    std::cout << "Sampling evaluation: " << std::endl;
+    std::cout << "Initializing...";
+
+#if false
+    // Note : very long code to run... 
     {
         auto [names, evals] = TestSamplers(config, eval,  
             // Classical samplers
@@ -125,7 +136,7 @@ int main(int argc, char** argv)
             std::make_pair("Hammersley"  , utk::SamplerHammersley()), 
             std::make_pair("Halton"      , utk::SamplerHalton(2)),
             std::make_pair("LutLDBN"     , utk::SamplerLutLDBN()),
-            std::make_pair("Niederrieter", utk::SamplerNiederreiter(2)),
+            std::make_pair("Niederreiter", utk::SamplerNiederreiter(2)),
             std::make_pair("Faure"       , utk::SamplerFaure(2)),
             std::make_pair("PMJ"         , utk::SamplerPMJ()),
             std::make_pair("Sobol"       , utk::SamplerSobol<uint32_t>(2,  0)),
@@ -149,5 +160,21 @@ int main(int argc, char** argv)
         );    
         WriteEval("all.csv", names, evals);
     }
+#else
+    {
+        auto [names, evals] = TestSamplers(config, eval,  
+            // Classical samplers
+            std::make_pair("WN"          , utk::SamplerWhitenoise(2)),
+            std::make_pair("Strat"       , utk::SamplerStratified(2)),
+            std::make_pair("Grid"        , utk::SamplerRegularGrid(2)),
+            // std::make_pair("FastPoisson" , utk::SamplerFastPoisson()),
+            std::make_pair("Owen32"      , utk::SamplerSobol<uint32_t>(2, 32)),
+            std::make_pair("R1"          , utk::SamplerRank1()) 
+        );
+
+        WriteEval("all.csv", names, evals);
+    }
+#endif
+
     return 0;
 }

@@ -17,7 +17,7 @@ plot_pointset()
     local pts="$out/$name.dat"
     local spect="$out/${name}_spectrum.dat"
     
-    $exec -n $N -m 1 -d 2 -s 20081976 -o $pts
+    $exec -n $N -m 64 -d 2 -s 20081976 -o $pts
     $spectra -i $pts --canceldc -o $spect
 
     python plot.py $pts $spect

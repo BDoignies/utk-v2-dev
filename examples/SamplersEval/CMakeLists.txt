@@ -1,2 +1,0 @@
-add_executable(SamplerEvals evals.cpp)
-target_link_libraries(SamplerEvals UTK_LIBRARY)

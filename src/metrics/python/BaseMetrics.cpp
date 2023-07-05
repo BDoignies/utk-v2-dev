@@ -49,6 +49,39 @@
 #include <utk/metrics/Integrands/GaussianIntegrands.hpp>
 #include <utk/metrics/Integrands/HeavisideIntegrands.hpp>
 
+
+template<typename InputType, typename IntegrandType>
+auto GetBuildComputeFunction()
+{
+    return [](IntegrationTest& inttest, const char* outname, int dim, int m, int seed, utk::GenerationParameter params, py::buffer b){
+        py::buffer_info info = b.request();
+
+        if (info.format != py::format_descriptor<InputType>::format())
+            throw std::runtime_error("Type not supported");
+
+        if (info.ndim == 2)
+        {
+            std::vector<py::ssize_t> desiredStride = {
+                info.shape[1] * static_cast<py::ssize_t>(sizeof(InputType)), sizeof(InputType)
+            };
+
+            if (info.strides != desiredStride)
+                throw std::runtime_error("Only contiguous C-ordered array are supported");
+            
+            Pointset<InputType> in = Pointset<InputType>::View(
+                static_cast<InputType*>(info.ptr), 
+                info.shape[0], info.shape[1]
+            );
+            inttest.BuildDatabase<IntegrandType>(outname, dim, m, seed, params, in);
+
+            return;
+        }
+        
+        throw std::runtime_error("Only 2D array are supported");
+    };
+}
+
+
 void init_Metrics(py::module& m)
 {
     using namespace utk;
@@ -122,10 +155,10 @@ void init_Metrics(py::module& m)
     // Expose error reporting
     py::class_<IntegrationTest::ErrorReport>(m, "IntegrationErrorReport")
         .def_readonly("min", &IntegrationTest::ErrorReport::min)
-        .def_readonly("min", &IntegrationTest::ErrorReport::max)
-        .def_readonly("min", &IntegrationTest::ErrorReport::mean)
-        .def_readonly("min", &IntegrationTest::ErrorReport::var)
-        .def_readonly("min", &IntegrationTest::ErrorReport::count);
+        .def_readonly("max", &IntegrationTest::ErrorReport::max)
+        .def_readonly("mean", &IntegrationTest::ErrorReport::mean)
+        .def_readonly("var", &IntegrationTest::ErrorReport::var)
+        .def_readonly("count", &IntegrationTest::ErrorReport::count);
 
 
     // Not the cleanest, but pybind disallow binding same class to 
@@ -133,9 +166,9 @@ void init_Metrics(py::module& m)
     // Or this works...
     py::class_<IntegrationTest>(m, "IntegrationTest")
         .def(py::init<>())
-        .def("BuildGaussianDatabase" , &IntegrationTest::BuildDatabase<GaussianIntegrand>)
+        .def("BuildGaussianDatabase" , GetBuildComputeFunction<double, GaussianIntegrand>())
         .def( "ReadGaussianDatabse"  , &IntegrationTest:: ReadDatabase<GaussianIntegrand>)
-        .def("BuildHeavisideDatabase", &IntegrationTest::BuildDatabase<HeavisideIntegrand>)
+        .def("BuildHeavisideDatabase", GetBuildComputeFunction<double, HeavisideIntegrand>())
         .def( "ReadHeavisideDatabse" , &IntegrationTest:: ReadDatabase<HeavisideIntegrand>)
         .def("compute"      , GetComputeFunction<IntegrationTest, double, IntegrationTest::ErrorReport>());   
 }

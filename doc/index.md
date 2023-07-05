@@ -36,6 +36,7 @@ The UTK library was developed mainly by
 
 *   David Coeurjolly [david.coeurjolly@liris.cnrs.fr](mailto:david.coeurjolly@liris.cnrs.fr)
 *   Hélène Perrier [helene.perrier@liris.cnrs.fr](mailto:helene.perrier@liris.cnrs.fr)
+*   Bastien Doignies [bastien.doignies@liris.cnrs.fr](mailto:bastien.doignies@liris.cnrs.fr)
 
 But was also contributed to by
 

@@ -1,3 +1,5 @@
+# Outer project to build UTK only once !
+
 cmake_minimum_required(VERSION 3.12)
 Project(UTKExamples)
 
@@ -10,4 +12,4 @@ set(CMAKE_BUILD_TYPE "Release")
 
 find_package(UTK PATHS ../)
 
-add_subdirectory(SamplersEval)
+add_subdirectory(Evaluation)

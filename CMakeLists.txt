@@ -10,13 +10,10 @@ set(CMAKE_BUILD_TYPE "Release")
 
 option(UTK_LOG "Enable utk logging" ON)
 
-if (NOT WIN32)
-    # Disable pyutk on windows... For some reason
-    # there is a conflicting declaration... of 'byte'
-    option(UTK_PYTHON "Enable pyutk" ON)
-else()
-    set(UTK_PYTHON OFF)
-endif()
+# Disabled by default, better to install it with 
+# pybind provided extension
+option(UTK_PYTHON "Enable build of pyutk (see setup.py)" OFF)
+option(UTK_BUILD_EXE "Enable building of utk's executables" ON)
 
 option(UTK_USE_OPENMP "Enable USE of OpenMp" ON)
 # CGal options

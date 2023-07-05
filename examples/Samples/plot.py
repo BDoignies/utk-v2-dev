@@ -62,7 +62,7 @@ def plot_spect(file):
     plt.gca().axis('off')
     plt.gca().set_aspect('equal')
     
-    data = np.power(data, 1 / 2.2) # Gamma correction
+    data = np.power(data, 1 / 2.2) # Brighten spectrum
     plt.imshow(data, cmap='gray')
     plt.savefig(file.replace('.dat', '.png'), bbox_inches='tight')
     

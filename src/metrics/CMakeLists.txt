@@ -15,26 +15,32 @@ SET(Metrics
     PCF
 )
 
-add_subdirectory(Integration)
-
 SET(pyutk_metrics)
 SET(pyutk_metrics_libs pybind11::module spdlog::spdlog)
+IF (OpenMP_FOUND)
+    LIST(APPEND pyutk_metrics_libs OpenMP::OpenMP_CXX)
+ENDIF()
 
 FOREACH(FILE ${Metrics})
-    add_executable(${FILE} ${FILE}.cpp)
-    target_include_directories(${FILE} PRIVATE "${PROJECT_SOURCE_DIR}/include/")
-    target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
-    
-    IF (OpenMP_FOUND)
-        target_link_libraries(${FILE} PRIVATE OpenMP::OpenMP_CXX)
-        LIST(APPEND pyutk_metrics_libs OpenMP::OpenMP_CXX)
-    ENDIF()
+    IF(UTK_BUILD_EXE)
+        add_executable(${FILE} ${FILE}.cpp)
+        target_include_directories(${FILE} PRIVATE "${PROJECT_SOURCE_DIR}/include/")
+        target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
+        
+        IF (OpenMP_FOUND)
+            target_link_libraries(${FILE} PRIVATE OpenMP::OpenMP_CXX)
+        ENDIF()
 
-    install(TARGETS ${FILE}
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
+        install(TARGETS ${FILE}
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib)
+    ENDIF()
 ENDFOREACH(FILE)
+
+IF(UTK_BUILD_EXE)
+    add_subdirectory(Integration)
+ENDIF()
 
 IF (UTK_PYTHON)
     # TODO : OpenMP !!!

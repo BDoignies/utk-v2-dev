@@ -33,8 +33,10 @@ SET(pyutk_samplers)
 SET(pyutk_samplers_libs pybind11::module spdlog::spdlog)
 
 FOREACH(FILE ${Samplers})
-    add_executable(${FILE} ${FILE}.cpp)
-    target_include_directories(${FILE} PRIVATE "${UTK_INCLUDE_DIR}")
+    IF(UTK_BUILD_EXE)
+        add_executable(${FILE} ${FILE}.cpp)
+        target_include_directories(${FILE} PRIVATE "${UTK_INCLUDE_DIR}")
+    ENDIF()
 
     IF (EXISTS ${UTK_EXTERNALS_FOLDER}/${FILE})
         FILE(GLOB_RECURSE ADDITIONNAL_CODE
@@ -43,17 +45,20 @@ FOREACH(FILE ${Samplers})
         
         LIST(APPEND pyutk_samplers ${ADDITIONNAL_CODE})
         
-        target_sources(${FILE} PRIVATE ${ADDITIONNAL_CODE})
-        target_include_directories(${FILE} PRIVATE ${UTK_EXTERNALS_FOLDER})
+        IF (UTK_BUILD_EXE)
+            target_sources(${FILE} PRIVATE ${ADDITIONNAL_CODE})
+            target_include_directories(${FILE} PRIVATE ${UTK_EXTERNALS_FOLDER})
+        ENDIF()
     ENDIF()
 
+    IF(UTK_BUILD_EXE)
+        target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
 
-    target_link_libraries(${FILE} PRIVATE spdlog::spdlog CLI11::CLI11)
-
-    install(TARGETS ${FILE}
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
+        install(TARGETS ${FILE}
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib)
+    ENDIF()
 ENDFOREACH(FILE)
 
 # ===========================================
@@ -62,7 +67,7 @@ ENDFOREACH(FILE)
 
 # Disable compilation on windows... GEOGRAM dllspec is problematic for an unknown reason...
 IF(NOT WIN32)
-    IF(OpenMP_FOUND)
+    IF(OpenMP_FOUND AND UTK_BUILD_EXE)
         # Lloyd
         add_executable(Lloyd Lloyd.cpp  ${UTK_EXTERNALS_FOLDER}/Lloyd/Delaunay_psm.cpp)
         
@@ -82,7 +87,7 @@ ELSE()
 ENDIF()
 
 
-IF (CGAL_FOUND AND SuiteSparse_FOUND AND UTK_BUILD_EXTERNAL_CODE)
+IF (CGAL_FOUND AND SuiteSparse_FOUND AND UTK_BUILD_EXE)
     add_executable(BoundedBNOT  BoundedBNOT.cpp)
     add_executable(PeriodicBNOT PeriodicBNOT.cpp)
 

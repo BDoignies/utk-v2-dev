@@ -27,9 +27,7 @@ FetchContent_Declare(
 # new FindPython module and set PYTHON_EXECUTABLE for Pybind11 to pick up.
 # This works well with conda environments.
 
-# (BD) Note : it does not work with conda environments !!!
-# But letting pybind find them works...
-
+# This will be set by CMAKE 
 # find_package(Python REQUIRED COMPONENTS Interpreter Development)
 # set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
