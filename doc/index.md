@@ -27,7 +27,33 @@ See `Using UTK/*` documentation pages for mor information and building options.
 
 ## External libraries
 
-Every external library is downloaded automatically by CMake. Nothing to install ! 
+Most libraries are installed and downloaded automatically. However, some are not.
+
+BNOT requires the following librarires to be built : 
+
+* CGAL
+* BOOST
+* SuiteSparse
+* LAPACK
+* BLAS
+* METIS
+* MPFR
+* GMP
+
+CGal and Boost are downloaded automatically if not found. Other should be install 
+and made available to relevent cmake find_package. 
+
+For Ubuntu the following lines installs everything :
+
+```
+sudo apt-get install libblas-dev 
+sudo apt-get install liblapack-dev
+sudo apt-get install libgmp-dev
+sudo apt-get install libmpfr-dev
+sudo apt-get install libmetis-dev
+sudo apt-get install libsuitesparse-dev 
+sudo apt-get install libcgal-dev
+```
 
 ## Authors
 
