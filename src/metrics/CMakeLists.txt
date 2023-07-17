@@ -31,6 +31,11 @@ FOREACH(FILE ${Metrics})
             target_link_libraries(${FILE} PRIVATE OpenMP::OpenMP_CXX)
         ENDIF()
 
+        IF(FFTW_FOUND AND UTK_USE_FFTW)
+            target_include_directories(${FILE} PRIVATE ${FFTW_INCLUDES})
+            target_link_libraries(${FILE} PRIVATE ${FFTW_LIBRARIES})
+        ENDIF()
+
         install(TARGETS ${FILE}
             RUNTIME DESTINATION bin
             LIBRARY DESTINATION lib
